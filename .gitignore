@@ -1,0 +1,16 @@
+node_modules
+
+dist
+
+.env
+
+*.log
+
+# AI datasets/weights
+models/skin/**/*.pt
+models/skin/**/*.onnx
+models/skin/**/runs/
+*.pt
+*.onnx
+__pycache__/
+*.pyc

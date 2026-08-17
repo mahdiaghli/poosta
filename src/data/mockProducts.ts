@@ -1,0 +1,43 @@
+import type { Product } from '@/types';
+
+/**
+ * joined with product_ingredients / product_skin_types / product_concerns.
+ */
+export const MOCK_PRODUCTS: Product[] = [
+  { id: 'p1', name: 'ژل شست‌وشوی ملایم', brand: 'Cerave', category: 'cleanser', price: 480000, currency: 'IRT',
+    rating: 4.7, reviewCount: 312, barcode: '6291234567893',
+    skinTypes: ['oily', 'combination', 'normal'], concerns: ['acne', 'oiliness'],
+    ingredientKeys: ['ceramides', 'glycerin'], activeIngredientKeys: [] },
+  { id: 'p2', name: 'سرم نیاسینامید ۱۰٪', brand: 'The Ordinary', category: 'serum', price: 390000, currency: 'IRT',
+    rating: 4.5, reviewCount: 820, barcode: '6291234567891',
+    skinTypes: ['oily', 'combination'], concerns: ['pores', 'oiliness', 'acne'],
+    ingredientKeys: ['niacinamide', 'zinc'], activeIngredientKeys: ['niacinamide'] },
+  { id: 'p3', name: 'مرطوب‌کننده سبک آبرسان', brand: 'La Roche-Posay', category: 'moisturizer', price: 620000, currency: 'IRT',
+    rating: 4.8, reviewCount: 540, barcode: '6291234567894',
+    skinTypes: ['dry', 'normal', 'sensitive'], concerns: ['hydration', 'texture'],
+    ingredientKeys: ['hyaluronic_acid', 'ceramides'], activeIngredientKeys: [] },
+  { id: 'p4', name: 'ضدآفتاب فلوئید SPF50', brand: 'Anessa', category: 'sunscreen', price: 750000, currency: 'IRT',
+    rating: 4.9, reviewCount: 1190, barcode: '6291234567890',
+    skinTypes: ['oily', 'combination', 'normal', 'dry'], concerns: ['darkSpots', 'redness'],
+    ingredientKeys: ['zinc_oxide'], activeIngredientKeys: [] },
+  { id: 'p5', name: 'سرم ویتامین C', brand: 'Skinceuticals', category: 'serum', price: 1250000, currency: 'IRT',
+    rating: 4.6, reviewCount: 410, barcode: '6291234567895',
+    skinTypes: ['normal', 'dry', 'combination'], concerns: ['darkSpots', 'texture'],
+    ingredientKeys: ['vitamin_c'], activeIngredientKeys: ['vitamin_c'] },
+  { id: 'p6', name: 'تونر آرام‌بخش سنتلا', brand: 'Purito', category: 'treatment', price: 520000, currency: 'IRT',
+    rating: 4.4, reviewCount: 275, barcode: '6291234567896',
+    skinTypes: ['sensitive', 'normal'], concerns: ['redness', 'hydration'],
+    ingredientKeys: ['centella'], activeIngredientKeys: ['centella'] },
+  { id: 'p7', name: "کرم رتینول شب", brand: "Paula's Choice", category: 'treatment', price: 980000, currency: 'IRT',
+    rating: 4.5, reviewCount: 365, barcode: '6291234567892',
+    skinTypes: ['normal', 'combination', 'oily'], concerns: ['texture', 'darkSpots', 'pores'],
+    ingredientKeys: ['retinol'], activeIngredientKeys: ['retinol'] },
+  { id: 'p8', name: 'ژل پاک‌کننده فوم‌دار', brand: 'Bioderma', category: 'cleanser', price: 420000, currency: 'IRT',
+    rating: 4.3, reviewCount: 298, barcode: '6291234567897',
+    skinTypes: ['sensitive', 'dry', 'normal'], concerns: ['redness', 'hydration'],
+    ingredientKeys: ['glycerin'], activeIngredientKeys: [] },
+  { id: 'p9', name: 'اسید لایه‌بردار AHA/BHA', brand: 'Some By Mi', category: 'treatment', price: 560000, currency: 'IRT',
+    rating: 4.2, reviewCount: 190, barcode: '6291234567898',
+    skinTypes: ['oily', 'combination', 'normal'], concerns: ['texture', 'pores', 'acne'],
+    ingredientKeys: ['aha', 'bha'], activeIngredientKeys: ['aha', 'bha'] },
+];

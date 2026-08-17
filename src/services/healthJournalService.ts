@@ -1,0 +1,3 @@
+import type { DailyCheckIn,SkinDiaryEntry } from '@/types';
+export const checkinOverall=(c:DailyCheckIn)=>Math.max(0,Math.min(100,Math.round((10-(c.dryness+c.oiliness+c.redness+c.acne+c.irritation)/5)*10)));
+export const diarySummary=(checkins:DailyCheckIn[],diary:SkinDiaryEntry[])=>{const days=new Map(diary.map(x=>[x.date,x]));const paired=checkins.map(c=>({c,d:days.get(c.date)})).filter(x=>x.d);if(!paired.length)return null;return{avgSleep:Number((paired.reduce((s,x)=>s+(x.d!.sleepHours??0),0)/paired.length).toFixed(1)),avgAcne:Number((paired.reduce((s,x)=>s+x.c.acne,0)/paired.length).toFixed(1))};};

@@ -1,0 +1,3239 @@
+{
+  "schema_version": "1.0.0",
+  "generated_for": "Poosta",
+  "generated_at": "2026-08-17",
+  "market": "Iran",
+  "notes": {
+    "availability": "Products are selected because they are commonly found through Iranian retail/import channels; availability and authenticity should be rechecked before commerce use.",
+    "safety": "Safety and interaction fields are conservative product-development metadata, not medical advice. Exact formulas may vary by market and change over time.",
+    "price": "Prices and barcode are intentionally null until verified from a current Iranian retailer/current packaging."
+  },
+  "products": [
+    {
+      "id": "cerave_hydrating_facial_cleanser",
+      "brand": "CeraVe",
+      "name": "Hydrating Facial Cleanser",
+      "category": "cleanser",
+      "subcategory": "hydrating_gentle_cleanser",
+      "size_options_ml": [
+        236,
+        473
+      ],
+      "skin_types": [
+        "dry",
+        "normal",
+        "sensitive"
+      ],
+      "concerns": [
+        "dryness",
+        "dehydration",
+        "skin_barrier"
+      ],
+      "key_ingredients": [
+        "ceramides",
+        "hyaluronic_acid"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": true,
+      "alcohol_free": true,
+      "essential_oil_free": true,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "official_url": "https://www.cerave.com/skincare/cleansers/hydrating-facial-cleanser",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "cerave_foaming_facial_cleanser",
+      "brand": "CeraVe",
+      "name": "Foaming Facial Cleanser",
+      "category": "cleanser",
+      "subcategory": "foaming_cleanser",
+      "size_options_ml": [
+        236,
+        473
+      ],
+      "skin_types": [
+        "normal",
+        "combination",
+        "oily"
+      ],
+      "concerns": [
+        "oiliness",
+        "congestion"
+      ],
+      "key_ingredients": [
+        "ceramides",
+        "niacinamide"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": true,
+      "alcohol_free": true,
+      "essential_oil_free": true,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "official_url": "https://www.cerave.com/skincare/cleansers/foaming-facial-cleanser",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "cerave_moisturizing_cream",
+      "brand": "CeraVe",
+      "name": "Moisturizing Cream",
+      "category": "moisturizer",
+      "subcategory": "barrier_moisturizer",
+      "size_options_ml": [
+        52,
+        177,
+        340
+      ],
+      "skin_types": [
+        "dry",
+        "normal",
+        "sensitive"
+      ],
+      "concerns": [
+        "dryness",
+        "skin_barrier",
+        "dehydration"
+      ],
+      "key_ingredients": [
+        "ceramides",
+        "hyaluronic_acid"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": true,
+      "alcohol_free": true,
+      "essential_oil_free": true,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "official_url": "https://www.cerave.com/skincare/moisturizers/moisturizing-cream",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "cerave_resurfacing_retinol_serum",
+      "brand": "CeraVe",
+      "name": "Resurfacing Retinol Serum",
+      "category": "serum",
+      "subcategory": "retinoid_treatment",
+      "size_options_ml": [
+        30
+      ],
+      "skin_types": [
+        "normal",
+        "combination",
+        "oily"
+      ],
+      "concerns": [
+        "acne",
+        "post_acne_marks",
+        "texture",
+        "pores"
+      ],
+      "key_ingredients": [
+        "retinol",
+        "niacinamide",
+        "ceramides"
+      ],
+      "actives": [
+        {
+          "ingredient": "retinol",
+          "concentration_percent": null
+        }
+      ],
+      "concentration": {
+        "retinol_percent": null
+      },
+      "fragrance_free": true,
+      "alcohol_free": true,
+      "essential_oil_free": true,
+      "pregnancy_safety": "avoid_or_medical_review",
+      "irritation_level": "moderate",
+      "am_usage": false,
+      "pm_usage": true,
+      "interaction_ids": [
+        "aha",
+        "bha",
+        "other_retinoids"
+      ],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "official_url": "https://www.cerave.com/skincare/serums/resurfacing-retinol-serum",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "theordinary_squalane_cleanser",
+      "brand": "The Ordinary",
+      "name": "Squalane Cleanser",
+      "category": "cleanser",
+      "subcategory": "emulsion_cleanser",
+      "size_options_ml": [
+        50,
+        150
+      ],
+      "skin_types": [
+        "normal",
+        "dry",
+        "sensitive"
+      ],
+      "concerns": [
+        "dryness",
+        "dehydration",
+        "skin_barrier"
+      ],
+      "key_ingredients": [
+        "squalane"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": true,
+      "alcohol_free": true,
+      "essential_oil_free": true,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "official_url": "https://theordinary.com/en-us/squalane-cleanser-face-cleanser-100446.html",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "theordinary_niacinamide_10_zinc_1",
+      "brand": "The Ordinary",
+      "name": "Niacinamide 10% + Zinc 1%",
+      "category": "serum",
+      "subcategory": "niacinamide_serum",
+      "size_options_ml": [
+        30,
+        60
+      ],
+      "skin_types": [
+        "oily",
+        "combination",
+        "normal"
+      ],
+      "concerns": [
+        "oiliness",
+        "pores",
+        "blemishes"
+      ],
+      "key_ingredients": [
+        "niacinamide",
+        "zinc_pca"
+      ],
+      "actives": [
+        {
+          "ingredient": "niacinamide",
+          "concentration_percent": 10
+        },
+        {
+          "ingredient": "zinc_pca",
+          "concentration_percent": 1
+        }
+      ],
+      "concentration": {
+        "niacinamide_percent": 10,
+        "zinc_pca_percent": 1
+      },
+      "fragrance_free": true,
+      "alcohol_free": true,
+      "essential_oil_free": true,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "official_url": "https://theordinary.com/en-us/niacinamide-10-zinc-1-serum-100436.html",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "theordinary_hyaluronic_acid_2_b5",
+      "brand": "The Ordinary",
+      "name": "Hyaluronic Acid 2% + B5",
+      "category": "serum",
+      "subcategory": "hydration_serum",
+      "size_options_ml": [
+        30,
+        60
+      ],
+      "skin_types": [
+        "dry",
+        "normal",
+        "combination",
+        "sensitive"
+      ],
+      "concerns": [
+        "dehydration",
+        "dryness"
+      ],
+      "key_ingredients": [
+        "hyaluronic_acid",
+        "vitamin_b5"
+      ],
+      "actives": [
+        {
+          "ingredient": "hyaluronic_acid",
+          "concentration_percent": 2
+        }
+      ],
+      "concentration": {
+        "hyaluronic_acid_percent": 2
+      },
+      "fragrance_free": true,
+      "alcohol_free": true,
+      "essential_oil_free": true,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "official_url": "https://theordinary.com/en-us/hyaluronic-acid-2-b5-serum-100425.html",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "theordinary_glycolic_acid_7_toner",
+      "brand": "The Ordinary",
+      "name": "Glycolic Acid 7% Exfoliating Toner",
+      "category": "toner",
+      "subcategory": "aha_exfoliant",
+      "size_options_ml": [
+        100,
+        240
+      ],
+      "skin_types": [
+        "normal",
+        "combination",
+        "oily"
+      ],
+      "concerns": [
+        "texture",
+        "dullness",
+        "uneven_tone"
+      ],
+      "key_ingredients": [
+        "glycolic_acid"
+      ],
+      "actives": [
+        {
+          "ingredient": "glycolic_acid",
+          "concentration_percent": 7
+        }
+      ],
+      "concentration": {
+        "glycolic_acid_percent": 7
+      },
+      "fragrance_free": true,
+      "alcohol_free": false,
+      "essential_oil_free": false,
+      "pregnancy_safety": "medical_review_preferred",
+      "irritation_level": "moderate",
+      "am_usage": false,
+      "pm_usage": true,
+      "interaction_ids": [
+        "retinoids",
+        "other_ahas",
+        "bha",
+        "strong_actives"
+      ],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "official_url": "https://theordinary.com/en-us/glycolic-acid-7-exfoliating-toner-100418.html",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "theordinary_salicylic_acid_2_solution",
+      "brand": "The Ordinary",
+      "name": "Salicylic Acid 2% Solution",
+      "category": "serum",
+      "subcategory": "bha_exfoliant",
+      "size_options_ml": [
+        30
+      ],
+      "skin_types": [
+        "oily",
+        "combination"
+      ],
+      "concerns": [
+        "acne",
+        "blackheads",
+        "pores",
+        "oiliness"
+      ],
+      "key_ingredients": [
+        "salicylic_acid"
+      ],
+      "actives": [
+        {
+          "ingredient": "salicylic_acid",
+          "concentration_percent": 2
+        }
+      ],
+      "concentration": {
+        "salicylic_acid_percent": 2
+      },
+      "fragrance_free": true,
+      "alcohol_free": true,
+      "essential_oil_free": true,
+      "pregnancy_safety": "medical_review_preferred",
+      "irritation_level": "moderate",
+      "am_usage": false,
+      "pm_usage": true,
+      "interaction_ids": [
+        "retinoids",
+        "aha",
+        "other_strong_exfoliants"
+      ],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "official_url": "https://theordinary.com/en-us/salicylic-acid-2-solution-100619.html",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "theordinary_retinol_05_squalane",
+      "brand": "The Ordinary",
+      "name": "Retinol 0.5% in Squalane",
+      "category": "serum",
+      "subcategory": "retinoid_treatment",
+      "size_options_ml": [
+        30
+      ],
+      "skin_types": [
+        "normal",
+        "combination",
+        "oily"
+      ],
+      "concerns": [
+        "texture",
+        "fine_lines",
+        "uneven_tone"
+      ],
+      "key_ingredients": [
+        "retinol",
+        "squalane"
+      ],
+      "actives": [
+        {
+          "ingredient": "retinol",
+          "concentration_percent": 0.5
+        }
+      ],
+      "concentration": {
+        "retinol_percent": 0.5
+      },
+      "fragrance_free": true,
+      "alcohol_free": true,
+      "essential_oil_free": true,
+      "pregnancy_safety": "avoid_or_medical_review",
+      "irritation_level": "moderate_high",
+      "am_usage": false,
+      "pm_usage": true,
+      "interaction_ids": [
+        "aha",
+        "bha",
+        "other_retinoids"
+      ],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "official_url": "https://theordinary.com/en-us/retinol-0-5-in-squalane-serum-100437.html",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "theordinary_azelaic_acid_10",
+      "brand": "The Ordinary",
+      "name": "Azelaic Acid Suspension 10%",
+      "category": "treatment",
+      "subcategory": "azelaic_acid",
+      "size_options_ml": [
+        30
+      ],
+      "skin_types": [
+        "normal",
+        "combination",
+        "oily",
+        "sensitive"
+      ],
+      "concerns": [
+        "blemishes",
+        "uneven_tone",
+        "redness"
+      ],
+      "key_ingredients": [
+        "azelaic_acid"
+      ],
+      "actives": [
+        {
+          "ingredient": "azelaic_acid",
+          "concentration_percent": 10
+        }
+      ],
+      "concentration": {
+        "azelaic_acid_percent": 10
+      },
+      "fragrance_free": true,
+      "alcohol_free": true,
+      "essential_oil_free": true,
+      "pregnancy_safety": "medical_review_preferred",
+      "irritation_level": "moderate",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [
+        "strong_exfoliants",
+        "retinoids"
+      ],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "official_url": "https://theordinary.com/en-us/azelaic-acid-suspension-10-exfoliator-100407.html",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "laroche_effaclar_duo",
+      "brand": "La Roche-Posay",
+      "name": "Effaclar Duo",
+      "category": "treatment",
+      "subcategory": "acne_blemish_care",
+      "size_options_ml": [
+        40
+      ],
+      "skin_types": [
+        "oily",
+        "combination",
+        "blemish_prone"
+      ],
+      "concerns": [
+        "acne",
+        "blemishes",
+        "pores",
+        "oiliness"
+      ],
+      "key_ingredients": [
+        "salicylic_acid",
+        "niacinamide"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "check_local_formula_and_medical_guidance",
+      "irritation_level": "moderate",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [
+        "retinoids",
+        "aha",
+        "bha"
+      ],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "official_url": "https://www.laroche-posay.us/our-products/face/acne-products/effaclar-duo-dual-action-acne-treatment-883140015248.html",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "laroche_cicaplast_baume_b5",
+      "brand": "La Roche-Posay",
+      "name": "Cicaplast Baume B5",
+      "category": "moisturizer",
+      "subcategory": "barrier_repair",
+      "size_options_ml": [
+        40,
+        100
+      ],
+      "skin_types": [
+        "dry",
+        "normal",
+        "sensitive"
+      ],
+      "concerns": [
+        "skin_barrier",
+        "dryness",
+        "irritation"
+      ],
+      "key_ingredients": [
+        "panthenol",
+        "madecassoside"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": true,
+      "alcohol_free": true,
+      "essential_oil_free": true,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "official_url": "https://www.laroche-posay.us/our-products/body/hand-face-body-moisturizer/cicaplast-baume-b5-3337872412993.html",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "laroche_anthelios_uvmune_400",
+      "brand": "La Roche-Posay",
+      "name": "Anthelios UVMune 400 Oil Control Fluid SPF50+",
+      "category": "sunscreen",
+      "subcategory": "face_sunscreen",
+      "size_options_ml": [
+        50
+      ],
+      "skin_types": [
+        "oily",
+        "combination"
+      ],
+      "concerns": [
+        "sun_protection",
+        "oiliness"
+      ],
+      "key_ingredients": [
+        "uv_filters"
+      ],
+      "actives": [],
+      "concentration": {
+        "spf": 50
+      },
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": false,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "official_url": "https://www.laroche-posay.us/our-products/sun/face-sunscreen/anthelios-uvmune-400-oil-control-fluid-spf50.html",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "laroche_toleriane_hydrating_cleanser",
+      "brand": "La Roche-Posay",
+      "name": "Toleriane Hydrating Gentle Facial Cleanser",
+      "category": "cleanser",
+      "subcategory": "gentle_hydrating_cleanser",
+      "size_options_ml": [
+        200,
+        400
+      ],
+      "skin_types": [
+        "dry",
+        "normal",
+        "sensitive"
+      ],
+      "concerns": [
+        "dryness",
+        "sensitivity",
+        "skin_barrier"
+      ],
+      "key_ingredients": [
+        "glycerin",
+        "ceramides",
+        "niacinamide"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": true,
+      "alcohol_free": true,
+      "essential_oil_free": true,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "official_url": "https://www.laroche-posay.us/our-products/face/face-wash/toleriane-hydrating-gentle-facial-cleanser-3433422406591.html",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "cosrx_low_ph_good_morning",
+      "brand": "COSRX",
+      "name": "Low pH Good Morning Gel Cleanser",
+      "category": "cleanser",
+      "subcategory": "low_ph_gel_cleanser",
+      "size_options_ml": [
+        150
+      ],
+      "skin_types": [
+        "normal",
+        "combination",
+        "oily"
+      ],
+      "concerns": [
+        "oiliness",
+        "congestion"
+      ],
+      "key_ingredients": [
+        "tea_tree_oil"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": false,
+      "alcohol_free": null,
+      "essential_oil_free": false,
+      "pregnancy_safety": "check_formula_and_individual_tolerance",
+      "irritation_level": "low_moderate",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "official_url": "https://www.cosrx.com/products/low-ph-good-morning-gel-cleanser",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "cosrx_advanced_snail_96_essence",
+      "brand": "COSRX",
+      "name": "Advanced Snail 96 Mucin Power Essence",
+      "category": "essence",
+      "subcategory": "snail_mucin_hydration",
+      "size_options_ml": [
+        100
+      ],
+      "skin_types": [
+        "dry",
+        "normal",
+        "combination",
+        "sensitive"
+      ],
+      "concerns": [
+        "dehydration",
+        "skin_barrier",
+        "texture"
+      ],
+      "key_ingredients": [
+        "snail_secretion_filtrate",
+        "hyaluronic_acid"
+      ],
+      "actives": [],
+      "concentration": {
+        "snail_secretion_filtrate_percent": 96
+      },
+      "fragrance_free": true,
+      "alcohol_free": true,
+      "essential_oil_free": true,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "official_url": "https://www.cosrx.com/products/advanced-snail-96-mucin-power-essence",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "cosrx_bha_blackhead_power_liquid",
+      "brand": "COSRX",
+      "name": "BHA Blackhead Power Liquid",
+      "category": "treatment",
+      "subcategory": "bha_exfoliant",
+      "size_options_ml": [
+        100
+      ],
+      "skin_types": [
+        "oily",
+        "combination"
+      ],
+      "concerns": [
+        "blackheads",
+        "pores",
+        "acne",
+        "oiliness"
+      ],
+      "key_ingredients": [
+        "betaine_salicylate"
+      ],
+      "actives": [
+        {
+          "ingredient": "betaine_salicylate",
+          "concentration_percent": 4
+        }
+      ],
+      "concentration": {
+        "betaine_salicylate_percent": 4
+      },
+      "fragrance_free": true,
+      "alcohol_free": true,
+      "essential_oil_free": true,
+      "pregnancy_safety": "medical_review_preferred",
+      "irritation_level": "moderate",
+      "am_usage": false,
+      "pm_usage": true,
+      "interaction_ids": [
+        "retinoids",
+        "aha",
+        "other_exfoliants"
+      ],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "official_url": "https://www.cosrx.com/products/bha-blackhead-power-liquid",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "cosrx_vitamin_c_23",
+      "brand": "COSRX",
+      "name": "The Vitamin C 23 Serum",
+      "category": "serum",
+      "subcategory": "vitamin_c_serum",
+      "size_options_ml": [
+        20
+      ],
+      "skin_types": [
+        "normal",
+        "combination",
+        "oily"
+      ],
+      "concerns": [
+        "uneven_tone",
+        "dark_spots",
+        "dullness"
+      ],
+      "key_ingredients": [
+        "pure_vitamin_c"
+      ],
+      "actives": [
+        {
+          "ingredient": "ascorbic_acid",
+          "concentration_percent": 23
+        }
+      ],
+      "concentration": {
+        "ascorbic_acid_percent": 23
+      },
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "medical_review_preferred",
+      "irritation_level": "moderate_high",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [
+        "strong_exfoliants",
+        "retinoids"
+      ],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "official_url": "https://www.cosrx.com/products/the-vitamin-c-23-serum",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "boj_green_plum_cleanser",
+      "brand": "Beauty of Joseon",
+      "name": "Green Plum Refreshing Cleanser",
+      "category": "cleanser",
+      "subcategory": "gentle_daily_cleanser",
+      "size_options_ml": [
+        100,
+        200
+      ],
+      "skin_types": [
+        "normal",
+        "combination",
+        "oily",
+        "sensitive"
+      ],
+      "concerns": [
+        "dullness",
+        "congestion"
+      ],
+      "key_ingredients": [
+        "green_plum"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": true,
+      "alcohol_free": true,
+      "essential_oil_free": true,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "official_url": "https://beautyofjoseon.com/products/green-plum-refreshing-cleanser",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "boj_glow_serum",
+      "brand": "Beauty of Joseon",
+      "name": "Glow Serum: Propolis + Niacinamide",
+      "category": "serum",
+      "subcategory": "balancing_hydrating_serum",
+      "size_options_ml": [
+        30
+      ],
+      "skin_types": [
+        "normal",
+        "combination",
+        "oily",
+        "dry"
+      ],
+      "concerns": [
+        "dullness",
+        "blemishes",
+        "dehydration"
+      ],
+      "key_ingredients": [
+        "propolis",
+        "niacinamide"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": true,
+      "alcohol_free": true,
+      "essential_oil_free": true,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low_moderate",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "official_url": "https://beautyofjoseon.com/products/glow-serum-propolis-niacinamide",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "boj_dynasty_cream",
+      "brand": "Beauty of Joseon",
+      "name": "Dynasty Cream",
+      "category": "moisturizer",
+      "subcategory": "barrier_moisturizer",
+      "size_options_ml": [
+        50,
+        100
+      ],
+      "skin_types": [
+        "dry",
+        "normal",
+        "combination"
+      ],
+      "concerns": [
+        "dryness",
+        "skin_barrier",
+        "dullness"
+      ],
+      "key_ingredients": [
+        "rice_bran_water",
+        "niacinamide"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": true,
+      "alcohol_free": true,
+      "essential_oil_free": true,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "official_url": "https://beautyofjoseon.com/products/dynasty-cream",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "boj_relief_sun",
+      "brand": "Beauty of Joseon",
+      "name": "Relief Sun: Rice + Probiotics SPF50+ PA++++",
+      "category": "sunscreen",
+      "subcategory": "face_sunscreen",
+      "size_options_ml": [
+        50
+      ],
+      "skin_types": [
+        "normal",
+        "dry",
+        "combination",
+        "sensitive"
+      ],
+      "concerns": [
+        "sun_protection",
+        "dullness"
+      ],
+      "key_ingredients": [
+        "rice_extract",
+        "probiotics"
+      ],
+      "actives": [],
+      "concentration": {
+        "spf": 50,
+        "pa_rating": "++++"
+      },
+      "fragrance_free": true,
+      "alcohol_free": true,
+      "essential_oil_free": true,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": false,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "official_url": "https://beautyofjoseon.com/products/relief-sun-rice-probiotics",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "dermalift_sebolift_cleanser",
+      "brand": "Dermalift",
+      "name": "Seboliift Facial Cleanser for Oily/Acne-Prone Skin",
+      "category": "cleanser",
+      "subcategory": "oil_control_cleanser",
+      "size_options_ml": [
+        150
+      ],
+      "skin_types": [
+        "oily",
+        "combination",
+        "acne_prone"
+      ],
+      "concerns": [
+        "oiliness",
+        "acne",
+        "congestion"
+      ],
+      "key_ingredients": [
+        "salicylic_acid",
+        "oil_control_actives"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "check_current_formula",
+      "irritation_level": "low_moderate",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [
+        "strong_exfoliants"
+      ],
+      "iran_availability": "available",
+      "availability_type": "iran_brand",
+      "official_url": "https://dermalift.ir/shop/",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "dermalift_hydralift_moisturizer",
+      "brand": "Dermalift",
+      "name": "Hydralift Moisturizer",
+      "category": "moisturizer",
+      "subcategory": "hydration",
+      "size_options_ml": [
+        50
+      ],
+      "skin_types": [
+        "normal",
+        "dry",
+        "combination"
+      ],
+      "concerns": [
+        "dryness",
+        "dehydration",
+        "skin_barrier"
+      ],
+      "key_ingredients": [
+        "humectants",
+        "emollients"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "check_current_formula",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_brand",
+      "official_url": "https://dermalift.ir/shop/",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "neuderm_optimal_hydrosense",
+      "brand": "Neuderm",
+      "name": "Optimal Hydrosense Hydrating Cream",
+      "category": "moisturizer",
+      "subcategory": "face_moisturizer",
+      "size_options_ml": [
+        50
+      ],
+      "skin_types": [
+        "normal",
+        "dry",
+        "combination"
+      ],
+      "concerns": [
+        "dryness",
+        "dehydration"
+      ],
+      "key_ingredients": [
+        "humectants",
+        "emollients"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "check_current_formula",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_brand",
+      "official_url": "https://neuderm.ir/product-category/neuderm-products/skin-care/",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "neuderm_vitamin_c_serum",
+      "brand": "Neuderm",
+      "name": "Vitamin C+ Serum",
+      "category": "serum",
+      "subcategory": "vitamin_c",
+      "size_options_ml": [
+        30
+      ],
+      "skin_types": [
+        "normal",
+        "combination",
+        "oily"
+      ],
+      "concerns": [
+        "dullness",
+        "uneven_tone",
+        "dark_spots"
+      ],
+      "key_ingredients": [
+        "vitamin_c"
+      ],
+      "actives": [],
+      "concentration": {
+        "vitamin_c_percent": null
+      },
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "check_current_formula",
+      "irritation_level": "low_moderate",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [
+        "strong_exfoliants"
+      ],
+      "iran_availability": "available",
+      "availability_type": "iran_brand",
+      "official_url": "https://neuderm.ir/product-category/neuderm-products/skin-care/",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "comeon_anti_acne_super_serum",
+      "brand": "Comeon",
+      "name": "Anti-Acne Super Serum",
+      "category": "serum",
+      "subcategory": "acne_treatment",
+      "size_options_ml": [
+        30
+      ],
+      "skin_types": [
+        "oily",
+        "combination",
+        "acne_prone"
+      ],
+      "concerns": [
+        "acne",
+        "oiliness",
+        "blemishes"
+      ],
+      "key_ingredients": [
+        "acne_targeted_actives"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "check_current_formula",
+      "irritation_level": "moderate",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [
+        "strong_exfoliants",
+        "retinoids"
+      ],
+      "iran_availability": "available",
+      "availability_type": "iran_brand",
+      "official_url": "https://comeon-co.com/",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "lafarrerr_oily_sunscreen_spf50",
+      "brand": "Lafarrerr",
+      "name": "SPF50 Sunscreen for Oily/Acne-Prone Skin",
+      "category": "sunscreen",
+      "subcategory": "face_sunscreen",
+      "size_options_ml": [
+        40
+      ],
+      "skin_types": [
+        "oily",
+        "combination",
+        "acne_prone"
+      ],
+      "concerns": [
+        "sun_protection",
+        "oiliness"
+      ],
+      "key_ingredients": [
+        "uv_filters"
+      ],
+      "actives": [],
+      "concentration": {
+        "spf": 50
+      },
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low_moderate",
+      "am_usage": true,
+      "pm_usage": false,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_brand",
+      "official_url": "https://rubicala.com/product_brand/lafarrerr/",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "hydroderm_cica_repair",
+      "brand": "Hydroderm",
+      "name": "Cicafid Repair Cream",
+      "category": "moisturizer",
+      "subcategory": "repair",
+      "size_options_ml": [
+        30
+      ],
+      "skin_types": [
+        "dry",
+        "normal",
+        "sensitive"
+      ],
+      "concerns": [
+        "skin_barrier",
+        "irritation",
+        "dryness"
+      ],
+      "key_ingredients": [
+        "repair_supporting_actives"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "check_current_formula",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_brand",
+      "official_url": "https://khaneyedarou.com/brand/hydroderm/",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "drjila_urea_10",
+      "brand": "Dr. Jila",
+      "name": "Urea 10% Cream",
+      "category": "moisturizer",
+      "subcategory": "urea_moisturizer",
+      "size_options_ml": [
+        50
+      ],
+      "skin_types": [
+        "dry",
+        "very_dry"
+      ],
+      "concerns": [
+        "dryness",
+        "rough_texture"
+      ],
+      "key_ingredients": [
+        "urea"
+      ],
+      "actives": [
+        {
+          "ingredient": "urea",
+          "concentration_percent": 10
+        }
+      ],
+      "concentration": {
+        "urea_percent": 10
+      },
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low_moderate",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_brand",
+      "official_url": "https://doctorjila.com/product-category/face-skin-care/",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "seagull_sunscreen_spf60",
+      "brand": "Seagull",
+      "name": "SPF60 Sunscreen",
+      "category": "sunscreen",
+      "subcategory": "face_sunscreen",
+      "size_options_ml": [
+        50
+      ],
+      "skin_types": [
+        "normal",
+        "combination",
+        "oily",
+        "dry"
+      ],
+      "concerns": [
+        "sun_protection"
+      ],
+      "key_ingredients": [
+        "uv_filters"
+      ],
+      "actives": [],
+      "concentration": {
+        "spf": 60
+      },
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low_moderate",
+      "am_usage": true,
+      "pm_usage": false,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_brand",
+      "official_url": "https://khaneyedarou.com/brand/seagull/",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "my_spot_guard_matte_spf50",
+      "brand": "MY",
+      "name": "Spot Guard Matte 4-in-1 SPF50",
+      "category": "sunscreen",
+      "subcategory": "matte_face_sunscreen",
+      "size_options_ml": [
+        50
+      ],
+      "skin_types": [
+        "oily",
+        "combination"
+      ],
+      "concerns": [
+        "sun_protection",
+        "oiliness",
+        "uneven_tone"
+      ],
+      "key_ingredients": [
+        "uv_filters"
+      ],
+      "actives": [],
+      "concentration": {
+        "spf": 50
+      },
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low_moderate",
+      "am_usage": true,
+      "pm_usage": false,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_brand",
+      "official_url": "https://my.co.ir/product-category/personal-care/skin-care-women/",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "cetaphil_gentle_skin_cleanser",
+      "brand": "Cetaphil",
+      "name": "Gentle Skin Cleanser",
+      "category": "cleanser",
+      "subcategory": "gentle_cleanser",
+      "size_options_ml": [
+        236,
+        473
+      ],
+      "skin_types": [
+        "dry",
+        "normal",
+        "sensitive"
+      ],
+      "concerns": [
+        "dryness",
+        "sensitivity",
+        "skin_barrier"
+      ],
+      "key_ingredients": [
+        "glycerin",
+        "niacinamide",
+        "panthenol"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": true,
+      "alcohol_free": true,
+      "essential_oil_free": true,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "official_url": "https://www.cetaphil.com/us/cleansers/gentle-skin-cleanser/302993917564.html",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "eucerin_dermopure_cleanser",
+      "brand": "Eucerin",
+      "name": "DermoPure Clinical Purifying Cleanser",
+      "category": "cleanser",
+      "subcategory": "acne_cleanser",
+      "size_options_ml": [
+        150
+      ],
+      "skin_types": [
+        "oily",
+        "combination",
+        "acne_prone"
+      ],
+      "concerns": [
+        "acne",
+        "oiliness",
+        "blemishes"
+      ],
+      "key_ingredients": [
+        "salicylic_acid"
+      ],
+      "actives": [
+        {
+          "ingredient": "salicylic_acid",
+          "concentration_percent": null
+        }
+      ],
+      "concentration": {
+        "salicylic_acid_percent": null
+      },
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "check_current_formula",
+      "irritation_level": "moderate",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [
+        "strong_exfoliants"
+      ],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "official_url": "https://int.eucerin.com/home/products",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "avene_cicalfate_repair",
+      "brand": "Avène",
+      "name": "Cicalfate+ Restorative Protective Cream",
+      "category": "moisturizer",
+      "subcategory": "repair_barrier",
+      "size_options_ml": [
+        40,
+        100
+      ],
+      "skin_types": [
+        "dry",
+        "normal",
+        "sensitive"
+      ],
+      "concerns": [
+        "skin_barrier",
+        "irritation",
+        "dryness"
+      ],
+      "key_ingredients": [
+        "copper_zinc_complex",
+        "repair_system"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": true,
+      "alcohol_free": true,
+      "essential_oil_free": true,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "official_url": "https://www.aveneusa.com/cicalfate-restorative-protective-cream",
+      "barcode": null,
+      "price": null,
+      "currency": null
+    },
+    {
+      "id": "ardene_pigmenta_body_lightening_sensitive_areas",
+      "brand": "Ardene",
+      "name": "Pigmenta Strong Lightening Body Cream for Sensitive Areas",
+      "category": "body_care",
+      "subcategory": "body_dark_spot_care",
+      "size_options_ml": [
+        150
+      ],
+      "skin_types": [
+        "normal",
+        "combination",
+        "dry",
+        "oily"
+      ],
+      "concerns": [
+        "body_dark_spots",
+        "uneven_tone"
+      ],
+      "key_ingredients": [],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "check_current_formula",
+      "irritation_level": "moderate",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [
+        "strong_exfoliants"
+      ],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://mer30daru.com/product_brand/arden/",
+      "barcode": null,
+      "notes": "Iranian-market product; verify exact current ingredient list before automated safety rules."
+    },
+    {
+      "id": "ardene_dry_skin_hydrating_collagen_cream",
+      "brand": "Ardene",
+      "name": "Hydrating & Collagen Cream for Dry Skin",
+      "category": "moisturizer",
+      "subcategory": "face_moisturizer",
+      "size_options_ml": [
+        50
+      ],
+      "skin_types": [
+        "dry",
+        "normal"
+      ],
+      "concerns": [
+        "dryness",
+        "dehydration"
+      ],
+      "key_ingredients": [
+        "collagen"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "check_current_formula",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://mer30daru.com/product_brand/arden/",
+      "barcode": null,
+      "notes": "Current Iranian retailer listing."
+    },
+    {
+      "id": "ardene_oily_skin_moisturizer",
+      "brand": "Ardene",
+      "name": "Moisturizing Cream for Oily Skin",
+      "category": "moisturizer",
+      "subcategory": "oil_control_moisturizer",
+      "size_options_ml": [
+        50
+      ],
+      "skin_types": [
+        "oily",
+        "combination"
+      ],
+      "concerns": [
+        "oiliness",
+        "dehydration"
+      ],
+      "key_ingredients": [],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "check_current_formula",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://mer30daru.com/product_brand/arden/",
+      "barcode": null,
+      "notes": "Current Iranian retailer listing."
+    },
+    {
+      "id": "ardene_aha_12_peeling_cream",
+      "brand": "Ardene",
+      "name": "AHA 12% Peeling & Anti-Spot Cream",
+      "category": "treatment",
+      "subcategory": "aha_exfoliant",
+      "size_options_ml": [
+        30
+      ],
+      "skin_types": [
+        "normal",
+        "combination",
+        "oily"
+      ],
+      "concerns": [
+        "texture",
+        "uneven_tone",
+        "dark_spots"
+      ],
+      "key_ingredients": [
+        "aha"
+      ],
+      "actives": [
+        {
+          "ingredient": "aha",
+          "concentration_percent": 12
+        }
+      ],
+      "concentration": {
+        "aha_percent": 12
+      },
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "medical_review_preferred",
+      "irritation_level": "moderate_high",
+      "am_usage": false,
+      "pm_usage": true,
+      "interaction_ids": [
+        "retinoids",
+        "bha",
+        "other_ahas"
+      ],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://mer30daru.com/product_brand/arden/",
+      "barcode": null,
+      "notes": "Concentration verified from current retailer listing; exact acid blend not specified."
+    },
+    {
+      "id": "ardene_sebuma_makeup_cleanser",
+      "brand": "Ardene",
+      "name": "Sebuma 3-in-1 Makeup Remover for Oily/Acne-Prone Skin",
+      "category": "cleanser",
+      "subcategory": "makeup_remover",
+      "size_options_ml": [
+        500
+      ],
+      "skin_types": [
+        "oily",
+        "combination",
+        "acne_prone"
+      ],
+      "concerns": [
+        "oiliness",
+        "blemishes"
+      ],
+      "key_ingredients": [],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "check_current_formula",
+      "irritation_level": "low_moderate",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://mer30daru.com/product_brand/arden/",
+      "barcode": null,
+      "notes": "Useful as cleansing step; do not treat as leave-on acne active unless label confirms."
+    },
+    {
+      "id": "prime_pha_5_repair_moisturizer",
+      "brand": "Prime",
+      "name": "Daily Repair & Hydrating Moisturizer PHA 5%",
+      "category": "moisturizer",
+      "subcategory": "pha_exfoliating_moisturizer",
+      "size_options_ml": [
+        50
+      ],
+      "skin_types": [
+        "normal",
+        "combination",
+        "dry"
+      ],
+      "concerns": [
+        "texture",
+        "dehydration",
+        "skin_barrier"
+      ],
+      "key_ingredients": [
+        "pha"
+      ],
+      "actives": [
+        {
+          "ingredient": "pha",
+          "concentration_percent": 5
+        }
+      ],
+      "concentration": {
+        "pha_percent": 5
+      },
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "medical_review_preferred",
+      "irritation_level": "moderate",
+      "am_usage": false,
+      "pm_usage": true,
+      "interaction_ids": [
+        "retinoids",
+        "aha",
+        "bha"
+      ],
+      "iran_availability": "available",
+      "availability_type": "iran_brand",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://mer30daru.com/product/462202/prime-daily-anti-aging-moisturizer-cream/",
+      "barcode": null,
+      "notes": "Current Iranian retailer listing explicitly states PHA 5%."
+    },
+    {
+      "id": "prime_ultimate_whitening_serum",
+      "brand": "Prime",
+      "name": "Ultimate Whitening Anti-Spot Serum",
+      "category": "serum",
+      "subcategory": "dark_spot_serum",
+      "size_options_ml": [
+        30
+      ],
+      "skin_types": [
+        "normal",
+        "dry",
+        "combination",
+        "oily"
+      ],
+      "concerns": [
+        "dark_spots",
+        "uneven_tone",
+        "dullness"
+      ],
+      "key_ingredients": [
+        "niacinamide",
+        "butylresorcinol"
+      ],
+      "actives": [],
+      "concentration": {
+        "niacinamide_percent": null,
+        "butylresorcinol_percent": null
+      },
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "check_current_formula",
+      "irritation_level": "low_moderate",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [
+        "strong_exfoliants"
+      ],
+      "iran_availability": "available",
+      "availability_type": "iran_brand",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://mer30daru.com/product/477275/prime-ultimate-whitening-anti-spot-serum/",
+      "barcode": null,
+      "notes": "Retail listing states niacinamide and butylresorcinol; concentrations should be verified from label."
+    },
+    {
+      "id": "prime_vitamin_c_serum",
+      "brand": "Prime",
+      "name": "Vitamin C Serum with Kakadu Plum Extract",
+      "category": "serum",
+      "subcategory": "vitamin_c_serum",
+      "size_options_ml": [
+        30
+      ],
+      "skin_types": [
+        "normal",
+        "dry",
+        "combination",
+        "oily"
+      ],
+      "concerns": [
+        "dullness",
+        "dark_spots",
+        "uneven_tone",
+        "fine_lines"
+      ],
+      "key_ingredients": [
+        "vitamin_c",
+        "niacinamide",
+        "vitamin_e",
+        "green_tea",
+        "sodium_hyaluronate"
+      ],
+      "actives": [],
+      "concentration": {
+        "vitamin_c_percent": null
+      },
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "check_current_formula",
+      "irritation_level": "low_moderate",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [
+        "strong_exfoliants"
+      ],
+      "iran_availability": "available",
+      "availability_type": "iran_brand",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://mer30daru.com/product/23253/prime-vitamin-c-serum/",
+      "barcode": null,
+      "notes": "Retail listing provides ingredient names but not vitamin C concentration."
+    },
+    {
+      "id": "prime_spf50_tinted_rejuvenating",
+      "brand": "Prime",
+      "name": "Tinted Rejuvenating Sunscreen SPF 50",
+      "category": "sunscreen",
+      "subcategory": "tinted_face_sunscreen",
+      "size_options_ml": [
+        50
+      ],
+      "skin_types": [
+        "normal",
+        "dry",
+        "combination",
+        "oily"
+      ],
+      "concerns": [
+        "sun_protection",
+        "uneven_tone"
+      ],
+      "key_ingredients": [
+        "uv_filters",
+        "vitamin_e"
+      ],
+      "actives": [],
+      "concentration": {
+        "spf": 50
+      },
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low_moderate",
+      "am_usage": true,
+      "pm_usage": false,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_brand",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://mer30daru.com/product/12228/prime-tinted-rejuvenating-sunscreen/",
+      "barcode": null,
+      "notes": "Current Iranian retailer listing."
+    },
+    {
+      "id": "prime_acnex_tinted_spf60",
+      "brand": "Prime",
+      "name": "Acnex Tinted Oil-Free Sunscreen SPF 60",
+      "category": "sunscreen",
+      "subcategory": "acne_prone_tinted_sunscreen",
+      "size_options_ml": [
+        40
+      ],
+      "skin_types": [
+        "oily",
+        "combination",
+        "acne_prone"
+      ],
+      "concerns": [
+        "sun_protection",
+        "oiliness",
+        "acne",
+        "blemishes"
+      ],
+      "key_ingredients": [
+        "uv_filters"
+      ],
+      "actives": [],
+      "concentration": {
+        "spf": 60
+      },
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low_moderate",
+      "am_usage": true,
+      "pm_usage": false,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_brand",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://mer30daru.com/product/14677/prime-tinted-sunscreen-cream-oil-free/",
+      "barcode": null,
+      "notes": "Retail listing identifies it as oil-free and intended for oily/acne-prone skin."
+    },
+    {
+      "id": "prime_oily_spf30_moisturizer",
+      "brand": "Prime",
+      "name": "Colorless Moisturizing Cream for Oily Skin SPF 30",
+      "category": "moisturizer",
+      "subcategory": "spf_moisturizer",
+      "size_options_ml": [
+        50
+      ],
+      "skin_types": [
+        "oily",
+        "combination",
+        "acne_prone"
+      ],
+      "concerns": [
+        "oiliness",
+        "dehydration",
+        "sun_protection"
+      ],
+      "key_ingredients": [],
+      "actives": [],
+      "concentration": {
+        "spf": 30
+      },
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low_moderate",
+      "am_usage": true,
+      "pm_usage": false,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_brand",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://mer30daru.com/product/17480/prime-colorless-moisturizing-cream/",
+      "barcode": null,
+      "notes": "Retail listing says oil-free and matte; SPF 30."
+    },
+    {
+      "id": "cinere_firming_lift_cream",
+      "brand": "Cinere",
+      "name": "Firming Lift Cream for Face & Neck",
+      "category": "moisturizer",
+      "subcategory": "anti_aging_moisturizer",
+      "size_options_ml": [
+        50
+      ],
+      "skin_types": [
+        "normal",
+        "dry",
+        "combination",
+        "oily"
+      ],
+      "concerns": [
+        "fine_lines",
+        "loss_of_firmness",
+        "dehydration"
+      ],
+      "key_ingredients": [
+        "collagen"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "check_current_formula",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_brand",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://mer30daru.com/product/13409/cinere-firming-lift-cream/",
+      "barcode": null,
+      "notes": "Current Iranian retailer listing."
+    },
+    {
+      "id": "facedoux_keratosome_urea5",
+      "brand": "Face Doux",
+      "name": "Keratosome Moisturizing Cream Urea + Euserin 5%",
+      "category": "moisturizer",
+      "subcategory": "urea_moisturizer",
+      "size_options_ml": [
+        100
+      ],
+      "skin_types": [
+        "dry",
+        "very_dry"
+      ],
+      "concerns": [
+        "dryness",
+        "rough_texture",
+        "dehydration"
+      ],
+      "key_ingredients": [
+        "urea",
+        "euserin"
+      ],
+      "actives": [
+        {
+          "ingredient": "urea",
+          "concentration_percent": 5
+        }
+      ],
+      "concentration": {
+        "urea_percent": 5
+      },
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_brand",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://mer30daru.com/product/507755/face-doux-keratosome-moisturizing-cream/",
+      "barcode": null,
+      "notes": "Current retailer lists urea + euserin 5%."
+    },
+    {
+      "id": "facedoux_keratosome_urea10",
+      "brand": "Face Doux",
+      "name": "Keratosome Moisturizing Cream Urea 10%",
+      "category": "moisturizer",
+      "subcategory": "urea_moisturizer",
+      "size_options_ml": [
+        100
+      ],
+      "skin_types": [
+        "dry",
+        "very_dry"
+      ],
+      "concerns": [
+        "dryness",
+        "rough_texture",
+        "dehydration"
+      ],
+      "key_ingredients": [
+        "urea",
+        "euserin"
+      ],
+      "actives": [
+        {
+          "ingredient": "urea",
+          "concentration_percent": 10
+        }
+      ],
+      "concentration": {
+        "urea_percent": 10
+      },
+      "fragrance_free": false,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low_moderate",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_brand",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://mer30daru.com/product/507534/face-doux-keratosome-moisturizing-cream-dry-skin/",
+      "barcode": null,
+      "notes": "Retail listing notes a pleasant fragrance; current formula should be verified."
+    },
+    {
+      "id": "facedoux_acne_control_gel",
+      "brand": "Face Doux",
+      "name": "Acne Control Gel AHA",
+      "category": "treatment",
+      "subcategory": "acne_aha",
+      "size_options_ml": [
+        30
+      ],
+      "skin_types": [
+        "oily",
+        "combination",
+        "acne_prone"
+      ],
+      "concerns": [
+        "acne",
+        "oiliness",
+        "congestion",
+        "post_acne_marks"
+      ],
+      "key_ingredients": [
+        "aha"
+      ],
+      "actives": [
+        {
+          "ingredient": "aha",
+          "concentration_percent": null
+        }
+      ],
+      "concentration": {
+        "aha_percent": null
+      },
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "medical_review_preferred",
+      "irritation_level": "moderate",
+      "am_usage": false,
+      "pm_usage": true,
+      "interaction_ids": [
+        "retinoids",
+        "bha",
+        "other_ahas"
+      ],
+      "iran_availability": "available",
+      "availability_type": "iran_brand",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://mer30daru.com/product/11868/face-doux-acne-control-gel/",
+      "barcode": null,
+      "notes": "Current retailer describes AHA but does not state concentration."
+    },
+    {
+      "id": "facedoux_aha15_peeling_cream",
+      "brand": "Face Doux",
+      "name": "AHA 15% Peeling Cream",
+      "category": "treatment",
+      "subcategory": "aha_exfoliant",
+      "size_options_ml": [
+        30
+      ],
+      "skin_types": [
+        "normal",
+        "combination",
+        "oily"
+      ],
+      "concerns": [
+        "texture",
+        "dark_spots",
+        "dullness",
+        "fine_lines"
+      ],
+      "key_ingredients": [
+        "aha"
+      ],
+      "actives": [
+        {
+          "ingredient": "aha",
+          "concentration_percent": 15
+        }
+      ],
+      "concentration": {
+        "aha_percent": 15
+      },
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "medical_review_preferred",
+      "irritation_level": "high",
+      "am_usage": false,
+      "pm_usage": true,
+      "interaction_ids": [
+        "retinoids",
+        "bha",
+        "other_ahas"
+      ],
+      "iran_availability": "available",
+      "availability_type": "iran_brand",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://mer30daru.com/product/9360/face-doux-aha-cream-30ml/",
+      "barcode": null,
+      "notes": "High-strength exfoliant; conservative usage rules required."
+    },
+    {
+      "id": "facedoux_hydrasome_dry_facewash",
+      "brand": "Face Doux",
+      "name": "Hydrasome Face Wash Foam for Dry Skin",
+      "category": "cleanser",
+      "subcategory": "hydrating_foam_cleanser",
+      "size_options_ml": [
+        150
+      ],
+      "skin_types": [
+        "dry",
+        "sensitive"
+      ],
+      "concerns": [
+        "dryness",
+        "dehydration",
+        "redness"
+      ],
+      "key_ingredients": [
+        "aloe_vera"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_brand",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://mer30daru.com/product/511401/face-doux-hydrasome-face-wash-foam/",
+      "barcode": null,
+      "notes": "Current retailer describes aloe vera and dry/sensitive-skin use."
+    },
+    {
+      "id": "facedoux_pigmasome_lightening",
+      "brand": "Face Doux",
+      "name": "Pigmasome Lightening Cream",
+      "category": "treatment",
+      "subcategory": "dark_spot_care",
+      "size_options_ml": [
+        30
+      ],
+      "skin_types": [
+        "normal",
+        "dry",
+        "combination",
+        "oily"
+      ],
+      "concerns": [
+        "dark_spots",
+        "post_acne_marks",
+        "uneven_tone"
+      ],
+      "key_ingredients": [
+        "antioxidants"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "check_current_formula",
+      "irritation_level": "low_moderate",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_brand",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://mer30daru.com/product/9213/face-doux-lightening-cream/",
+      "barcode": null,
+      "notes": "Retail listing states no hydroquinone or kojic acid."
+    },
+    {
+      "id": "comeon_hydrating_super_serum",
+      "brand": "Comeon",
+      "name": "Hydrating Super Serum",
+      "category": "serum",
+      "subcategory": "hydration_serum",
+      "size_options_ml": [
+        30
+      ],
+      "skin_types": [
+        "dry",
+        "normal",
+        "combination",
+        "oily"
+      ],
+      "concerns": [
+        "dehydration",
+        "dryness",
+        "skin_barrier"
+      ],
+      "key_ingredients": [
+        "panthenol",
+        "glycerin",
+        "hyaluronic_acid"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_brand",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://mer30daru.com/product/487605/comeon-hydrating-super-serum/",
+      "barcode": null,
+      "notes": "Current retailer lists panthenol, glycerin and hyaluronic acid; manufactured in Iran."
+    },
+    {
+      "id": "comeon_anti_pigment_super_serum",
+      "brand": "Comeon",
+      "name": "Anti-Pigment Super Serum",
+      "category": "serum",
+      "subcategory": "dark_spot_care",
+      "size_options_ml": [
+        30
+      ],
+      "skin_types": [
+        "normal",
+        "dry",
+        "combination",
+        "oily"
+      ],
+      "concerns": [
+        "dark_spots",
+        "uneven_tone",
+        "dullness"
+      ],
+      "key_ingredients": [
+        "dexpanthenol",
+        "glycerin"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "check_current_formula",
+      "irritation_level": "low_moderate",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_brand",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://mer30daru.com/product/539312/comeon-anti-pigment-super-serum/",
+      "barcode": null,
+      "notes": "Current retailer listing."
+    },
+    {
+      "id": "seagull_vitamin_c_clarifying_toner",
+      "brand": "Seagull",
+      "name": "Vitamin C Clarifying Toner",
+      "category": "toner",
+      "subcategory": "brightening_toner",
+      "size_options_ml": [
+        250
+      ],
+      "skin_types": [
+        "oily",
+        "combination",
+        "normal"
+      ],
+      "concerns": [
+        "dullness",
+        "oiliness",
+        "uneven_tone"
+      ],
+      "key_ingredients": [
+        "vitamin_c"
+      ],
+      "actives": [
+        {
+          "ingredient": "vitamin_c",
+          "concentration_percent": null
+        }
+      ],
+      "concentration": {
+        "vitamin_c_percent": null
+      },
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "check_current_formula",
+      "irritation_level": "moderate",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [
+        "strong_exfoliants",
+        "retinoids"
+      ],
+      "iran_availability": "available",
+      "availability_type": "iran_brand",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://mer30daru.com/product/12366/seagull-clarifying-toner/",
+      "barcode": null,
+      "notes": "Retailer describes exfoliating/clarifying properties and vitamin C."
+    },
+    {
+      "id": "seagull_mimosa_healing_cream",
+      "brand": "Seagull",
+      "name": "Mimosa Healing Cream",
+      "category": "moisturizer",
+      "subcategory": "repair_soothing",
+      "size_options_ml": [
+        50
+      ],
+      "skin_types": [
+        "dry",
+        "sensitive",
+        "normal"
+      ],
+      "concerns": [
+        "irritation",
+        "redness",
+        "skin_barrier",
+        "dryness"
+      ],
+      "key_ingredients": [
+        "mimosa"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": true,
+      "alcohol_free": null,
+      "essential_oil_free": true,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_brand",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://mer30daru.com/product/4460/seagull-mimosa-healing-cream/",
+      "barcode": null,
+      "notes": "Current retailer describes use for sensitive/damaged skin."
+    },
+    {
+      "id": "vichy_minéral_89",
+      "brand": "Vichy",
+      "name": "Minéral 89 Fortifying & Hydrating Serum",
+      "category": "serum",
+      "subcategory": "hydration_barrier_serum",
+      "size_options_ml": [
+        50,
+        75
+      ],
+      "skin_types": [
+        "dry",
+        "normal",
+        "combination",
+        "oily",
+        "sensitive"
+      ],
+      "concerns": [
+        "dehydration",
+        "skin_barrier"
+      ],
+      "key_ingredients": [
+        "hyaluronic_acid",
+        "vichy_volcanic_water"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://drshim.ir/brand/vichy/",
+      "barcode": null,
+      "notes": "Current Iranian retailer listing."
+    },
+    {
+      "id": "vichy_capital_soleil_3in1",
+      "brand": "Vichy",
+      "name": "Capital Soleil 3-in-1 Anti-Aging Sunscreen",
+      "category": "sunscreen",
+      "subcategory": "anti_aging_face_sunscreen",
+      "size_options_ml": [
+        50
+      ],
+      "skin_types": [
+        "normal",
+        "combination",
+        "oily"
+      ],
+      "concerns": [
+        "sun_protection",
+        "fine_lines",
+        "uneven_tone"
+      ],
+      "key_ingredients": [
+        "uv_filters"
+      ],
+      "actives": [],
+      "concentration": {
+        "spf": 50
+      },
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low_moderate",
+      "am_usage": true,
+      "pm_usage": false,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://drshim.ir/brand/vichy/",
+      "barcode": null,
+      "notes": "Exact regional formulation should be confirmed."
+    },
+    {
+      "id": "bioderma_atoderm_lip_balm",
+      "brand": "Bioderma",
+      "name": "Atoderm Lip Balm",
+      "category": "lip_care",
+      "subcategory": "lip_balm",
+      "size_options_ml": [
+        15
+      ],
+      "skin_types": [
+        "dry",
+        "sensitive",
+        "normal"
+      ],
+      "concerns": [
+        "dry_lips",
+        "lip_barrier"
+      ],
+      "key_ingredients": [],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://drshim.ir/brand/bioderma/",
+      "barcode": null,
+      "notes": "Current Iranian retailer listing."
+    },
+    {
+      "id": "bioderma_spot_age_spf50",
+      "brand": "Bioderma",
+      "name": "Photoderm Spot-Age SPF50+",
+      "category": "sunscreen",
+      "subcategory": "anti_dark_spot_sunscreen",
+      "size_options_ml": [
+        40
+      ],
+      "skin_types": [
+        "normal",
+        "dry",
+        "combination"
+      ],
+      "concerns": [
+        "sun_protection",
+        "dark_spots",
+        "fine_lines"
+      ],
+      "key_ingredients": [
+        "uv_filters"
+      ],
+      "actives": [],
+      "concentration": {
+        "spf": 50
+      },
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low_moderate",
+      "am_usage": true,
+      "pm_usage": false,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://drshim.ir/brand/bioderma/",
+      "barcode": null,
+      "notes": "Listed in current Iranian retailer catalog."
+    },
+    {
+      "id": "bioderma_sebium_micellar",
+      "brand": "Bioderma",
+      "name": "Sébium H2O Micellar Water",
+      "category": "cleanser",
+      "subcategory": "micellar_water",
+      "size_options_ml": [
+        250,
+        500
+      ],
+      "skin_types": [
+        "oily",
+        "combination",
+        "acne_prone"
+      ],
+      "concerns": [
+        "oiliness",
+        "blemishes",
+        "makeup_removal"
+      ],
+      "key_ingredients": [],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://drshim.ir/brand/bioderma/",
+      "barcode": null,
+      "notes": "Current Iranian retailer listing; verify current exact formula."
+    },
+    {
+      "id": "isntree_hyaluronic_toner",
+      "brand": "Isntree",
+      "name": "Hyaluronic Acid Toner",
+      "category": "toner",
+      "subcategory": "hydrating_toner",
+      "size_options_ml": [
+        200
+      ],
+      "skin_types": [
+        "dry",
+        "normal",
+        "combination",
+        "sensitive"
+      ],
+      "concerns": [
+        "dehydration",
+        "dryness"
+      ],
+      "key_ingredients": [
+        "hyaluronic_acid"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://drshim.ir/brand/isntree/",
+      "barcode": null,
+      "notes": "Current Iranian retailer listing."
+    },
+    {
+      "id": "isntree_ultra_low_molecular_ha_serum",
+      "brand": "Isntree",
+      "name": "Ultra-Low Molecular Hyaluronic Acid Serum",
+      "category": "serum",
+      "subcategory": "hydration_serum",
+      "size_options_ml": [
+        50
+      ],
+      "skin_types": [
+        "dry",
+        "normal",
+        "combination",
+        "sensitive"
+      ],
+      "concerns": [
+        "dehydration",
+        "dryness"
+      ],
+      "key_ingredients": [
+        "hyaluronic_acid"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://drshim.ir/brand/isntree/",
+      "barcode": null,
+      "notes": "Current Iranian retailer listing."
+    },
+    {
+      "id": "isntree_hyaluronic_acid_aqua_gel_cream",
+      "brand": "Isntree",
+      "name": "Hyaluronic Acid Aqua Gel Cream",
+      "category": "moisturizer",
+      "subcategory": "gel_cream",
+      "size_options_ml": [
+        100
+      ],
+      "skin_types": [
+        "normal",
+        "combination",
+        "oily"
+      ],
+      "concerns": [
+        "dehydration",
+        "dryness"
+      ],
+      "key_ingredients": [
+        "hyaluronic_acid"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://drshim.ir/brand/isntree/",
+      "barcode": null,
+      "notes": "Current Iranian retailer listing."
+    },
+    {
+      "id": "isntree_retinol_serum",
+      "brand": "Isntree",
+      "name": "Retinol Serum",
+      "category": "serum",
+      "subcategory": "retinoid_treatment",
+      "size_options_ml": [
+        30
+      ],
+      "skin_types": [
+        "normal",
+        "combination",
+        "oily"
+      ],
+      "concerns": [
+        "texture",
+        "fine_lines",
+        "blemishes"
+      ],
+      "key_ingredients": [
+        "retinol"
+      ],
+      "actives": [
+        {
+          "ingredient": "retinol",
+          "concentration_percent": null
+        }
+      ],
+      "concentration": {
+        "retinol_percent": null
+      },
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "avoid_or_medical_review",
+      "irritation_level": "moderate_high",
+      "am_usage": false,
+      "pm_usage": true,
+      "interaction_ids": [
+        "aha",
+        "bha",
+        "other_retinoids"
+      ],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://drshim.ir/brand/isntree/",
+      "barcode": null,
+      "notes": "Current Iranian retailer listing; concentration must be filled from exact SKU label."
+    },
+    {
+      "id": "isntree_hyper_niacinamide_20",
+      "brand": "Isntree",
+      "name": "Hyper Niacinamide 20 Serum",
+      "category": "serum",
+      "subcategory": "niacinamide_serum",
+      "size_options_ml": [
+        20
+      ],
+      "skin_types": [
+        "oily",
+        "combination"
+      ],
+      "concerns": [
+        "oiliness",
+        "pores",
+        "blemishes",
+        "uneven_tone"
+      ],
+      "key_ingredients": [
+        "niacinamide"
+      ],
+      "actives": [
+        {
+          "ingredient": "niacinamide",
+          "concentration_percent": 20
+        }
+      ],
+      "concentration": {
+        "niacinamide_percent": 20
+      },
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "moderate",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [
+        "strong_actives"
+      ],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://drshim.ir/brand/isntree/",
+      "barcode": null,
+      "notes": "Retail listing identifies 20% niacinamide; high strength should be introduced cautiously."
+    },
+    {
+      "id": "isntree_hyaluronic_sun_gel",
+      "brand": "Isntree",
+      "name": "Hyaluronic Acid Watery Sun Gel SPF50+",
+      "category": "sunscreen",
+      "subcategory": "hydrating_face_sunscreen",
+      "size_options_ml": [
+        50
+      ],
+      "skin_types": [
+        "normal",
+        "dry",
+        "combination"
+      ],
+      "concerns": [
+        "sun_protection",
+        "dehydration"
+      ],
+      "key_ingredients": [
+        "hyaluronic_acid",
+        "uv_filters"
+      ],
+      "actives": [],
+      "concentration": {
+        "spf": 50
+      },
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": false,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://drshim.ir/brand/isntree/",
+      "barcode": null,
+      "notes": "Current Iranian retailer listing."
+    },
+    {
+      "id": "roundlab_dokdo_soothing_exfoliating_toner",
+      "brand": "Round Lab",
+      "name": "1025 Dokdo Soothing Exfoliating Toner",
+      "category": "toner",
+      "subcategory": "mild_exfoliating_toner",
+      "size_options_ml": [
+        200
+      ],
+      "skin_types": [
+        "normal",
+        "combination",
+        "oily"
+      ],
+      "concerns": [
+        "texture",
+        "congestion",
+        "dullness"
+      ],
+      "key_ingredients": [
+        "mild_exfoliating_actives"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "check_current_formula",
+      "irritation_level": "moderate",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [
+        "retinoids",
+        "other_acids"
+      ],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://drshim.ir/brand/round-lab/",
+      "barcode": null,
+      "notes": "Current Iranian retailer listing explicitly describes it as soothing and mildly exfoliating."
+    },
+    {
+      "id": "roundlab_birch_moisturizing_sun_spf50",
+      "brand": "Round Lab",
+      "name": "Birch Juice Moisturizing Sun Cream SPF50+",
+      "category": "sunscreen",
+      "subcategory": "hydrating_face_sunscreen",
+      "size_options_ml": [
+        50
+      ],
+      "skin_types": [
+        "normal",
+        "dry",
+        "combination"
+      ],
+      "concerns": [
+        "sun_protection",
+        "dehydration"
+      ],
+      "key_ingredients": [
+        "birch_sap",
+        "uv_filters"
+      ],
+      "actives": [],
+      "concentration": {
+        "spf": 50
+      },
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": false,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://drshim.ir/brand/round-lab/",
+      "barcode": null,
+      "notes": "Current Iranian retailer listing."
+    },
+    {
+      "id": "roundlab_dokdo_lotion",
+      "brand": "Round Lab",
+      "name": "1025 Dokdo Lotion",
+      "category": "moisturizer",
+      "subcategory": "soothing_lotion",
+      "size_options_ml": [
+        200
+      ],
+      "skin_types": [
+        "normal",
+        "dry",
+        "combination",
+        "sensitive"
+      ],
+      "concerns": [
+        "dryness",
+        "dehydration",
+        "sensitivity"
+      ],
+      "key_ingredients": [
+        "soothing_hydration_complex"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://drshim.ir/brand/round-lab/",
+      "barcode": null,
+      "notes": "Current Iranian retailer listing."
+    },
+    {
+      "id": "roundlab_birch_soothing_gel",
+      "brand": "Round Lab",
+      "name": "Birch Juice Soothing Gel",
+      "category": "moisturizer",
+      "subcategory": "soothing_gel",
+      "size_options_ml": [
+        150
+      ],
+      "skin_types": [
+        "normal",
+        "combination",
+        "oily",
+        "sensitive"
+      ],
+      "concerns": [
+        "dehydration",
+        "redness",
+        "sensitivity"
+      ],
+      "key_ingredients": [
+        "birch_sap"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://drshim.ir/brand/round-lab/",
+      "barcode": null,
+      "notes": "Current Iranian retailer listing."
+    },
+    {
+      "id": "neutrogena_hydro_boost_water_gel",
+      "brand": "Neutrogena",
+      "name": "Hydro Boost Water Gel",
+      "category": "moisturizer",
+      "subcategory": "gel_moisturizer",
+      "size_options_ml": [
+        50
+      ],
+      "skin_types": [
+        "normal",
+        "combination",
+        "oily"
+      ],
+      "concerns": [
+        "dehydration",
+        "dryness"
+      ],
+      "key_ingredients": [
+        "hyaluronic_acid"
+      ],
+      "actives": [],
+      "concentration": {},
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "generally_low_concern",
+      "irritation_level": "low_moderate",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://www.neutrogena.com/",
+      "barcode": null,
+      "notes": "Widely sold/imported in Iran; exact market formula and stock should be rechecked per SKU."
+    },
+    {
+      "id": "neutrogena_salicylic_acid_cleanser",
+      "brand": "Neutrogena",
+      "name": "Oil-Free Acne Wash",
+      "category": "cleanser",
+      "subcategory": "salicylic_acid_acne_cleanser",
+      "size_options_ml": [
+        269
+      ],
+      "skin_types": [
+        "oily",
+        "combination",
+        "acne_prone"
+      ],
+      "concerns": [
+        "acne",
+        "blackheads",
+        "oiliness"
+      ],
+      "key_ingredients": [
+        "salicylic_acid"
+      ],
+      "actives": [
+        {
+          "ingredient": "salicylic_acid",
+          "concentration_percent": 2
+        }
+      ],
+      "concentration": {
+        "salicylic_acid_percent": 2
+      },
+      "fragrance_free": null,
+      "alcohol_free": null,
+      "essential_oil_free": null,
+      "pregnancy_safety": "medical_review_preferred",
+      "irritation_level": "moderate",
+      "am_usage": true,
+      "pm_usage": true,
+      "interaction_ids": [
+        "retinoids",
+        "aha",
+        "other_bha"
+      ],
+      "iran_availability": "available",
+      "availability_type": "iran_retailer",
+      "last_verified_at": "2026-08-17",
+      "official_url": "https://www.neutrogena.com/",
+      "barcode": null,
+      "notes": "Common imported acne cleanser; verify exact active concentration on Iranian SKU."
+    }
+  ],
+  "catalog_notes": "Expanded using current Iranian retailer listings and official/brand pages. Retail availability changes frequently. Fields with null values should be verified from the exact current SKU label before automated recommendations or safety decisions."
+}

@@ -1,0 +1,5 @@
+path: datasets/skin/acne
+train: images/train
+val: images/val
+names:
+  0: acne_lesion
