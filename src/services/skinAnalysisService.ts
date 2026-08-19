@@ -90,6 +90,8 @@ function heuristicAnalyze(stats: PixelStats, profile: SkinProfile): SkinAnalysis
  */
 const endpoint = import.meta.env.VITE_SKIN_AI_ENDPOINT?.trim() || '/api/skin-analysis';
 
+export type SkinAnalysisMode = 'normal' | 'gemini';
+
 function validateProviderResult(value: unknown): SkinAnalysisResult {
   const raw = value as Partial<SkinAnalysisResult> | null;
   if (!raw || typeof raw !== 'object' || !raw.metrics) throw new Error('پاسخ تحلیل پوست معتبر نیست.');
@@ -114,7 +116,7 @@ function validateProviderResult(value: unknown): SkinAnalysisResult {
 }
 
 export const skinAnalysisService = {
-  provider: 'local-heuristic-v2',
+  provider: 'local-models',
   async checkImageQuality(imageDataUrl: string): Promise<ImageQualityResult> {
     try {
       const stats = await analyzePixels(imageDataUrl);
@@ -129,15 +131,25 @@ export const skinAnalysisService = {
       return {ok:false,issues:[{code:'invalid_image',message:'خواندن تصویر ممکن نیست.'}]};
     }
   },
-  async analyzeSkin(imageDataUrl: string, profile: SkinProfile): Promise<SkinAnalysisResult> {
-    const stats=await analyzePixels(imageDataUrl);
+  async analyzeSkin(imageDataUrl: string, profile: SkinProfile, mode: SkinAnalysisMode = 'normal'): Promise<SkinAnalysisResult> {
     const q=await this.checkImageQuality(imageDataUrl);
     if(!q.ok) throw new Error(q.issues[0]?.message || 'این عکس برای تحلیل مناسب نیست.');
-    const result=heuristicAnalyze(stats,profile);
-    result.provider='local-heuristic-v2';
-    result.imageQuality={ suitable:true, faceDetected:false, faceCount:0, frontal:false, faceVisibility:'partial', qualityScore:Math.max(0,Math.min(1,1-q.issues.length/5)), issues:[] };
-    result.limitations=['این نسخه مدل بینایی/تشخیص چهره آموزش‌دیده ندارد و شاخص‌ها تقریبی هستند.'];
-    result.recommendedNextStep='برای نسخه دقیق‌تر، مدل خودتان را در models/skin قرار دهید و آداپتر آن را جایگزین heuristicAnalyze کنید.';
-    return result;
+
+    const path = mode === 'gemini' ? '/api/gemini-skin-analysis' : endpoint;
+    try {
+      const res = await fetch(path, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageDataUrl, profile }),
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(body?.error || body?.message || (mode === 'gemini' ? 'تحلیل دقیق با Gemini انجام نشد.' : 'تحلیل مدل‌های محلی انجام نشد.'));
+      }
+      return validateProviderResult(body);
+    } catch (error) {
+      if (error instanceof Error) throw error;
+      throw new Error(mode === 'gemini' ? 'ارتباط با Gemini برقرار نشد.' : 'ارتباط با مدل تحلیل محلی برقرار نشد.');
+    }
   },
 };

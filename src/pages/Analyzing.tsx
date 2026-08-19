@@ -10,13 +10,14 @@ export default function Analyzing() {
   const runScan = useAppStore((s) => s.runScan);
   const [phraseIdx, setPhraseIdx] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const state = location.state as { imageDataUrl?: string; thumb?: string; mode?: 'normal' | 'gemini' } | null;
+  const modeLabel = state?.mode === 'gemini' ? 'تحلیل دقیق با Gemini' : 'تحلیل معمولی با مدل‌های محلی';
 
   useEffect(() => {
-    const state = location.state as { imageDataUrl?: string; thumb?: string } | null;
     if (!state?.imageDataUrl) { navigate('/scan', { replace: true }); return; }
 
     const interval = setInterval(() => setPhraseIdx((i) => (i + 1) % PHRASES.length), 1300);
-    runScan(state.imageDataUrl, state.thumb).then(() => {
+    runScan(state.imageDataUrl, state.thumb, state.mode || 'normal').then(() => {
       clearInterval(interval);
       navigate('/result', { replace: true });
     }).catch((err) => {
@@ -42,7 +43,7 @@ export default function Analyzing() {
         <span className="text-4xl text-sageDeep">✦</span>
       </div>
       <div className="text-[15px] font-semibold text-sageDeep min-h-[22px]">{PHRASES[phraseIdx]}</div>
-      <p className="text-[14.5px] text-stone">لطفاً چند لحظه صبر کنید</p>
+      <p className="text-[14.5px] text-stone">{modeLabel}</p>
     </div>
   );
 }

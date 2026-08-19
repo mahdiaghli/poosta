@@ -5,7 +5,7 @@ import type {
   ScanComparison, OwnedProduct, RoutineLog, Reminders, RoutineVariant,
   Budget, ChatMessage, RoutinePeriod, DailyCheckIn, SkinDiaryEntry, PatchTest,
 } from '@/types';
-import { skinAnalysisService } from '@/services/skinAnalysisService';
+import { skinAnalysisService, type SkinAnalysisMode } from '@/services/skinAnalysisService';
 import { recommendationEngine } from '@/services/recommendationEngine';
 import { routineTrackerService } from '@/services/routineTrackerService';
 import { productService } from '@/services/productService';
@@ -37,7 +37,7 @@ interface AppState {
 
   setUser: (u: AppUser | null) => void;
   setProfile: (p: Partial<SkinProfile>) => void;
-  runScan: (imageDataUrl: string, thumbnailUrl?: string) => Promise<void>;
+  runScan: (imageDataUrl: string, thumbnailUrl?: string, mode?: SkinAnalysisMode) => Promise<void>;
   rebuildRoutine: () => Promise<void>;
   setRoutineOptions: (opts: Partial<{ variant: RoutineVariant; budget: Budget; useOnlyMyProducts: boolean }>) => void;
   toggleRoutineStep: (period: RoutinePeriod, index: number) => void;
@@ -52,7 +52,7 @@ interface AppState {
   addDiaryEntry: (e: SkinDiaryEntry) => void;
   startPatchTest: (productName: string, productId?: string) => void;
   addPatchCheckIn: (id: string, reaction: PatchTest['checkins'][number]['reaction'], notes?: string) => void;
-      setOwnedProductDates: (id,openedAt,expiresAt) => { set(s=>({myProducts:s.myProducts.map(p=>p.id===id?{...p,openedAt,expiresAt}:p)})); },
+  setOwnedProductDates: (id: string, openedAt?: string, expiresAt?: string) => void;
   requestNotifications: () => Promise<NotificationPermission>;
   resetAccount: () => void;
 }
@@ -88,9 +88,9 @@ export const useAppStore = create<AppState>()(
         
       },
 
-      runScan: async (imageDataUrl, thumbnailUrl) => {
+      runScan: async (imageDataUrl, thumbnailUrl, mode = 'normal') => {
         const { profile, lastScan } = get();
-        const result = await skinAnalysisService.analyzeSkin(imageDataUrl, profile);
+        const result = await skinAnalysisService.analyzeSkin(imageDataUrl, profile, mode);
         result.thumbnailUrl = thumbnailUrl;
 
         const comparison: ScanComparison | null = lastScan
