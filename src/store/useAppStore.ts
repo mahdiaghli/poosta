@@ -5,7 +5,7 @@ import type {
   ScanComparison, OwnedProduct, RoutineLog, Reminders, RoutineVariant,
   Budget, ChatMessage, RoutinePeriod, DailyCheckIn, SkinDiaryEntry, PatchTest,
 } from '@/types';
-import { skinAnalysisService, type SkinAnalysisMode } from '@/services/skinAnalysisService';
+import { skinAnalysisService } from '@/services/skinAnalysisService';
 import { recommendationEngine } from '@/services/recommendationEngine';
 import { routineTrackerService } from '@/services/routineTrackerService';
 import { productService } from '@/services/productService';
@@ -37,7 +37,7 @@ interface AppState {
 
   setUser: (u: AppUser | null) => void;
   setProfile: (p: Partial<SkinProfile>) => void;
-  runScan: (imageDataUrl: string, thumbnailUrl?: string, mode?: SkinAnalysisMode) => Promise<void>;
+  runScan: (imageDataUrl: string, thumbnailUrl?: string, mode?: 'accurate' | 'standard') => Promise<void>;
   rebuildRoutine: () => Promise<void>;
   setRoutineOptions: (opts: Partial<{ variant: RoutineVariant; budget: Budget; useOnlyMyProducts: boolean }>) => void;
   toggleRoutineStep: (period: RoutinePeriod, index: number) => void;
@@ -88,7 +88,7 @@ export const useAppStore = create<AppState>()(
         
       },
 
-      runScan: async (imageDataUrl, thumbnailUrl, mode = 'normal') => {
+      runScan: async (imageDataUrl, thumbnailUrl, mode = 'standard') => {
         const { profile, lastScan } = get();
         const result = await skinAnalysisService.analyzeSkin(imageDataUrl, profile, mode);
         result.thumbnailUrl = thumbnailUrl;

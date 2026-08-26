@@ -10,14 +10,15 @@ export default function Analyzing() {
   const runScan = useAppStore((s) => s.runScan);
   const [phraseIdx, setPhraseIdx] = useState(0);
   const [error, setError] = useState<string | null>(null);
-  const state = location.state as { imageDataUrl?: string; thumb?: string; mode?: 'normal' | 'gemini' } | null;
-  const modeLabel = state?.mode === 'gemini' ? 'تحلیل دقیق با Gemini' : 'تحلیل معمولی با مدل‌های محلی';
+  const mode = (location.state as { mode?: 'accurate' | 'standard' } | null)?.mode ?? 'standard';
+  const modeLabel = mode === 'accurate' ? 'تحلیل با دقت بالا (Gemini/OpenRouter)' : 'تحلیل معمولی (مدل محلی)';
 
   useEffect(() => {
+    const state = location.state as { imageDataUrl?: string; thumb?: string; mode?: 'accurate' | 'standard' } | null;
     if (!state?.imageDataUrl) { navigate('/scan', { replace: true }); return; }
 
     const interval = setInterval(() => setPhraseIdx((i) => (i + 1) % PHRASES.length), 1300);
-    runScan(state.imageDataUrl, state.thumb, state.mode || 'normal').then(() => {
+    runScan(state.imageDataUrl, state.thumb, state.mode ?? 'standard').then(() => {
       clearInterval(interval);
       navigate('/result', { replace: true });
     }).catch((err) => {

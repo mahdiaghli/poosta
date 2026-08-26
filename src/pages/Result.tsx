@@ -39,12 +39,17 @@ export default function Result() {
         </div>
         <div className="font-bold text-sageDeep">امتیاز کلی پوست</div>
         <div className="text-[11.5px] text-stone">اعتمادپذیری تحلیل تصویری: {Math.round(lastScan.confidence * 100)}٪</div>
+        {lastScan.providerUsed && (
+          <div className="text-[10.5px] text-stone bg-sageMist rounded-full px-2.5 py-1 mt-1">
+            {lastScan.providerUsed.startsWith('gemini') ? '🎯 Gemini' : lastScan.providerUsed.startsWith('openrouter') ? '🎯 OpenRouter' : '⚡ مدل محلی'}
+          </div>
+        )}
       </div>
 
       <Card className="mt-2">
         <h2 className="text-[17px] font-bold mb-3.5">شاخص‌های پوستی</h2>
         {(Object.entries(lastScan.metrics) as [SkinMetricKey, number][]).map(([k, v]) => (
-          <MetricBar key={k} label={METRIC_LABELS_FA[k]} value={v} />
+          <MetricBar key={k} label={METRIC_LABELS_FA[k]} value={v} source={lastScan.metricsSource?.[k]} />
         ))}
       </Card>
 

@@ -1,4 +1,13 @@
 ultralytics>=8.3.0
-opencv-python-headless>=4.10.0
 numpy>=1.26.0
 Pillow>=10.4.0
+# mediapipe pulls in opencv-contrib-python itself -- do NOT also list
+# opencv-python / opencv-python-headless separately. Having 2+ opencv
+# packages installed at once silently breaks cv2 (missing attributes,
+# "!empty()" cascade errors) because they share the same cv2 namespace and
+# partially overwrite each other's files. One opencv package, always.
+mediapipe>=0.10.14
+# Needed only for ai/train_severity.py (regression model on the Kaggle
+# severity-labeled dataset). torch itself already comes in via ultralytics.
+torchvision>=0.19.0
+pandas>=2.2.0

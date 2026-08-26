@@ -32,6 +32,8 @@ export interface SkinAnalysisResult extends SkinAnalysisImageEvidence {
   topOpportunities: SkinMetricKey[];
   confidence: number;
   provider: string;
+  providerUsed?: string; // e.g. 'gemini:gemini-2.5-flash' | 'openrouter:...' | 'local'
+  metricsSource?: Partial<Record<SkinMetricKey, 'model' | 'heuristic'>>; // per-metric: trained model vs classical CV estimate
   thumbnailUrl?: string;
   createdAt: string;
 }

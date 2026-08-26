@@ -14,14 +14,14 @@ export default function Privacy() {
 
   const deleteHistory = async () => {
     if (!confirm('تاریخچه تحلیل و عکس‌های پوست شما حذف شود؟')) return;
-    await privacyService.deleteScanHistory(user?.id);
+    await privacyService.deleteScanHistory();
     useAppStore.setState({ scanHistory: [], lastScan: null, lastComparison: null });
     alert('تاریخچه با موفقیت حذف شد.');
   };
 
   const deleteAccount = async () => {
     if (!confirm('حساب کاربری و تمام داده‌های شما برای همیشه حذف شود؟')) return;
-    await privacyService.deleteAccount(user?.id);
+    await privacyService.deleteAccount();
     resetAccount();
     navigate('/welcome');
   };
@@ -31,9 +31,11 @@ export default function Privacy() {
       <TopBar showBack eyebrow="حریم خصوصی" />
       <h1 className="text-[21px] font-extrabold text-sageDeep">حریم خصوصی و داده‌های چهره شما</h1>
       <p className="text-[14.5px] text-stone leading-[1.9] mt-2.5">
-        تصویر اصلی صورت شما فقط در حافظه موقت مرورگر برای مدت تحلیل پردازش و سپس حذف می‌شود. یک تصویر بندانگشتی
-        کوچک برای مقایسه‌ی «قبل/بعد» ذخیره می‌ماند تا وقتی خودتان آن را حذف کنید. هیچ داده‌ای بدون رضایت صریح شما
-        برای آموزش مدل هوش مصنوعی استفاده نمی‌شود و شخص ثالثی به آن دسترسی ندارد.
+        در حالت «تحلیل معمولی»، تصویر شما فقط روی همین سرور پردازش می‌شود و به هیچ سرویس بیرونی ارسال نمی‌شود.
+        در حالت «تحلیل با دقت»، تصویر برای همان یک درخواست به سرویس شخص‌ثالث (Gemini یا OpenRouter) ارسال می‌شود تا
+        تحلیل شود؛ طبق قوانین این سرویس‌ها نگهداری می‌شود، نه توسط ما. در هر دو حالت، تصویر اصلی پس از تحلیل روی
+        سرور ما ذخیره نمی‌شود — فقط یک تصویر بندانگشتی کوچک برای مقایسه‌ی «قبل/بعد» نگه داشته می‌شود تا خودتان
+        حذفش کنید. هیچ داده‌ای بدون رضایت صریح شما برای آموزش مدل استفاده نمی‌شود.
       </p>
       <Card className="mt-4.5 mb-3.5">
         <h2 className="text-[17px] font-bold mb-3.5">داده‌های ذخیره‌شده</h2>

@@ -18,10 +18,10 @@ export function useSkinScan() {
     return result;
   }, []);
 
-  const analyze = useCallback(async (imageDataUrl: string, thumbnailUrl?: string) => {
+  const analyze = useCallback(async (imageDataUrl: string, thumbnailUrl?: string, mode: 'accurate' | 'standard' = 'standard') => {
     setAnalyzing(true);
     try {
-      await runScan(imageDataUrl, thumbnailUrl);
+      await runScan(imageDataUrl, thumbnailUrl, mode);
     } finally {
       setAnalyzing(false);
     }

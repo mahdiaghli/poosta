@@ -16,4 +16,5 @@ __pycache__/
 *.pyc
 
 /datasets/
+datasets/
 datasets
