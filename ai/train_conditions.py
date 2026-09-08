@@ -50,10 +50,10 @@ def main() -> None:
     train_kwargs = dict(
         data=str(data_yaml), epochs=args.epochs, imgsz=args.imgsz, batch=args.batch,
         project=str(out / "runs"), name=args.name, pretrained=True, patience=args.patience, workers=2,
-        mosaic=0.8, close_mosaic=15, mixup=0.0, copy_paste=0.3,
+        mosaic=0.5, close_mosaic=15, mixup=0.0, copy_paste=0.0,
         degrees=8.0, scale=0.3, shear=0.0, fliplr=0.5,
         hsv_h=0.01, hsv_s=0.4, hsv_v=0.3,
-        cls=1.5,
+        cls=2.0,
     )
     if args.device:
         train_kwargs["device"] = args.device

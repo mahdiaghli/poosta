@@ -34,6 +34,9 @@ export interface SkinAnalysisResult extends SkinAnalysisImageEvidence {
   provider: string;
   providerUsed?: string; // e.g. 'gemini:gemini-2.5-flash' | 'openrouter:...' | 'local'
   metricsSource?: Partial<Record<SkinMetricKey, 'model' | 'heuristic'>>; // per-metric: trained model vs classical CV estimate
+  /** Cosmetic "how old the skin looks" (not chronological age). */
+  apparentSkinAge?: number;
+  apparentSkinAgeNote?: string;
   thumbnailUrl?: string;
   createdAt: string;
 }

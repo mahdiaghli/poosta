@@ -27,12 +27,19 @@ function validateProviderResult(value: unknown): SkinAnalysisResult {
     observations: Array.isArray(raw.observations) ? raw.observations : [],
     limitations: Array.isArray(raw.limitations) ? raw.limitations : [],
     recommendedNextStep: raw.recommendedNextStep,
+    apparentSkinAge: Number.isFinite(Number((raw as any).apparentSkinAge))
+      ? Math.max(18, Math.min(70, Math.round(Number((raw as any).apparentSkinAge))))
+      : undefined,
+    apparentSkinAgeNote: typeof (raw as any).apparentSkinAgeNote === 'string'
+      ? (raw as any).apparentSkinAgeNote
+      : undefined,
   };
 }
 
 export const skinAnalysisService = {
   provider: 'local-yolo-acne',
   async checkImageQuality(imageDataUrl: string): Promise<ImageQualityResult> {
+    // Fast local pixel gate first
     try {
       const stats = await analyzePixels(imageDataUrl);
       const issues: { code: string; message: string }[] = [];
@@ -41,16 +48,38 @@ export const skinAnalysisService = {
       if (stats.meanBrightness > 225) issues.push({ code: 'too_bright', message: 'نور تصویر بیش از حد زیاد است.' });
       if (stats.contrast < 8) issues.push({ code: 'low_contrast', message: 'کنتراست تصویر پایین است.' });
       if (stats.sharpness < 2) issues.push({ code: 'blurry', message: 'تصویر ممکن است تار باشد.' });
-      return { ok: issues.length === 0, issues };
+      if (issues.length) return { ok: false, issues };
     } catch {
       return { ok: false, issues: [{ code: 'invalid_image', message: 'خواندن تصویر ممکن نیست.' }] };
+    }
+
+    // Server face + quality gate (MediaPipe/Haar) — before any analysis model
+    try {
+      const { deviceLicenseService } = await import('./deviceLicenseService');
+      const response = await fetch('/api/image-quality', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...deviceLicenseService.authHeaders() },
+        body: JSON.stringify({ imageDataUrl }),
+      });
+      const body = await response.json().catch(() => ({}));
+      if (!response.ok || body.ok === false) {
+        const msg = body.error
+          || (Array.isArray(body.imageQuality?.issues) ? body.imageQuality.issues[0] : null)
+          || 'چهره یا کیفیت تصویر برای تحلیل مناسب نیست.';
+        return { ok: false, issues: [{ code: 'face_quality', message: msg }] };
+      }
+      return { ok: true, issues: [] };
+    } catch {
+      // If AI server is down, keep local pixel OK so UX isn't blocked offline —
+      // server /api/skin-analysis still re-checks before models.
+      return { ok: true, issues: [] };
     }
   },
   async analyzeSkin(
     imageDataUrl: string,
     _profile: SkinProfile,
     mode: 'accurate' | 'standard' = 'standard',
-    opts?: { sessionId?: string; scanId?: string; phone?: string },
+    opts?: { sessionId?: string; scanId?: string; phone?: string; chronologicalAge?: number },
   ): Promise<SkinAnalysisResult> {
     const quality = await this.checkImageQuality(imageDataUrl);
     if (!quality.ok) throw new Error(quality.issues[0]?.message || 'این عکس برای تحلیل مناسب نیست.');
@@ -65,6 +94,8 @@ export const skinAnalysisService = {
           session_id: opts?.sessionId,
           scan_id: opts?.scanId,
           phone: opts?.phone,
+          chronologicalAge: opts?.chronologicalAge,
+          age: opts?.chronologicalAge,
         }),
       });
       const body = await response.json().catch(() => ({}));

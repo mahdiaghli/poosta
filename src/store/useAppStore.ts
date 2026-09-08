@@ -111,7 +111,11 @@ export const useAppStore = create<AppState>()(
         } catch { /* legacy / offline path continues */ }
 
         const phone = kioskPhone || getKioskPhone() || undefined;
-        const result = await skinAnalysisService.analyzeSkin(imageDataUrl, profile, mode, { sessionId, phone });
+        const result = await skinAnalysisService.analyzeSkin(imageDataUrl, profile, mode, {
+          sessionId,
+          phone,
+          chronologicalAge: profile.age,
+        });
         result.thumbnailUrl = thumbnailUrl;
         const scanId = (result as any).scanId || null;
         if (scanId) setLastServerScanId(scanId);

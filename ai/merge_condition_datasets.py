@@ -78,8 +78,12 @@ CANONICAL_DISPLAY = {
     "eyebags": "Eyebags",
 }
 
-# Skip known non-photo / synthetic overlays (e.g. ardayemc "kering" dry-skin art)
-SKIP_NAME_FRAGMENTS = ("kering",)
+# Skip composites / non-photo / unlabeled-condition dumps that teach the
+# detector to fire on bottles, cracked-earth overlays, or whole-cheek redness.
+SKIP_NAME_FRAGMENTS = (
+    "kering", "milk", "bottle", "cracked", "roseca", "rosacea",
+    "berminyak", "overlay",
+)
 
 NMS_IOU = 0.7
 
@@ -133,6 +137,23 @@ def nms_same_class(rows: list[list[str]], iou_thr: float = NMS_IOU) -> list[list
                 continue
             selected.append((parts, box))
         kept.extend(p for p, _ in selected)
+    return kept
+
+
+def drop_region_sized_boxes(rows: list[list[str]], names: list[str], max_area: float = 0.12) -> list[list[str]]:
+    """Drop YOLO boxes that cover most of the image — those are redness/oily
+    regions, not lesions, and they train the model to call background 'acne'."""
+    kept: list[list[str]] = []
+    for parts in rows:
+        try:
+            cid = int(parts[0])
+            _xc, _yc, w, h = map(float, parts[1:5])
+        except (ValueError, IndexError):
+            continue
+        name = names[cid].lower() if 0 <= cid < len(names) else ""
+        if "eyebag" not in name and (w * h) > max_area:
+            continue
+        kept.append(parts)
     return kept
 
 
@@ -278,6 +299,7 @@ def merge_lesions() -> None:
                         parts[0] = str(new_cls)
                         lines_out.append(parts)
                 lines_out = nms_same_class(lines_out)
+                lines_out = drop_region_sized_boxes(lines_out, unified)
                 # Keep negatives (no lesion boxes): they teach "don't fire on oily/dry regions".
                 dst_img = OUT_DIR / "images" / split_out / f"{d.name}__{img.name}"
                 shutil.copy2(img, dst_img)

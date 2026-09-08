@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "scripts/seed-license.mjs": {
-    "mtime": 1788851875.911302,
-    "ast_hash": "9da9b9fb0de1cc4a835b1c5b578c0b94",
+    "mtime": 1788853174.6091058,
+    "ast_hash": "73da1662c3246a4555508860e231f6ea",
     "semantic_hash": ""
   },
   "scripts/smoke-v1.mjs": {
@@ -105,8 +105,8 @@
     "semantic_hash": ""
   },
   "server.js": {
-    "mtime": 1788851893.8757439,
-    "ast_hash": "282d0972fdeaed8bf5bdfef993acee8c",
+    "mtime": 1788853167.3585176,
+    "ast_hash": "1bbda8a8123b52f0ceedc9abb4d45d06",
     "semantic_hash": ""
   },
   "server/annotate.mjs": {
@@ -115,8 +115,8 @@
     "semantic_hash": ""
   },
   "server/db.mjs": {
-    "mtime": 1788851862.016037,
-    "ast_hash": "7b38e20ac9b4ab1a7cacd28ea94ce36d",
+    "mtime": 1788853014.9344888,
+    "ast_hash": "bcc12c0e6d7f0deb478b4c3a7bbeb57d",
     "semantic_hash": ""
   },
   "server/license.mjs": {
@@ -125,8 +125,8 @@
     "semantic_hash": ""
   },
   "server/sessions.mjs": {
-    "mtime": 1788850790.6866727,
-    "ast_hash": "f39e2e83f61dc1fade639d227b7939eb",
+    "mtime": 1788853080.371276,
+    "ast_hash": "db0f19d7eeaac6735cdb581f3c1c0431",
     "semantic_hash": ""
   },
   "server/storage.mjs": {
@@ -135,8 +135,8 @@
     "semantic_hash": ""
   },
   "src/App.tsx": {
-    "mtime": 1788851931.9490426,
-    "ast_hash": "e79e49832126e401a15148f6200db202",
+    "mtime": 1788853357.4447708,
+    "ast_hash": "312f839aaa210421967973e65803e1d7",
     "semantic_hash": ""
   },
   "src/components/layout/BottomNav.tsx": {
@@ -300,8 +300,8 @@
     "semantic_hash": ""
   },
   "src/pages/Result.tsx": {
-    "mtime": 1788851933.8903863,
-    "ast_hash": "a362a499e549c4a92eca35208b5fcc9f",
+    "mtime": 1788853321.4684417,
+    "ast_hash": "174e8e8a7ae03cb1d5cb3c9064ee801d",
     "semantic_hash": ""
   },
   "src/pages/Routine.tsx": {
@@ -310,8 +310,8 @@
     "semantic_hash": ""
   },
   "src/pages/Scan.tsx": {
-    "mtime": 1788765637.9479277,
-    "ast_hash": "b072a4527a054ffe18c0c940db5fb5fc",
+    "mtime": 1788853375.257195,
+    "ast_hash": "25f9f795ac376cae9d74b50878e3ea5e",
     "semantic_hash": ""
   },
   "src/pages/SkinDiary.tsx": {
@@ -405,8 +405,8 @@
     "semantic_hash": ""
   },
   "src/services/skinAnalysisService.ts": {
-    "mtime": 1788850965.10474,
-    "ast_hash": "991188c6c853f5716b87e29bf86ec4af",
+    "mtime": 1788853316.551207,
+    "ast_hash": "5e338583309b53a0b68609a2fe1e74df",
     "semantic_hash": ""
   },
   "src/services/weatherService.ts": {
@@ -415,8 +415,8 @@
     "semantic_hash": ""
   },
   "src/store/useAppStore.ts": {
-    "mtime": 1788850938.578156,
-    "ast_hash": "75ce71b3dc3326b1f6dac5652e73c825",
+    "mtime": 1788853308.5811832,
+    "ast_hash": "20a1891d58dc71971d402f274d259c15",
     "semantic_hash": ""
   },
   "src/types/index.ts": {
@@ -735,8 +735,8 @@
     "semantic_hash": ""
   },
   "server/shareRoutine.mjs": {
-    "mtime": 1788851875.5540535,
-    "ast_hash": "a93a9a86afc8c001b19fe1df8a0b03e6",
+    "mtime": 1788853097.354507,
+    "ast_hash": "bbf3795f4a2603947bac7450d299735c",
     "semantic_hash": ""
   },
   "server/sms.mjs": {
@@ -745,8 +745,8 @@
     "semantic_hash": ""
   },
   "src/components/SendRoutineSms.tsx": {
-    "mtime": 1788851921.9427345,
-    "ast_hash": "6d05fb4e29d44e6275dc8d81d979ed01",
+    "mtime": 1788853726.3796363,
+    "ast_hash": "fef46d6d943b78b23c66951aad88b658",
     "semantic_hash": ""
   },
   "src/pages/SharedRoutine.tsx": {
@@ -755,8 +755,73 @@
     "semantic_hash": ""
   },
   "src/services/routineShareService.ts": {
-    "mtime": 1788851903.2514927,
-    "ast_hash": "920cf86e4e29850fe7f24f685ab33c23",
+    "mtime": 1788853724.5848737,
+    "ast_hash": "b334c4610ed121a1e0fd8271ba422ce6",
+    "semantic_hash": ""
+  },
+  "server/admin.mjs": {
+    "mtime": 1788853053.1705952,
+    "ast_hash": "278599ddcbd438d53c0f1c852c051238",
+    "semantic_hash": ""
+  },
+  "server/customers.mjs": {
+    "mtime": 1788853029.083423,
+    "ast_hash": "dafc3811db83908a7bbe7cc337084d1c",
+    "semantic_hash": ""
+  },
+  "server/pharmacyProducts.mjs": {
+    "mtime": 1788853052.861508,
+    "ast_hash": "51cf894fa5aa935f02ea7099e5f129ff",
+    "semantic_hash": ""
+  },
+  "server/pharmacyStaff.mjs": {
+    "mtime": 1788853038.1765862,
+    "ast_hash": "458251f5e4efff8e1128ae4d49ed908a",
+    "semantic_hash": ""
+  },
+  "src/components/KioskVisitActions.tsx": {
+    "mtime": 1788853389.9600482,
+    "ast_hash": "08554588a8357c2da8bf33c810382072",
+    "semantic_hash": ""
+  },
+  "src/pages/Admin.tsx": {
+    "mtime": 1788853261.5921447,
+    "ast_hash": "a3954e70b1ea15a62460e6839412eb78",
+    "semantic_hash": ""
+  },
+  "src/pages/PharmacyDashboard.tsx": {
+    "mtime": 1788853227.5999894,
+    "ast_hash": "2a2bd9f19ec6a199570fb3d60bf2424d",
+    "semantic_hash": ""
+  },
+  "src/pages/PharmacyLogin.tsx": {
+    "mtime": 1788853240.0714166,
+    "ast_hash": "826a51088ab50e8233846be2ab3b1da3",
+    "semantic_hash": ""
+  },
+  "src/pages/PrintKioskSlip.tsx": {
+    "mtime": 1788853341.222599,
+    "ast_hash": "11eea012b0d9854d246c76ae1572342a",
+    "semantic_hash": ""
+  },
+  "src/pages/PrintScanSlip.tsx": {
+    "mtime": 1788853261.2654827,
+    "ast_hash": "68862b3d14774b111cdc40f983aa4932",
+    "semantic_hash": ""
+  },
+  "src/services/kioskHandoffService.ts": {
+    "mtime": 1788853181.1219199,
+    "ast_hash": "1ddc8d56ccbafd92e868677c457dbcd4",
+    "semantic_hash": ""
+  },
+  "src/services/pharmacyStaffService.ts": {
+    "mtime": 1788853180.8749151,
+    "ast_hash": "a4ad5570b482965697616451ef52c8c5",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-09-08-pharmacy-ops-v1-design.md": {
+    "mtime": 1788852970.6497352,
+    "ast_hash": "f674b4d3cab9d611e51ed7e18e5be397",
     "semantic_hash": ""
   }
 }

@@ -90,7 +90,9 @@ function send(res, status, body) {
 
 function sendErr(res, err) {
   const status = err.status || 500;
-  send(res, status, { error: err.message || 'خطای سرور', code: err.code || 'ERROR' });
+  const body = { error: err.message || 'خطای سرور', code: err.code || 'ERROR' };
+  if (err.imageQuality) body.imageQuality = err.imageQuality;
+  send(res, status, body);
 }
 
 function readBody(req, limit = 20_000_000) {
@@ -161,8 +163,26 @@ async function enrichBoxesFromLocal(imageDataUrl, result) {
   }
 }
 
+async function assertImageQuality(imageDataUrl) {
+  const q = await proxy('/quality', 'POST', { imageDataUrl });
+  const iq = q.body?.imageQuality || {};
+  if (q.status >= 400 || q.body?.ok === false || iq.suitable === false) {
+    const msg = q.body?.error || iq.issues?.[0] || 'کیفیت تصویر یا تشخیص چهره مناسب نیست.';
+    const err = new Error(msg);
+    err.status = 400;
+    err.code = 'IMAGE_QUALITY';
+    err.imageQuality = iq;
+    throw err;
+  }
+  return iq;
+}
+
 async function runAnalysis(body) {
   const mode = body.mode === 'accurate' || body.mode === 'standard' ? body.mode : 'auto';
+
+  // Face + quality gate BEFORE any local YOLO / Gemini / OpenRouter call
+  await assertImageQuality(body.imageDataUrl);
+
   let result;
 
   if (mode === 'standard') {
@@ -170,15 +190,35 @@ async function runAnalysis(body) {
     if (local.status >= 400) {
       const err = new Error(local.body?.error || 'تحلیل محلی ناموفق بود.');
       err.status = local.status;
+      err.imageQuality = local.body?.imageQuality;
       throw err;
     }
     result = { ...local.body, providerUsed: 'local' };
   } else {
     const premium = await analyzeWithPremiumProvider(body.imageDataUrl);
     if (premium) {
+      if (premium.imageQuality && premium.imageQuality.suitable === false) {
+        const err = new Error(premium.imageQuality.issues?.[0] || 'کیفیت تصویر مناسب نیست.');
+        err.status = 400;
+        err.code = 'IMAGE_QUALITY';
+        err.imageQuality = premium.imageQuality;
+        throw err;
+      }
+      // Prefer local skin-age if premium omitted it
       result = { ...premium, providerUsed: premium.provider };
       if (mode === 'accurate' || mode === 'auto') {
         result = await enrichBoxesFromLocal(body.imageDataUrl, result);
+      }
+      if (result.apparentSkinAge == null && result.metrics) {
+        // Soft local age fill from premium metrics without re-running heavy models
+        const m = result.metrics;
+        const youth = (
+          Number(m.fineLines ?? 50) + Number(m.texture ?? 50) + Number(m.darkSpots ?? 50)
+          + Number(m.pores ?? 50) + Number(m.acne ?? 50)
+        ) / 5;
+        const apparent = Math.max(18, Math.min(70, Math.round(55 - youth * 0.33)));
+        result.apparentSkinAge = apparent;
+        result.apparentSkinAgeNote = `بر اساس ظاهر پوست در عکس، پوست شما حدوداً ${apparent} ساله به نظر می‌رسد. این یک برآورد ظاهری/کازمتیک است، نه سن واقعی یا تشخیص پزشکی.`;
       }
     } else if (mode === 'accurate') {
       const err = new Error('در حال حاضر سرویس تحلیل دقیق (Gemini/OpenRouter) در دسترس نیست یا کلید تنظیم نشده. لطفاً «تحلیل معمولی» را امتحان کنید.');
@@ -228,6 +268,24 @@ const server = http.createServer(async (req, res) => {
       const body = await readBody(req, 100_000);
       const out = activateDevice({ activationCode: body.activation_code || body.activationCode, appVersion: body.app_version || body.appVersion });
       return send(res, 200, out);
+    }
+
+    if (path === '/api/image-quality' && req.method === 'POST') {
+      const body = await readBody(req);
+      if (!body.imageDataUrl) {
+        return send(res, 400, { error: 'imageDataUrl الزامی است.', code: 'BAD_REQUEST' });
+      }
+      try {
+        const iq = await assertImageQuality(body.imageDataUrl);
+        return send(res, 200, { ok: true, imageQuality: iq });
+      } catch (e) {
+        return send(res, e.status || 400, {
+          ok: false,
+          error: e.message,
+          code: e.code || 'IMAGE_QUALITY',
+          imageQuality: e.imageQuality || null,
+        });
+      }
     }
 
     if (path === '/api/device/heartbeat' && req.method === 'POST') {
@@ -446,7 +504,10 @@ const server = http.createServer(async (req, res) => {
         }
       }
 
-      const result = await runAnalysis(body);
+      const result = await runAnalysis({
+        ...body,
+        chronologicalAge: body.chronologicalAge ?? body.age ?? undefined,
+      });
       let customer = customerPayloadFromResult(result);
 
       if (scanId) {

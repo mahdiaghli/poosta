@@ -25,7 +25,9 @@ const PROMPT = `تو یک دستیار ارزیابی ظاهری پوست هست
  "confidence": number (0 تا 1),
  "observations": string[] (۳ تا ۶ جمله فارسی),
  "limitations": string[] (حتماً ذکر کن این ارزیابی ظاهری/کازمتیک است نه تشخیص پزشکی),
- "recommendedNextStep": string
+ "recommendedNextStep": string,
+ "apparentSkinAge": number (سن ظاهری پوست ۱۸-۷۰؛ سن واقعی نیست),
+ "apparentSkinAgeNote": string (یک جمله فارسی که بگوید برآورد ظاهری است)
 }
 اگر عکس نامناسب است (چهره نامشخص/تار/چند چهره)، imageQuality.suitable را false کن، دلیل را در issues بگذار، بقیه فیلدها را ۵۰/خنثی بگذار.`;
 

@@ -83,6 +83,10 @@ def region_probs_to_metrics(probs: dict[str, float]) -> dict[str, tuple[int, str
         metric = COL_TO_METRIC.get(col)
         if not metric:
             continue
+        if metric == "hydration":
+            continue  # RGB cannot measure water content; keep the neutral 50
+        if p < 0.55:
+            continue
         score = int(max(0, min(100, round(100 - p * 55))))
         out[metric] = (score, f"طبقه‌بند ناحیه ({col}, p={p:.2f})")
     return out

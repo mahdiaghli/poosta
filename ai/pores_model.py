@@ -7,7 +7,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 MODEL_PATH = ROOT / "models/skin/pores/best.onnx"
 PREDICT_IMGSZ = 960
-PREDICT_CONF = 0.45
+PREDICT_CONF = 0.55
 
 _model = None
 _load_attempted = False
@@ -38,7 +38,11 @@ def pore_coverage_ratio(face_bgr: np.ndarray) -> float | None:
             return 0.0
         masks = result.masks.data.detach().cpu().numpy()
         union = np.clip(masks.sum(axis=0), 0, 1)
-        return float(union.mean())
+        # Ignore the outer 12% of the mask canvas (hair / box edge)
+        h, w = union.shape
+        m = np.zeros_like(union, dtype=bool)
+        m[int(h * 0.12): int(h * 0.88), int(w * 0.12): int(w * 0.88)] = True
+        return float(union[m].mean()) if m.any() else float(union.mean())
     except Exception as e:
         print(f"[pores_model] predict failed: {type(e).__name__}: {e}")
         return None

@@ -9,7 +9,6 @@
   "7": "compilerOptions",
   "8": "types/index.ts",
   "9": "MultiFolderDataset",
-  "10": "Coach.tsx",
   "11": "merge_condition_datasets.py",
   "12": "recommendationEngine.ts",
   "13": "Local Skin AI setup",
@@ -23,9 +22,7 @@
   "21": "LocalStorageDriver",
   "22": "deviceLicenseService.ts",
   "23": "main",
-  "24": "_absolute_dataset_yaml",
   "25": "MetricBar.tsx",
-  "26": "notificationService.ts",
   "27": "Poosta — Local Skin AI",
   "28": "smoke-v1.mjs",
   "29": "vite-env.d.ts",
@@ -42,11 +39,6 @@
   "40": "vite.config.d.ts",
   "41": "vite.config.js",
   "42": "vite.config.ts",
-  "43": "ProductDetail.tsx",
   "44": "AppState",
-  "45": "TopBar.tsx",
-  "46": "Result.tsx",
-  "47": "DailyCheckIn",
-  "48": "WeeklyRoutine.tsx",
-  "49": "useAuth.ts"
+  "47": "DailyCheckIn"
 }

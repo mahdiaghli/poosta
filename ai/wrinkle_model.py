@@ -73,7 +73,10 @@ def wrinkle_coverage_ratio(face_bgr: np.ndarray) -> float | None:
         with torch.no_grad():
             out = _model(x)
             pred = out.argmax(dim=1).squeeze(0).numpy()
-        return float((pred == 1).mean())
+        h, w = pred.shape
+        yy, xx = np.ogrid[:h, :w]
+        inner = ((xx - w * 0.5) / max(1.0, 0.36 * w)) ** 2 + ((yy - h * 0.5) / max(1.0, 0.42 * h)) ** 2 <= 1.0
+        return float(((pred == 1) & inner).mean())
     except Exception as e:
         print(f"[wrinkle_model] infer failed: {type(e).__name__}: {e}")
         return None

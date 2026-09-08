@@ -1,12 +1,12 @@
 # Graph Report - poosta  (2026-09-08)
 
 ## Corpus Check
-- 110 files · ~480,177 words
+- 123 files · ~486,122 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 618 nodes · 1249 edges · 50 communities (40 shown, 10 thin omitted)
-- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 11 edges (avg confidence: 0.66)
+- 675 nodes · 1445 edges · 42 communities (35 shown, 7 thin omitted)
+- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 12 edges (avg confidence: 0.65)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
@@ -25,7 +25,6 @@
 - compilerOptions
 - types/index.ts
 - MultiFolderDataset
-- Coach.tsx
 - merge_condition_datasets.py
 - recommendationEngine.ts
 - Local Skin AI setup
@@ -39,9 +38,7 @@
 - LocalStorageDriver
 - deviceLicenseService.ts
 - main
-- _absolute_dataset_yaml
 - MetricBar.tsx
-- notificationService.ts
 - Poosta — Local Skin AI
 - smoke-v1.mjs
 - vite-env.d.ts
@@ -50,25 +47,20 @@
 - skin/README.md
 - PRODUCT_CATALOG_INTEGRATION.md
 - import-products-local.mjs
-- ProductDetail.tsx
 - AppState
-- TopBar.tsx
-- Result.tsx
 - DailyCheckIn
-- WeeklyRoutine.tsx
-- useAuth.ts
 
 ## God Nodes (most connected - your core abstractions)
-1. `useAppStore` - 51 edges
-2. `getDb()` - 23 edges
-3. `TopBar()` - 21 edges
-4. `Button()` - 20 edges
-5. `analyze()` - 19 edges
-6. `Card()` - 17 edges
-7. `AppState` - 17 edges
-8. `compilerOptions` - 17 edges
-9. `Poosta Pharmacy V1 — Design Spec` - 16 edges
-10. `scripts` - 12 edges
+1. `useAppStore` - 55 edges
+2. `getDb()` - 43 edges
+3. `Button()` - 26 edges
+4. `TopBar()` - 24 edges
+5. `Card()` - 21 edges
+6. `analyze()` - 19 edges
+7. `newId()` - 19 edges
+8. `nowIso()` - 19 edges
+9. `AppState` - 17 edges
+10. `compilerOptions` - 17 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `analyzeWithPremiumProvider()` --calls--> `analyzeSkinWithGemini()`  [EXTRACTED]
@@ -77,23 +69,23 @@
   server.js → openrouter-skin-analysis.js
 - `main()` --calls--> `getDb()`  [EXTRACTED]
   scripts/seed-license.mjs → server/db.mjs
-- `main()` --calls--> `newId()`  [EXTRACTED]
+- `main()` --calls--> `hashPin()`  [EXTRACTED]
   scripts/seed-license.mjs → server/db.mjs
-- `main()` --calls--> `nowIso()`  [EXTRACTED]
+- `main()` --calls--> `newId()`  [EXTRACTED]
   scripts/seed-license.mjs → server/db.mjs
 
 ## Import Cycles
 - None detected.
 
-## Communities (50 total, 10 thin omitted)
+## Communities (42 total, 7 thin omitted)
 
 ### Community 0 - "useAppStore"
-Cohesion: 0.16
-Nodes (10): Button(), Props, Variant, VARIANT_CLASSES, DailyCheckIn(), feelings, fields, Privacy() (+2 more)
+Cohesion: 0.22
+Nodes (8): Customer identity, Goal, Kiosk reset, Live updates, Non-goals, Poosta Pharmacy Ops V1.1 — Design Spec, Print, Staff & admin auth
 
 ### Community 1 - "server.js"
 Cohesion: 0.06
-Nodes (68): analyzeSkinWithGemini(), GEMINI_URL(), METRIC_KEYS, RESPONSE_SCHEMA, analyzeSkinWithOpenRouter(), METRIC_KEYS, FEATURES, main() (+60 more)
+Nodes (88): analyzeSkinWithGemini(), GEMINI_URL(), METRIC_KEYS, RESPONSE_SCHEMA, analyzeSkinWithOpenRouter(), METRIC_KEYS, FEATURES, main() (+80 more)
 
 ### Community 2 - "skin_ai_server.py"
 Cohesion: 0.06
@@ -108,8 +100,8 @@ Cohesion: 0.08
 Nodes (25): 10. Seed & ops, 11. Module layout (server), 12. Failure handling, 13. Testing (V1), 14. Decisions log (from product conversation), 15. Success criteria, 1. Goal, 2. Non-goals (explicit) (+17 more)
 
 ### Community 5 - "useAppStore.ts"
-Cohesion: 0.29
-Nodes (8): BUDGETS, IMPORTANCE_LABEL, VARIANTS, routineTrackerService, emptyProfile, RoutineLog, RoutinePeriod, Budget
+Cohesion: 0.18
+Nodes (11): getKioskPhone(), kioskHandoffService, setKioskPhone(), setLastServerScanId(), notificationService, timers, routineTrackerService, emptyProfile (+3 more)
 
 ### Community 6 - "devDependencies"
 Cohesion: 0.08
@@ -120,16 +112,12 @@ Cohesion: 0.08
 Nodes (23): DOM, DOM.Iterable, ES2020, src, compilerOptions, baseUrl, isolatedModules, jsx (+15 more)
 
 ### Community 8 - "types/index.ts"
-Cohesion: 0.12
-Nodes (15): CATEGORY_ICON, ProductCard(), EmptyState(), Barcode(), CATEGORIES, Products(), barcodeService, CATEGORY_SET (+7 more)
+Cohesion: 0.08
+Nodes (23): CATEGORY_ICON, ProductCard(), Chip(), Props, Coach(), Msg, SUGGESTIONS, Onboarding() (+15 more)
 
 ### Community 9 - "MultiFolderDataset"
 Cohesion: 0.17
 Nodes (13): build_model(), discover(), main(), masked_bce_or_mse(), MultiFolderDataset, Path, Train a multi-task severity/condition classifier from one or more Roboflow CLASS, Finds every _classes.csv under data_dir. Returns (folder, df, label_cols). (+5 more)
-
-### Community 10 - "Coach.tsx"
-Cohesion: 0.18
-Nodes (10): Chip(), Props, Coach(), Msg, SUGGESTIONS, Onboarding(), StepDef, STEPS (+2 more)
 
 ### Community 11 - "merge_condition_datasets.py"
 Cohesion: 0.26
@@ -144,8 +132,8 @@ Cohesion: 0.18
 Nodes (10): ⚠️ Fitzpatrick17k — نیمه‌واقعی, Local Skin AI setup, ✅ SCIN — برای diversity/robustness (نه یک مدل مستقیم), ✅ Wrinkles — FFHQ-Wrinkle (واقعی و استفاده‌شدنی), آکنه (بدون تغییر), اجرا, نتیجه, هر شاخص از کجا میاد (+2 more)
 
 ### Community 14 - "ingredientService.ts"
-Cohesion: 0.22
-Nodes (9): IngredientScanner(), ALIASES, IngredientMatch, IngredientMatchStatus, IngredientScanResult, ingredientService, interactionChecker, Ingredient (+1 more)
+Cohesion: 0.18
+Nodes (9): ALIASES, IngredientMatch, IngredientMatchStatus, IngredientScanResult, ingredientService, interactionChecker, privacyService, Ingredient (+1 more)
 
 ### Community 15 - "File map"
 Cohesion: 0.20
@@ -160,28 +148,24 @@ Cohesion: 0.22
 Nodes (8): vite.config.ts, compilerOptions, allowSyntheticDefaultImports, composite, module, moduleResolution, skipLibCheck, include
 
 ### Community 18 - "productService.ts"
-Cohesion: 0.21
-Nodes (8): App(), isPublicPath(), MAIN_ROUTES, OPEN_WHEN_LOCKED, BottomNav(), ITEMS, Profile(), SKIN_TYPE_FA
+Cohesion: 0.05
+Nodes (67): App(), isPublicPath(), MAIN_ROUTES, OPEN_WHEN_LOCKED, KioskVisitActions(), BottomNav(), ITEMS, Props (+59 more)
 
 ### Community 19 - "skin.ts"
 Cohesion: 0.17
-Nodes (13): CompatibilityResult, Product, ProductConcern, ScoredProduct, AIImageQuality, Gender, Goal, ImageQualityIssue (+5 more)
+Nodes (14): CompatibilityResult, Product, ProductConcern, ScoredProduct, AIImageQuality, Gender, Goal, ImageQualityIssue (+6 more)
 
 ### Community 20 - "services/index.ts"
-Cohesion: 0.22
-Nodes (10): useRoutineTracker(), Analyzing(), PHRASES, Home(), TOOLS, Routine(), todayKey(), weatherService (+2 more)
+Cohesion: 0.23
+Nodes (8): Props, ScoreRing(), useRoutineTracker(), Home(), TOOLS, todayKey(), weatherService, WeatherInfo
 
 ### Community 22 - "deviceLicenseService.ts"
-Cohesion: 0.17
-Nodes (8): SendRoutineSms(), Activate(), authHeaders(), deviceLicenseService, getDeviceToken(), LicenseStatus, routineShareService, ShareRoutineResult
+Cohesion: 0.24
+Nodes (5): authHeaders(), deviceLicenseService, getDeviceToken(), LicenseStatus, ShareRoutineResult
 
 ### Community 23 - "main"
 Cohesion: 0.15
 Nodes (15): _latest_best_pt(), main(), Path, Export a trained Ultralytics checkpoint to ONNX for deployment.  imgsz must matc, resolve_weights(), main(), Fine-tune a pretrained Ultralytics YOLO model for acne/skin-lesion detection. Da, _absolute_dataset_yaml() (+7 more)
-
-### Community 24 - "_absolute_dataset_yaml"
-Cohesion: 0.22
-Nodes (7): Card(), Props, Props, METHODS, MyProducts(), PatchTest(), patchTestService
 
 ### Community 25 - "MetricBar.tsx"
 Cohesion: 0.60
@@ -195,45 +179,33 @@ Nodes (3): AI architecture, Poosta — Local Skin AI, Run
 Cohesion: 0.83
 Nodes (3): assert(), main(), req()
 
-### Community 43 - "ProductDetail.tsx"
-Cohesion: 0.22
-Nodes (8): MedicalDisclaimer(), useSkinScan(), ProductDetail(), GUIDES, resizeThumb(), Scan(), SharedPayload, SharedRoutine()
-
 ### Community 44 - "AppState"
-Cohesion: 0.29
-Nodes (11): CoachContext, CoachReply, AppState, ProductCategory, Routine, SkinProfile, AppUser, ChatMessage (+3 more)
-
-### Community 45 - "TopBar.tsx"
-Cohesion: 0.23
-Nodes (7): Props, TopBar(), useAuth(), Auth(), Consent(), POINTS, SkinDiary()
-
-### Community 46 - "Result.tsx"
-Cohesion: 0.28
-Nodes (6): Props, ScoreRing(), Progress(), Result(), METRIC_LABELS_FA, SkinMetricKey
+Cohesion: 0.22
+Nodes (12): authService, CoachContext, CoachReply, AppState, ProductCategory, Routine, Budget, SkinProfile (+4 more)
 
 ### Community 47 - "DailyCheckIn"
-Cohesion: 0.33
-Nodes (3): DailyCheckIn, PatchTest, SkinDiaryEntry
+Cohesion: 0.25
+Nodes (4): patchTestService, DailyCheckIn, PatchTest, SkinDiaryEntry
 
 ## Knowledge Gaps
-- **173 isolated node(s):** `METRIC_KEYS`, `RESPONSE_SCHEMA`, `METRIC_KEYS`, `name`, `private` (+168 more)
+- **180 isolated node(s):** `METRIC_KEYS`, `RESPONSE_SCHEMA`, `METRIC_KEYS`, `name`, `private` (+175 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **10 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **7 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `useAppStore` connect `services/index.ts` to `useAppStore`, `useAppStore.ts`, `types/index.ts`, `Coach.tsx`, `ProductDetail.tsx`, `TopBar.tsx`, `ingredientService.ts`, `Result.tsx`, `skinAnalysisService.ts`, `useAuth.ts`, `productService.ts`, `WeeklyRoutine.tsx`, `deviceLicenseService.ts`, `_absolute_dataset_yaml`?**
-  _High betweenness centrality (0.020) - this node is a cross-community bridge._
+- **Why does `useAppStore` connect `productService.ts` to `useAppStore.ts`, `types/index.ts`, `AppState`, `skinAnalysisService.ts`, `services/index.ts`?**
+  _High betweenness centrality (0.019) - this node is a cross-community bridge._
 - **Why does `devDependencies` connect `devDependencies` to `scripts`?**
   _High betweenness centrality (0.005) - this node is a cross-community bridge._
-- **Why does `get_model()` connect `skin_ai_server.py` to `main`?**
-  _High betweenness centrality (0.005) - this node is a cross-community bridge._
 - **What connects `METRIC_KEYS`, `RESPONSE_SCHEMA`, `METRIC_KEYS` to the rest of the system?**
-  _173 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _180 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `server.js` be split into smaller, more focused modules?**
-  _Cohesion score 0.06142728093947606 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.055166217430368376 - nodes in this community are weakly interconnected._
 - **Should `skin_ai_server.py` be split into smaller, more focused modules?**
   _Cohesion score 0.059027777777777776 - nodes in this community are weakly interconnected._
 - **Should `scripts` be split into smaller, more focused modules?**
   _Cohesion score 0.0625 - nodes in this community are weakly interconnected._
+- **Should `Poosta Pharmacy V1 — Design Spec` be split into smaller, more focused modules?**
+  _Cohesion score 0.07692307692307693 - nodes in this community are weakly interconnected._

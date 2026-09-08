@@ -40,6 +40,15 @@ export default function Result() {
           </div>
         </div>
         <div className="font-bold text-sageDeep">امتیاز کلی پوست</div>
+        {lastScan.apparentSkinAge != null && (
+          <div className="mt-2 text-center">
+            <div className="text-[28px] font-extrabold text-sageDeep num">{lastScan.apparentSkinAge}</div>
+            <div className="text-[13px] font-bold text-sageDeep">سن ظاهری پوست</div>
+            <div className="text-[11.5px] text-stone mt-1 max-w-[280px] leading-[1.7]">
+              {lastScan.apparentSkinAgeNote || 'برآورد ظاهری از روی بافت و خطوط پوست — سن واقعی شما نیست.'}
+            </div>
+          </div>
+        )}
         <div className="text-[11.5px] text-stone">اعتمادپذیری تحلیل تصویری: {Math.round(lastScan.confidence * 100)}٪</div>
         {lastScan.providerUsed && (
           <div className="text-[10.5px] text-stone bg-sageMist rounded-full px-2.5 py-1 mt-1">

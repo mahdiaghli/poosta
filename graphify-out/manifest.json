@@ -1,17 +1,12 @@
 {
-  "ai/code.py": {
-    "mtime": 1787389389.1417966,
-    "ast_hash": "d7f986834a9c375a787ea093d42d6a8c",
-    "semantic_hash": ""
-  },
   "ai/code22.py": {
     "mtime": 1787466574.2075737,
     "ast_hash": "fc3ac7748e47d3d5e40e01ce3902da18",
     "semantic_hash": ""
   },
   "ai/conditions_model.py": {
-    "mtime": 1788850862.1300197,
-    "ast_hash": "45b8b803355adf2dba27f42d3f6916a7",
+    "mtime": 1788873595.7392886,
+    "ast_hash": "b99f635e9ecc8d57fe3bef33aa082d08",
     "semantic_hash": ""
   },
   "ai/export_model.py": {
@@ -20,23 +15,23 @@
     "semantic_hash": ""
   },
   "ai/merge_condition_datasets.py": {
-    "mtime": 1788764732.3302276,
-    "ast_hash": "d4035084d6a330ac10687807f0a648e9",
+    "mtime": 1788873609.2652912,
+    "ast_hash": "b2153a2b03815f8845fe2dcf4bd1e934",
     "semantic_hash": ""
   },
   "ai/pores_model.py": {
-    "mtime": 1788678958.502016,
-    "ast_hash": "eee33ef6f80fd4066db9e77b965c6159",
+    "mtime": 1788874021.059104,
+    "ast_hash": "0d2bd94bd43140092666f32d83ae3529",
     "semantic_hash": ""
   },
   "ai/region_model.py": {
-    "mtime": 1788764754.0673673,
-    "ast_hash": "c241bca163ac3bab785e7ffceac6eb8b",
+    "mtime": 1788874082.3783925,
+    "ast_hash": "49ef97bc4517ecb45541c16acf740b16",
     "semantic_hash": ""
   },
   "ai/skin_ai_server.py": {
-    "mtime": 1788851019.7396529,
-    "ast_hash": "b7441e3d1009c32d9cee894dccb54409",
+    "mtime": 1788874083.7679958,
+    "ast_hash": "dfc3010b96f7c380429f921dbccfe88f",
     "semantic_hash": ""
   },
   "ai/train_acne.py": {
@@ -45,8 +40,8 @@
     "semantic_hash": ""
   },
   "ai/train_conditions.py": {
-    "mtime": 1788679571.839314,
-    "ast_hash": "293da4fb4ae8660f68f81f72dd42024c",
+    "mtime": 1788873609.5358627,
+    "ast_hash": "ce86e74c2a8dbbfc7533a8aecc64c79b",
     "semantic_hash": ""
   },
   "ai/train_pores.py": {
@@ -60,23 +55,18 @@
     "semantic_hash": ""
   },
   "ai/wrinkle_model.py": {
-    "mtime": 1788679049.1498652,
-    "ast_hash": "46913ac532ac8f303271c70b3969fa38",
-    "semantic_hash": ""
-  },
-  "code.py": {
-    "mtime": 1786999932.0,
-    "ast_hash": "dbe9cd26a589c5f8bafd8d4e126239e3",
+    "mtime": 1788874021.059104,
+    "ast_hash": "d13e098f61b94fa61f8245945b176380",
     "semantic_hash": ""
   },
   "gemini-skin-analysis.js": {
-    "mtime": 1787098125.0,
-    "ast_hash": "d991a2afe2c239d7341917587b5b2c3d",
+    "mtime": 1788871840.5467415,
+    "ast_hash": "8ea5c0f0c9b71ec0028687b7a64cbbb3",
     "semantic_hash": ""
   },
   "openrouter-skin-analysis.js": {
-    "mtime": 1787214187.0,
-    "ast_hash": "73d79694be0373097b69f9bc9358183c",
+    "mtime": 1788871844.720677,
+    "ast_hash": "14b0699775abcb3574185c5fa7d5686e",
     "semantic_hash": ""
   },
   "package.json": {
@@ -105,8 +95,8 @@
     "semantic_hash": ""
   },
   "server.js": {
-    "mtime": 1788853167.3585176,
-    "ast_hash": "1bbda8a8123b52f0ceedc9abb4d45d06",
+    "mtime": 1788871876.572943,
+    "ast_hash": "f71c24fb59ba4a335fadf67c07d4ff07",
     "semantic_hash": ""
   },
   "server/annotate.mjs": {
@@ -300,8 +290,8 @@
     "semantic_hash": ""
   },
   "src/pages/Result.tsx": {
-    "mtime": 1788853321.4684417,
-    "ast_hash": "174e8e8a7ae03cb1d5cb3c9064ee801d",
+    "mtime": 1788871862.9705336,
+    "ast_hash": "a0c9c79be23141791794089484c63151",
     "semantic_hash": ""
   },
   "src/pages/Routine.tsx": {
@@ -310,8 +300,8 @@
     "semantic_hash": ""
   },
   "src/pages/Scan.tsx": {
-    "mtime": 1788853375.257195,
-    "ast_hash": "25f9f795ac376cae9d74b50878e3ea5e",
+    "mtime": 1788871897.4025564,
+    "ast_hash": "e9b834f020bb7d9d7cb7695c37c3bdb3",
     "semantic_hash": ""
   },
   "src/pages/SkinDiary.tsx": {
@@ -405,8 +395,8 @@
     "semantic_hash": ""
   },
   "src/services/skinAnalysisService.ts": {
-    "mtime": 1788853316.551207,
-    "ast_hash": "5e338583309b53a0b68609a2fe1e74df",
+    "mtime": 1788871875.558558,
+    "ast_hash": "8d66a2529dc688d019dd627e9209508f",
     "semantic_hash": ""
   },
   "src/services/weatherService.ts": {
@@ -415,8 +405,8 @@
     "semantic_hash": ""
   },
   "src/store/useAppStore.ts": {
-    "mtime": 1788853308.5811832,
-    "ast_hash": "20a1891d58dc71971d402f274d259c15",
+    "mtime": 1788871874.325647,
+    "ast_hash": "f1bc67243a568b6c70b3c6c15da201db",
     "semantic_hash": ""
   },
   "src/types/index.ts": {
@@ -440,8 +430,8 @@
     "semantic_hash": ""
   },
   "src/types/skin.ts": {
-    "mtime": 1787491664.0,
-    "ast_hash": "b2ecdcbfab8defbc650e762aecc3540d",
+    "mtime": 1788871854.906552,
+    "ast_hash": "64607598130f96635cee32dbe752683f",
     "semantic_hash": ""
   },
   "src/types/user.ts": {
@@ -510,8 +500,8 @@
     "semantic_hash": ""
   },
   "ai/requirements.txt": {
-    "mtime": 1787725813.0,
-    "ast_hash": "79a7a2e8a9e42695e196aab93c82e4a3",
+    "mtime": 1788872623.8216808,
+    "ast_hash": "4aebdad0ceb890fab42d4ef7ac5f9967",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-08-pharmacy-v1.md": {
@@ -822,6 +812,16 @@
   "docs/superpowers/specs/2026-09-08-pharmacy-ops-v1-design.md": {
     "mtime": 1788852970.6497352,
     "ast_hash": "f674b4d3cab9d611e51ed7e18e5be397",
+    "semantic_hash": ""
+  },
+  "ai/check_cuda.py": {
+    "mtime": 1788872504.7594435,
+    "ast_hash": "f720efd58983aa248d0e5ea56a87a65b",
+    "semantic_hash": ""
+  },
+  "scripts/download_scin_images.py": {
+    "mtime": 1788872504.7533233,
+    "ast_hash": "734c8694f565403e51f6ea8832b6deb0",
     "semantic_hash": ""
   }
 }

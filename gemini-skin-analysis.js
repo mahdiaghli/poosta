@@ -35,20 +35,24 @@ const RESPONSE_SCHEMA = {
     observations: { type: 'ARRAY', items: { type: 'STRING' } },
     limitations: { type: 'ARRAY', items: { type: 'STRING' } },
     recommendedNextStep: { type: 'STRING' },
+    apparentSkinAge: { type: 'INTEGER' },
+    apparentSkinAgeNote: { type: 'STRING' },
   },
-  required: ['imageQuality', 'overallScore', 'metrics', 'concerns', 'topOpportunities', 'confidence'],
+  required: ['imageQuality', 'overallScore', 'metrics', 'concerns', 'topOpportunities', 'confidence', 'apparentSkinAge'],
 };
 
 const PROMPT = `تو یک دستیار ارزیابی ظاهری پوست هستی، نه پزشک. این تشخیص پزشکی نیست.
 عکس صورت پیوست‌شده را بررسی کن:
-1) اگر عکس مناسب تحلیل نیست (چهره مشخص نیست، خیلی تار/تاریک است، بیش از یک چهره دارد)، imageQuality.suitable را false کن و دلیل را در issues (فارسی) بنویس؛ در این حالت بقیه فیلدها را با مقدار خنثی (۵۰) پر کن.
+1) اگر عکس مناسب تحلیل نیست (چهره مشخص نیست، خیلی تار/تاریک است، بیش از یک چهره دارد)، imageQuality.suitable را false کن و دلیل را در issues (فارسی) بنویس؛ در این حالت بقیه فیلدها را با مقدار خنثی (۵۰) پر کن و apparentSkinAge را ۲۵ بگذار.
 2) اگر مناسب است، برای هر شاخص زیر عددی بین ۰ تا ۱۰۰ بده (۱۰۰ یعنی بهترین وضعیت):
    acne, oiliness, hydration, redness, pores, darkSpots, texture, fineLines
 3) overallScore را بر اساس اهمیت نسبی شاخص‌ها (نه میانگین ساده) بده.
 4) concerns: شاخص‌هایی با امتیاز زیر ۵۰. topOpportunities: دو شاخص با بیشترین فرصت بهبود.
 5) confidence بین ۰ تا ۱ (میزان اطمینان خودت از این ارزیابی، با توجه به کیفیت عکس).
 6) observations: ۳ تا ۶ جمله‌ی کوتاه فارسی درباره‌ی مشاهدات واقعی روی عکس.
-7) limitations: حتماً این را بگو که این یک ارزیابی ظاهری/کازمتیک است، نه تشخیص پزشکی، و در موارد جدی باید به متخصص پوست مراجعه شود.
+7) apparentSkinAge: سن ظاهری پوست بر اساس بافت، خطوط ریز، لک و منافذ (عدد صحیح ۱۸ تا ۷۰). این سن واقعی فرد نیست.
+8) apparentSkinAgeNote: یک جمله فارسی که بگوید این برآورد ظاهری/کازمتیک است نه سن واقعی.
+9) limitations: حتماً این را بگو که این یک ارزیابی ظاهری/کازمتیک است، نه تشخیص پزشکی، و در موارد جدی باید به متخصص پوست مراجعه شود.
 فقط JSON مطابق اسکیمای داده‌شده برگردان.`;
 
 /**

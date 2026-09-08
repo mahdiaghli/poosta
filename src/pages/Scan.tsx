@@ -172,13 +172,13 @@ export default function Scan() {
 
       {(checking || quality || cameraError) && (
         <div className={`rounded-md p-3.5 mt-3.5 text-sm leading-7 ${checking ? 'bg-sageMist text-sageDeep' : quality?.ok ? 'bg-sageMist text-sageDeep' : 'bg-[#FBEEE9] text-coral'}`}>
-          {checking ? 'در حال بررسی چهره، نور و کیفیت تصویر...' : quality?.ok ? '✓ عکس برای تحلیل مناسب است' : cameraError || quality?.issues.map((i) => i.message).join(' · ')}
+          {checking ? 'در حال بررسی چهره، نور و کیفیت تصویر...' : quality?.ok ? '✓ چهره پیدا شد و عکس برای تحلیل مناسب است' : cameraError || quality?.issues.map((i) => i.message).join(' · ')}
         </div>
       )}
 
       <div className="mt-5 flex flex-col gap-2.5">
-        <Button onClick={() => submit('accurate')} disabled={!preview || checking}>🎯 شروع تحلیل با دقت (Gemini)</Button>
-        <Button onClick={() => submit('standard')} disabled={!preview || checking} variant="secondary">⚡ شروع تحلیل معمولی (مدل محلی)</Button>
+        <Button onClick={() => submit('accurate')} disabled={!preview || checking || !quality?.ok}>🎯 شروع تحلیل با دقت (Gemini)</Button>
+        <Button onClick={() => submit('standard')} disabled={!preview || checking || !quality?.ok} variant="secondary">⚡ شروع تحلیل معمولی (مدل محلی)</Button>
       </div>
       <p className="text-[11.5px] text-stone leading-6 mt-2">
         «تحلیل با دقت» عکس شما را برای بررسی به سرویس هوش مصنوعی Gemini/OpenRouter می‌فرستد (دقت بالاتر). «تحلیل معمولی» کاملاً روی مدل‌های محلی همین پروژه انجام می‌شود و هیچ عکسی جایی ارسال نمی‌شود.
