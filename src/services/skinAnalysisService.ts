@@ -46,18 +46,41 @@ export const skinAnalysisService = {
       return { ok: false, issues: [{ code: 'invalid_image', message: 'خواندن تصویر ممکن نیست.' }] };
     }
   },
-  async analyzeSkin(imageDataUrl: string, _profile: SkinProfile, mode: 'accurate' | 'standard' = 'standard'): Promise<SkinAnalysisResult> {
+  async analyzeSkin(
+    imageDataUrl: string,
+    _profile: SkinProfile,
+    mode: 'accurate' | 'standard' = 'standard',
+    opts?: { sessionId?: string; scanId?: string; phone?: string },
+  ): Promise<SkinAnalysisResult> {
     const quality = await this.checkImageQuality(imageDataUrl);
     if (!quality.ok) throw new Error(quality.issues[0]?.message || 'این عکس برای تحلیل مناسب نیست.');
     try {
+      const { deviceLicenseService } = await import('./deviceLicenseService');
       const response = await fetch('/api/skin-analysis', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ imageDataUrl, mode }),
+        headers: { 'Content-Type': 'application/json', ...deviceLicenseService.authHeaders() },
+        body: JSON.stringify({
+          imageDataUrl,
+          mode,
+          session_id: opts?.sessionId,
+          scan_id: opts?.scanId,
+          phone: opts?.phone,
+        }),
       });
       const body = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(body?.error || 'مدل تحلیل پوست در دسترس نیست.');
-      return validateProviderResult(body);
+      if (!response.ok) {
+        if (response.status === 401 || response.status === 403) {
+          const { clearDeviceAuth } = await import('./deviceLicenseService');
+          clearDeviceAuth();
+        }
+        const issues = Array.isArray((body as { imageQuality?: { issues?: string[] } }).imageQuality?.issues)
+          ? (body as { imageQuality: { issues: string[] } }).imageQuality.issues
+          : [];
+        throw new Error(body?.error || issues[0] || `تحلیل پوست ناموفق بود (${response.status}).`);
+      }
+      const validated = validateProviderResult(body);
+      (validated as any).scanId = body.scanId || body.scan_id;
+      return validated;
     } catch (error) {
       throw error instanceof Error ? error : new Error('ارتباط با سرویس AI برقرار نشد.');
     }

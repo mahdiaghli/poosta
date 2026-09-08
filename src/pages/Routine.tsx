@@ -5,6 +5,7 @@ import { EmptyState } from '@/components/ui/EmptyState';
 import { useAppStore } from '@/store/useAppStore';
 import { useRoutineTracker } from '@/hooks/useRoutine';
 import type { RoutinePeriod, RoutineVariant, Budget } from '@/types';
+import { SendRoutineSms } from '@/components/SendRoutineSms';
 
 const VARIANTS: [RoutineVariant, string][] = [['best', 'بهترین روتین'], ['budget', 'مقرون‌به‌صرفه'], ['minimal', 'حداقلی']];
 const BUDGETS: [Budget, string][] = [['under1m', 'زیر ۱M'], ['1to2m', '۱ تا ۲M'], ['2to5m', '۲ تا ۵M'], ['5plus', 'بالای ۵M']];
@@ -101,6 +102,12 @@ export default function Routine() {
             </div>
           );
         })
+      )}
+
+      {routine && (
+        <div className="mt-5 flex flex-col gap-2.5">
+          <SendRoutineSms />
+        </div>
       )}
     </div>
   );

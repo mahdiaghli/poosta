@@ -48,7 +48,8 @@ def _try_load():
         net.eval()
         _model = net
         return net
-    except Exception:
+    except Exception as e:
+        print(f"[wrinkle_model] failed to load: {type(e).__name__}: {e}")
         _model = None
         return None
 
@@ -73,5 +74,6 @@ def wrinkle_coverage_ratio(face_bgr: np.ndarray) -> float | None:
             out = _model(x)
             pred = out.argmax(dim=1).squeeze(0).numpy()
         return float((pred == 1).mean())
-    except Exception:
+    except Exception as e:
+        print(f"[wrinkle_model] infer failed: {type(e).__name__}: {e}")
         return None

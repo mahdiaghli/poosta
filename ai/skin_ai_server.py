@@ -22,9 +22,11 @@ import base64
 import io
 import json
 import os
+import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlparse
 
 import cv2
 import numpy as np
@@ -32,8 +34,9 @@ from PIL import Image
 from ultralytics import YOLO
 
 from wrinkle_model import wrinkle_coverage_ratio  # optional real model, see ai/wrinkle_model.py
-from conditions_model import detect_conditions  # optional real model, see ai/conditions_model.py
+from conditions_model import list_condition_boxes, PREDICT_CONF, PREDICT_IMGSZ
 from pores_model import pore_coverage_ratio  # optional real model, see ai/pores_model.py
+from region_model import predict_region_probs, region_probs_to_metrics
 
 try:
     import mediapipe as mp  # optional: better face regions than a plain box
@@ -49,12 +52,15 @@ PORT = int(os.getenv("POOSTA_AI_PORT", "8788"))
 
 _model = None
 _face_cascade = None
+_mp_lock = threading.Lock()
+_predict_lock = threading.Lock()
 
 # Metric weights mirror the frontend's METRIC_WEIGHTS (kept in sync manually).
-WEIGHTS = {"acne": 0.17, "oiliness": 0.10, "hydration": 0.05, "redness": 0.11,
+# hydration is a constant 50 (not measured from RGB) so it must not move overallScore.
+WEIGHTS = {"acne": 0.17, "oiliness": 0.10, "hydration": 0.0, "redness": 0.11,
            "pores": 0.10, "darkSpots": 0.12, "texture": 0.13, "fineLines": 0.11}
-# hydration's weight is deliberately reduced (not zero) since it stays a neutral
-# default -- it shouldn't be allowed to meaningfully swing the overall score.
+
+_ALLOWED_ANALYZE_HOSTS = frozenset({"localhost", "127.0.0.1", "::1"})
 
 
 def get_model() -> YOLO:
@@ -113,7 +119,8 @@ def _mp_face_box(image: np.ndarray) -> tuple[int, int, int, int] | None:
         return None
     h, w = image.shape[:2]
     try:
-        res = _MP_FACE.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+        with _mp_lock:
+            res = _MP_FACE.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
     except Exception as e:
         print(f"[mediapipe] .process() failed at runtime, falling back to Haar cascade this frame. Reason: {type(e).__name__}: {e}")
         return None
@@ -124,7 +131,11 @@ def _mp_face_box(image: np.ndarray) -> tuple[int, int, int, int] | None:
     ys = [lm[10].y * h, lm[152].y * h]
     x1, x2 = int(min(xs)), int(max(xs))
     y1, y2 = int(min(ys)), int(max(ys))
-    return max(0, x1), max(0, y1), min(w, x2), min(h, y2)
+    # Landmarks 234/454/10/152 are tight; expand so cheeks/jaw/hairline stay in-frame
+    # (training images are closer to a full-face crop than a mesh hull).
+    bw, bh = max(1, x2 - x1), max(1, y2 - y1)
+    pad_x, pad_y = int(bw * 0.22), int(bh * 0.18)
+    return max(0, x1 - pad_x), max(0, y1 - pad_y), min(w, x2 + pad_x), min(h, y2 + pad_y)
 
 
 def regions_for_face(image: np.ndarray, box: tuple[int, int, int, int]) -> dict[str, tuple[int, int, int, int]]:
@@ -262,10 +273,10 @@ def detect_oiliness(image: np.ndarray, regions: dict) -> tuple[int, str]:
 
 
 # Tunable via env -- webcams/laptop cameras are inherently softer than phone
-# cameras, so a fixed sharpness threshold calibrated on one device can wrongly
-# reject clear photos from another. Lower these if real, in-focus photos keep
-# getting rejected; raise them if obviously blurry photos keep passing.
-MIN_SHARPNESS = float(os.getenv("POOSTA_MIN_SHARPNESS", "8"))
+# cameras. The Scan page uses a different sharpness metric with threshold ~2;
+# this Laplacian-variance floor used to be 8 and rejected in-focus laptop photos
+# after the client had already said the image was OK.
+MIN_SHARPNESS = float(os.getenv("POOSTA_MIN_SHARPNESS", "4"))
 MIN_BRIGHTNESS = float(os.getenv("POOSTA_MIN_BRIGHTNESS", "55"))
 MAX_BRIGHTNESS = float(os.getenv("POOSTA_MAX_BRIGHTNESS", "225"))
 MIN_CONTRAST = float(os.getenv("POOSTA_MIN_CONTRAST", "8"))
@@ -276,34 +287,36 @@ def quality(image: np.ndarray) -> dict[str, Any]:
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     brightness = float(gray.mean())
     contrast = float(gray.std())
-    # measured on the face region when we already know it (see below), since
-    # whole-frame sharpness can be skewed by a blurry/busy background even when
-    # the face itself is sharp
-    sharpness = float(cv2.Laplacian(gray, cv2.CV_64F).var())
 
     mp_box = _mp_face_box(image)
     cascade = None if mp_box else face_detector()
-    if mp_box:
-        faces = []
-    elif cascade is not None:
+    faces = []
+    if mp_box is None and cascade is not None:
         try:
-            faces = cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(100, 100))
+            faces = cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(80, 80))
+            if len(faces) == 0:
+                faces = cascade.detectMultiScale(gray, scaleFactor=1.05, minNeighbors=3, minSize=(48, 48))
         except Exception as e:
             print(f"[quality] Haar detectMultiScale failed at runtime: {type(e).__name__}: {e}")
             faces = []
-    else:
-        faces = []
-    face_count = 1 if mp_box else len(faces)
 
     no_detector_available = mp_box is None and cascade is None
+    face_count = 1 if mp_box is not None else len(faces)
+    box = mp_box
+    if box is None and len(faces) == 1:
+        x, y, w, h = [int(v) for v in faces[0]]
+        box = (x, y, x + w, y + h)
     if no_detector_available:
-        # Both MediaPipe and Haar are unavailable (broken local opencv/mediapipe
-        # install) -- degrade instead of hard-blocking every analysis: assume a
-        # roughly centered face fills most of the frame. Less accurate, but the
-        # app stays usable while you fix the environment (see startup logs above).
         h, w = image.shape[:2]
-        mp_box = (int(w * 0.15), int(h * 0.08), int(w * 0.85), int(h * 0.95))
+        box = (int(w * 0.12), int(h * 0.08), int(w * 0.88), int(h * 0.95))
         face_count = 1
+        print("[quality] MediaPipe/Haar unavailable -- using a centered face crop so analysis still runs")
+
+    sharp_src = crop(image, box) if box else image
+    if sharp_src.size == 0:
+        sharp_src = image
+    sharp_gray = cv2.cvtColor(sharp_src, cv2.COLOR_BGR2GRAY) if sharp_src.ndim == 3 else sharp_src
+    sharpness = float(cv2.Laplacian(sharp_gray, cv2.CV_64F).var())
 
     issues: list[str] = []
     if min(image.shape[:2]) < MIN_RESOLUTION:
@@ -316,16 +329,13 @@ def quality(image: np.ndarray) -> dict[str, Any]:
         issues.append("کنتراست تصویر پایین است.")
     if sharpness < MIN_SHARPNESS:
         issues.append("تصویر ممکن است تار باشد.")
-    if face_count != 1:
+    if not no_detector_available and face_count != 1:
         issues.append("دقیقاً یک چهره روبه‌رو باید در تصویر باشد.")
 
-    box = mp_box
-    if box is None and len(faces) == 1:
-        x, y, w, h = [int(v) for v in faces[0]]
-        box = (x, y, x + w, y + h)
     face = {"x": box[0], "y": box[1], "w": box[2] - box[0], "h": box[3] - box[1]} if box else None
-
     score = 1.0 - min(0.7, 0.12 * len(issues))
+    if no_detector_available:
+        score = min(score, 0.55)
     return {
         "suitable": not issues, "faceDetected": face_count == 1, "faceCount": int(face_count),
         "frontal": face_count == 1, "faceVisibility": "clear" if face_count == 1 else "poor",
@@ -336,17 +346,15 @@ def quality(image: np.ndarray) -> dict[str, Any]:
 
 
 # Fuzzy substring map: normalized class name fragment -> our metric key.
-# Deliberately NOT an exact-name lookup, since ardayemc/face_skin_problems
-# class spelling varies (Dark-Spots vs dark spot vs Pigmentation...).
+# Comedones (blackhead/whitehead) are acne, not pores. Longer fragments first.
 CLASS_TO_METRIC = [
-    ("acne", "acne"), ("pimple", "acne"),
-    ("blackhead", "pores"), ("whitehead", "pores"), ("enlarged-pore", "pores"), ("pore", "pores"),
+    ("enlarged-pore", "pores"), ("whitehead", "acne"), ("blackhead", "acne"),
+    ("acne", "acne"), ("pimple", "acne"), ("pore", "pores"),
     ("dark-spot", "darkSpots"), ("darkspot", "darkSpots"), ("pigmentation", "darkSpots"),
     ("melasma", "darkSpots"), ("freckle", "darkSpots"),
     ("wrinkle", "fineLines"), ("fine-line", "fineLines"), ("eyebag", "fineLines"),
     ("redness", "redness"), ("erythema", "redness"), ("rosacea", "redness"),
     ("oily", "oiliness"),
-    ("dry-skin", "hydration"), ("dryness", "hydration"),
 ]
 
 
@@ -355,9 +363,15 @@ def normalize_class(name: str) -> str:
 
 
 def conditions_to_metric_scores(detections: dict[str, dict]) -> dict[str, tuple[int, float]]:
-    """Aggregates raw class detections into {metric: (score, avg_conf)}."""
+    """Aggregates high-confidence class detections into {metric: (score, avg_conf)}.
+
+    Does not subtract confidence from the score (that double-penalizes) and caps
+    the count penalty so a handful of FPs cannot tank the metric to 0.
+    """
     buckets: dict[str, list[dict]] = {}
     for cls_name, info in detections.items():
+        if float(info.get("avg_conf", 0)) < PREDICT_CONF:
+            continue
         key = normalize_class(cls_name)
         metric = next((m for frag, m in CLASS_TO_METRIC if frag in key), None)
         if metric:
@@ -367,7 +381,7 @@ def conditions_to_metric_scores(detections: dict[str, dict]) -> dict[str, tuple[
     for metric, entries in buckets.items():
         total_count = sum(e["count"] for e in entries)
         avg_conf = float(np.mean([e["avg_conf"] for e in entries]))
-        score = int(max(0, min(100, round(100 - min(70, total_count * 7) - avg_conf * 10))))
+        score = int(max(0, min(100, round(100 - min(40, total_count * 4)))))
         out[metric] = (score, avg_conf)
     return out
 
@@ -399,26 +413,26 @@ def analyze(image: np.ndarray) -> dict[str, Any]:
              "fineLines": wrinkle_note, "oiliness": oil_note}
     metrics_source = {k: "heuristic" for k in metrics}  # overwritten to "model" below when a real model produced it
     conf = 0.0
-    acne_count = 0
 
-    # 2) old acne-only model, if the merged conditions model below isn't trained yet
-    try:
-        acne_model = get_model()
-        result = acne_model.predict(source=image, imgsz=640, conf=0.25, verbose=False)[0]
-        boxes = result.boxes
-        acne_count = int(len(boxes)) if boxes is not None else 0
-        confs = boxes.conf.detach().cpu().numpy().tolist() if boxes is not None and boxes.conf is not None else []
-        conf = float(np.mean(confs)) if confs else 0.0
-        metrics["acne"] = int(max(0, min(100, round(100 - min(70, acne_count * 7) - conf * 10))))
-        metrics_source["acne"] = "model"
-        notes["acne"] = f"{acne_count} ضایعه مشکوک به آکنه توسط مدل YOLO اختصاصی acne شناسایی شد."
-    except FileNotFoundError:
-        notes["acne"] = "مدل acne اختصاصی هنوز آموزش داده نشده."
+    annotation_boxes: list[dict] = []
+    if q.get("faceBox"):
+        annotation_boxes.append({**q["faceBox"], "label": "face", "source": q.get("faceMethod") or "face"})
 
-    # 3) real trained multi-condition model, if you ran ai/train_conditions.py
-    # (see models/skin/conditions/best.onnx) -- overrides classical/old-acne scores
-    # for whichever metrics it actually recognizes, per CLASS_TO_METRIC above.
-    detections = detect_conditions(image)
+    # Conditions model: run on the full frame (same geometry as Roboflow train)
+    # and keep boxes whose center is inside the (padded) face box.
+    with _predict_lock:
+        condition_boxes = list_condition_boxes(image, roi=q["_box"])
+    detections = None
+    if condition_boxes is not None:
+        annotation_boxes.extend(condition_boxes)
+        detections = {}
+        for b in condition_boxes:
+            entry = detections.setdefault(b["label"], {"count": 0, "confs": []})
+            entry["count"] += 1
+            entry["confs"].append(b.get("conf") or 0.0)
+        for v in detections.values():
+            confs = v.pop("confs")
+            v["avg_conf"] = float(np.mean(confs)) if confs else 0.0
     if detections is not None:
         scored = conditions_to_metric_scores(detections)
         for metric, (score, m_conf) in scored.items():
@@ -426,15 +440,60 @@ def analyze(image: np.ndarray) -> dict[str, Any]:
             metrics_source[metric] = "model"
             conf = max(conf, m_conf)
             notes[metric] = f"مدل ترکیبی conditions (کلاس‌های مرتبط با {metric}) — {score}"
+        if "acne" not in scored:
+            notes["acne"] = "مدل conditions ضایعه آکنه با اطمینان کافی پیدا نکرد."
+    else:
+        try:
+            acne_model = get_model()
+            with _predict_lock:
+                result = acne_model.predict(
+                    source=image, imgsz=PREDICT_IMGSZ, conf=PREDICT_CONF, verbose=False,
+                )[0]
+            boxes = result.boxes
+            acne_count = int(len(boxes)) if boxes is not None else 0
+            confs = boxes.conf.detach().cpu().numpy().tolist() if boxes is not None and boxes.conf is not None else []
+            conf = float(np.mean(confs)) if confs else 0.0
+            metrics["acne"] = int(max(0, min(100, round(100 - min(40, acne_count * 4)))))
+            metrics_source["acne"] = "model"
+            notes["acne"] = f"{acne_count} ضایعه مشکوک به آکنه توسط مدل YOLO اختصاصی acne شناسایی شد."
+            if boxes is not None and len(boxes):
+                xyxys = boxes.xyxy.detach().cpu().numpy().tolist()
+                for xyxy, c in zip(xyxys, confs or [0.0] * len(xyxys)):
+                    x1, y1, x2, y2 = xyxy
+                    annotation_boxes.append({
+                        "label": "acne",
+                        "x": int(round(x1)),
+                        "y": int(round(y1)),
+                        "w": int(round(max(1, x2 - x1))),
+                        "h": int(round(max(1, y2 - y1))),
+                        "conf": float(c),
+                        "source": "acne",
+                    })
+        except FileNotFoundError:
+            notes["acne"] = "مدل acne اختصاصی هنوز آموزش داده نشده."
 
-    # 4) real trained pore-segmentation model, if you ran ai/train_pores.py
-    pore_ratio = pore_coverage_ratio(face_crop)
+    # Pore-segmentation model, if you ran ai/train_pores.py
+    with _predict_lock:
+        pore_ratio = pore_coverage_ratio(face_crop)
     if pore_ratio is not None and pore_ratio > 0.001:
         metrics["pores"] = int(max(0, min(100, round(100 - pore_ratio * 300))))
         metrics_source["pores"] = "model"
         notes["texture/pores"] = f"مدل واقعی segmentation منافذ (پوشش: {pore_ratio:.1%})"
     elif pore_ratio is not None:
         notes["texture/pores"] = tex_note + " (مدل منافذ چیزی تشخیص نداد -- به heuristic کلاسیک برگشتیم؛ این مدل را با عکس‌های بیشتر/بازبینی دقت validate کنید)"
+
+    region_probs = predict_region_probs(face_crop)
+    if region_probs is not None:
+        for metric, (score, note) in region_probs_to_metrics(region_probs).items():
+            if metric == "pores" and metrics_source.get("pores") == "model":
+                continue
+            if metric == "fineLines" and metrics_source.get("fineLines") == "model":
+                continue
+            metrics[metric] = score
+            metrics_source[metric] = "model"
+            notes[metric if metric != "pores" else "texture/pores"] = note
+            if metric == "hydration":
+                notes["hydration"] = note
 
     overall = round(sum(metrics[k] * WEIGHTS[k] for k in metrics) / sum(WEIGHTS.values()))
 
@@ -448,6 +507,7 @@ def analyze(image: np.ndarray) -> dict[str, Any]:
         f"روش تشخیص چهره: {q['faceMethod']}",
         f"مدل ترکیبی conditions: {'فعال' if detections is not None else 'هنوز آموزش داده نشده (classical fallback فعال است)'}",
         f"مدل منافذ اختصاصی: {'فعال' if pore_ratio is not None else 'هنوز آموزش داده نشده (classical fallback فعال است)'}",
+        f"مدل ناحیه (چربی/خشکی/قرمزی/منافذ/چروک): {'فعال' if region_probs is not None else 'هنوز آموزش داده نشده'}",
     ]
     limitations = [
         "هر شاخص یا از یک مدل آموزش‌دیده (acne/conditions/pores/wrinkles، هرکدام که آموزش داده شده باشد) یا از پردازش تصویر کلاسیک به‌دست می‌آید (به observations بالا نگاه کنید که کدام است)؛ در هر دو حالت تخمین جهت‌دار است، نه اندازه‌گیری بالینی.",
@@ -464,18 +524,44 @@ def analyze(image: np.ndarray) -> dict[str, Any]:
         "imageQuality": {k: v for k, v in q.items() if k != "_box"},
         "observations": observations, "limitations": limitations,
         "recommendedNextStep": "برای دقت بالینی، هر شاخص (لک، چروک، منافذ...) به یک مدل آموزش‌دیده اختصاصی با دیتاست معتبر نیاز دارد؛ فعلاً از heuristicهای کلاسیک استفاده می‌شود.",
+        "annotationBoxes": annotation_boxes,
     }
 
 
 class Handler(BaseHTTPRequestHandler):
+    def _allow_origin(self) -> str | None:
+        origin = self.headers.get("Origin", "")
+        if not origin:
+            return None
+        try:
+            host = urlparse(origin).hostname or ""
+        except Exception:
+            return None
+        if host in _ALLOWED_ANALYZE_HOSTS:
+            return origin
+        return None
+
     def _send(self, status: int, body: dict[str, Any]) -> None:
         raw = json.dumps(body, ensure_ascii=False).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(raw)))
-        self.send_header("Access-Control-Allow-Origin", "*")
+        allowed = self._allow_origin()
+        if allowed:
+            self.send_header("Access-Control-Allow-Origin", allowed)
+            self.send_header("Vary", "Origin")
         self.end_headers()
         self.wfile.write(raw)
+
+    def do_OPTIONS(self) -> None:
+        allowed = self._allow_origin()
+        self.send_response(204 if allowed else 403)
+        if allowed:
+            self.send_header("Access-Control-Allow-Origin", allowed)
+            self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+            self.send_header("Access-Control-Allow-Headers", "Content-Type")
+            self.send_header("Vary", "Origin")
+        self.end_headers()
 
     def do_GET(self) -> None:
         if self.path == "/health":

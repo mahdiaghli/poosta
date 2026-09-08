@@ -18,3 +18,7 @@ __pycache__/
 /datasets/
 datasets/
 datasets
+
+# Pharmacy V1 private data (sqlite + scan originals/annotations/overlays)
+/data/
+data/

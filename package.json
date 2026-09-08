@@ -10,15 +10,19 @@
     "lint": "eslint . --ext ts,tsx",
     "api": "node server.js",
     "seed:products": "node scripts/import-products-local.mjs",
+    "seed:license": "node scripts/seed-license.mjs",
+    "smoke:v1": "node scripts/smoke-v1.mjs",
     "ai:install": "python -m pip install -r ai/requirements.txt",
     "ai:train": "python ai/train_acne.py",
     "ai:export": "python ai/export_model.py"
   },
   "dependencies": {
+    "better-sqlite3": "^13.0.3",
     "lucide-react": "^0.383.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.0",
+    "sharp": "^0.35.4",
     "zustand": "^4.5.4"
   },
   "devDependencies": {

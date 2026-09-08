@@ -22,7 +22,7 @@ import pandas as pd
 import numpy as np
 import torch
 from torch import nn
-from torch.utils.data import Dataset, DataLoader, random_split
+from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms, models
 from PIL import Image
 
@@ -32,6 +32,14 @@ OUT_DIR = ROOT / "models/skin/severity"
 
 TRANSFORM = transforms.Compose([
     transforms.Resize((224, 224)),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+])
+
+TRAIN_TRANSFORM = transforms.Compose([
+    transforms.Resize((224, 224)),
+    transforms.RandomHorizontalFlip(),
+    transforms.ColorJitter(brightness=0.15, contrast=0.15, saturation=0.1),
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
 ])
@@ -56,7 +64,8 @@ def discover(data_dir: Path) -> list[tuple[Path, pd.DataFrame, list[str]]]:
 class MultiFolderDataset(Dataset):
     """Concatenates samples across folders. Each sample carries a mask so the
     loss only applies to the columns that folder actually labels."""
-    def __init__(self, sources: list[tuple[Path, pd.DataFrame, list[str]]], all_cols: list[str]):
+    def __init__(self, sources: list[tuple[Path, pd.DataFrame, list[str]]], all_cols: list[str], transform=TRANSFORM):
+        self.transform = transform
         self.rows: list[tuple[Path, str, np.ndarray, np.ndarray]] = []  # (folder, filename, values, mask)
         for folder, df, label_cols in sources:
             col_idx = [all_cols.index(c) for c in label_cols]
@@ -74,13 +83,14 @@ class MultiFolderDataset(Dataset):
     def __getitem__(self, idx: int):
         folder, filename, values, mask = self.rows[idx]
         img_path = folder / filename
-        if not img_path.exists():  # fallback: sometimes nested under train/valid/test subfolders
-            matches = list(folder.rglob(filename))
+        if not img_path.exists():
+            matches = [p for p in folder.rglob(filename) if p.is_file()]
             if not matches:
                 raise FileNotFoundError(f"Image not found: {img_path}")
+            matches.sort(key=lambda p: (0 if "train" in p.parts else 1, len(p.parts), str(p)))
             img_path = matches[0]
         img = Image.open(img_path).convert("RGB")
-        return TRANSFORM(img), torch.from_numpy(values), torch.from_numpy(mask)
+        return self.transform(img), torch.from_numpy(values), torch.from_numpy(mask)
 
 
 def build_model(n_outputs: int) -> nn.Module:
@@ -89,15 +99,19 @@ def build_model(n_outputs: int) -> nn.Module:
     return net
 
 
-def masked_mse(pred: torch.Tensor, target: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
-    diff2 = (pred - target) ** 2 * mask
-    denom = mask.sum().clamp_min(1.0)
-    return diff2.sum() / denom
+def masked_bce_or_mse(pred: torch.Tensor, target: torch.Tensor, mask: torch.Tensor, binary: bool) -> torch.Tensor:
+    if binary:
+        loss = nn.functional.binary_cross_entropy_with_logits(pred, target, reduction="none")
+    else:
+        loss = (pred - target) ** 2
+    loss = loss * mask
+    return loss.sum() / mask.sum().clamp_min(1.0)
 
 
 def main() -> None:
     p = argparse.ArgumentParser()
     p.add_argument("--data-dir", default=str(DATA_DIR))
+    p.add_argument("--out-dir", default=str(OUT_DIR))
     p.add_argument("--epochs", type=int, default=20)
     p.add_argument("--batch", type=int, default=32)
     p.add_argument("--lr", type=float, default=1e-4)
@@ -123,16 +137,28 @@ def main() -> None:
     if args.dry_run:
         return
 
-    dataset = MultiFolderDataset(sources, all_cols)
-    val_len = max(1, int(0.15 * len(dataset)))
-    train_ds, val_ds = random_split(dataset, [len(dataset) - val_len, val_len])
+    global_max = max(float(df[label_cols].max().max()) for _, df, label_cols in sources)
+    binary = global_max <= 1.0
+    print(f"Loss: {'BCE-with-logits' if binary else 'MSE'} (label max={global_max})")
+
+    n = sum(len(df) for _, df, _ in sources)
+    val_len = max(1, int(0.15 * n))
+    perm = torch.randperm(n, generator=torch.Generator().manual_seed(42)).tolist()
+    val_idx, train_idx = perm[:val_len], perm[val_len:]
+    train_ds = torch.utils.data.Subset(
+        MultiFolderDataset(sources, all_cols, transform=TRAIN_TRANSFORM), train_idx
+    )
+    val_ds = torch.utils.data.Subset(
+        MultiFolderDataset(sources, all_cols, transform=TRANSFORM), val_idx
+    )
     train_loader = DataLoader(train_ds, batch_size=args.batch, shuffle=True, num_workers=2)
     val_loader = DataLoader(val_ds, batch_size=args.batch, num_workers=2)
 
     model = build_model(len(all_cols)).to(args.device)
     opt = torch.optim.AdamW(model.parameters(), lr=args.lr)
 
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    out_dir = Path(args.out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
     best_val = float("inf")
     for epoch in range(args.epochs):
         model.train()
@@ -140,7 +166,7 @@ def main() -> None:
         for x, y, mask in train_loader:
             x, y, mask = x.to(args.device), y.to(args.device), mask.to(args.device)
             opt.zero_grad()
-            loss = masked_mse(model(x), y, mask)
+            loss = masked_bce_or_mse(model(x), y, mask, binary)
             loss.backward()
             opt.step()
             train_loss += loss.item() * x.size(0)
@@ -151,15 +177,15 @@ def main() -> None:
         with torch.no_grad():
             for x, y, mask in val_loader:
                 x, y, mask = x.to(args.device), y.to(args.device), mask.to(args.device)
-                val_loss += masked_mse(model(x), y, mask).item() * x.size(0)
+                val_loss += masked_bce_or_mse(model(x), y, mask, binary).item() * x.size(0)
         val_loss /= len(val_ds)
-        print(f"epoch {epoch+1}/{args.epochs}  train_mse={train_loss:.4f}  val_mse={val_loss:.4f}")
+        print(f"epoch {epoch+1}/{args.epochs}  train_loss={train_loss:.4f}  val_loss={val_loss:.4f}")
 
         if val_loss < best_val:
             best_val = val_loss
-            torch.save({"state_dict": model.state_dict(), "label_cols": all_cols}, OUT_DIR / "best.pth")
+            torch.save({"state_dict": model.state_dict(), "label_cols": all_cols, "binary": binary}, out_dir / "best.pth")
 
-    print(f"Best val MSE: {best_val:.4f}. Saved to {OUT_DIR / 'best.pth'}")
+    print(f"Best val loss: {best_val:.4f}. Saved to {out_dir / 'best.pth'}")
 
 
 if __name__ == "__main__":

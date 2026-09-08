@@ -10,6 +10,8 @@ import { recommendationEngine } from '@/services/recommendationEngine';
 import { routineTrackerService } from '@/services/routineTrackerService';
 import { productService } from '@/services/productService';
 import { notificationService } from '@/services/notificationService';
+import { kioskHandoffService, setLastServerScanId, getKioskPhone, setKioskPhone as persistKioskPhone } from '@/services/kioskHandoffService';
+import { deviceLicenseService } from '@/services/deviceLicenseService';
 
 const emptyProfile: SkinProfile = {
   sensitivities: [], concerns: [], goals: [], budget: '2to5m',
@@ -31,6 +33,9 @@ interface AppState {
   useOnlyMyProducts: boolean;
   coachMessages: ChatMessage[];
   faceDataConsent: boolean;
+  kioskPhone: string;
+  serverProgress: any | null;
+  lastServerScanId: string | null;
   checkIns: DailyCheckIn[];
   diaryEntries: SkinDiaryEntry[];
   patchTests: PatchTest[];
@@ -47,6 +52,8 @@ interface AppState {
   setReminders: (r: Reminders) => void;
   pushCoachMessage: (m: ChatMessage) => void;
   setFaceDataConsent: (v: boolean) => void;
+  setKioskPhone: (phone: string) => void;
+  resetKioskSession: () => void;
   skipTonightTreatment: () => void;
   addCheckIn: (c: DailyCheckIn) => void;
   addDiaryEntry: (e: SkinDiaryEntry) => void;
@@ -75,6 +82,9 @@ export const useAppStore = create<AppState>()(
       useOnlyMyProducts: false,
       coachMessages: [],
       faceDataConsent: false,
+      kioskPhone: '',
+      serverProgress: null,
+      lastServerScanId: null,
       checkIns: [],
       diaryEntries: [],
       patchTests: [],
@@ -89,9 +99,22 @@ export const useAppStore = create<AppState>()(
       },
 
       runScan: async (imageDataUrl, thumbnailUrl, mode = 'standard') => {
-        const { profile, lastScan } = get();
-        const result = await skinAnalysisService.analyzeSkin(imageDataUrl, profile, mode);
+        const { profile, lastScan, kioskPhone } = get();
+        let sessionId: string | undefined;
+        try {
+          const headers = { 'Content-Type': 'application/json', ...deviceLicenseService.authHeaders() };
+          const sessionRes = await fetch('/api/sessions', { method: 'POST', headers, body: '{}' });
+          if (sessionRes.ok) {
+            const sessionBody = await sessionRes.json();
+            sessionId = sessionBody.session_id;
+          }
+        } catch { /* legacy / offline path continues */ }
+
+        const phone = kioskPhone || getKioskPhone() || undefined;
+        const result = await skinAnalysisService.analyzeSkin(imageDataUrl, profile, mode, { sessionId, phone });
         result.thumbnailUrl = thumbnailUrl;
+        const scanId = (result as any).scanId || null;
+        if (scanId) setLastServerScanId(scanId);
 
         const comparison: ScanComparison | null = lastScan
           ? { prevOverall: lastScan.overallScore, newOverall: result.overallScore, diff: result.overallScore - lastScan.overallScore }
@@ -102,8 +125,32 @@ export const useAppStore = create<AppState>()(
         const routine = recommendationEngine.buildRoutine(result.metrics, profile, opts, catalog);
         const products = recommendationEngine.recommendProducts(result.metrics, profile, catalog);
 
-        
-        set((s) => ({ lastScan: result, scanHistory: [...s.scanHistory, result], lastComparison: comparison, routine, products }));
+        let serverProgress = null;
+        try {
+          const handoff = await kioskHandoffService.handoff({
+            scanId,
+            phone,
+            routine,
+            products,
+          });
+          serverProgress = handoff?.progress?.progress ?? handoff?.progress ?? null;
+          if (!serverProgress && phone) {
+            const p = await kioskHandoffService.progress(phone);
+            serverProgress = p?.progress || null;
+          }
+        } catch (e) {
+          console.warn('[handoff]', e);
+        }
+
+        set((s) => ({
+          lastScan: result,
+          scanHistory: [...s.scanHistory, result],
+          lastComparison: comparison,
+          routine,
+          products,
+          lastServerScanId: scanId,
+          serverProgress,
+        }));
       },
 
       rebuildRoutine: async () => {
@@ -148,6 +195,23 @@ export const useAppStore = create<AppState>()(
       setOwnedProductDates: (id,openedAt,expiresAt) => { set(s=>({myProducts:s.myProducts.map(p=>p.id===id?{...p,openedAt,expiresAt}:p)})); },
       requestNotifications: async () => { const permission=await notificationService.requestPermission(); if(permission==='granted') notificationService.schedule(get().reminders); return permission; },
       setFaceDataConsent: (v) => { set({ faceDataConsent: v }); },
+      setKioskPhone: (phone) => {
+        persistKioskPhone(phone);
+        set({ kioskPhone: phone });
+      },
+      resetKioskSession: () => {
+        setLastServerScanId(null);
+        set({
+          lastScan: null,
+          scanHistory: [],
+          lastComparison: null,
+          routine: null,
+          products: [],
+          serverProgress: null,
+          lastServerScanId: null,
+          faceDataConsent: false,
+        });
+      },
       skipTonightTreatment: () => {
         const key = routineTrackerService.todayKey();
         const routine = get().routine;

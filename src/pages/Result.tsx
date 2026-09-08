@@ -7,6 +7,8 @@ import { MetricBar } from '@/components/ui/MetricBar';
 import { MedicalDisclaimer } from '@/components/ui/MedicalDisclaimer';
 import { useAppStore } from '@/store/useAppStore';
 import { METRIC_LABELS_FA, type SkinMetricKey } from '@/types';
+import { SendRoutineSms } from '@/components/SendRoutineSms';
+import { KioskVisitActions } from '@/components/KioskVisitActions';
 
 export default function Result() {
   const navigate = useNavigate();
@@ -81,6 +83,8 @@ export default function Result() {
 
       <div className="flex flex-col gap-2.5 mt-5">
         <Button onClick={() => navigate('/routine')}>مشاهده روتین پیشنهادی</Button>
+        <SendRoutineSms />
+        <KioskVisitActions />
         <Button variant="secondary" onClick={() => navigate('/home')}>بازگشت به خانه</Button>
       </div>
     </div>
