@@ -42,6 +42,18 @@ export function customerPayloadFromResult(result) {
   return safe;
 }
 
+export function markScanAnalyzing(scanId) {
+  getDb().prepare(`
+    UPDATE scans SET status = 'analyzing', analysis_error = NULL WHERE id = ?
+  `).run(scanId);
+}
+
+export function markScanFailed(scanId, message) {
+  getDb().prepare(`
+    UPDATE scans SET status = 'failed', analysis_error = ?, completed_at = ? WHERE id = ?
+  `).run(String(message || 'analysis failed').slice(0, 1000), nowIso(), scanId);
+}
+
 export async function finalizeScanAnalysis({ scanId, analysisResult, mode, customerId, recommendations, routine }) {
   const database = getDb();
   const scan = database.prepare('SELECT * FROM scans WHERE id = ?').get(scanId);
@@ -74,7 +86,9 @@ export async function finalizeScanAnalysis({ scanId, analysisResult, mode, custo
       annotations_key = ?,
       customer_id = COALESCE(?, customer_id),
       recommendations_json = COALESCE(?, recommendations_json),
-      routine_json = COALESCE(?, routine_json)
+      routine_json = COALESCE(?, routine_json),
+      analysis_error = NULL,
+      completed_at = ?
     WHERE id = ?
   `).run(
     status,
@@ -85,6 +99,7 @@ export async function finalizeScanAnalysis({ scanId, analysisResult, mode, custo
     customerId || null,
     recommendations ? JSON.stringify(recommendations) : null,
     routine ? JSON.stringify(routine) : null,
+    nowIso(),
     scanId,
   );
 

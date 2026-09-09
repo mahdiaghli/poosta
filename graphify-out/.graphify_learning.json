@@ -1,0 +1,240 @@
+{
+  "generated_at": "2026-09-09T15:08:44.179037+00:00",
+  "nodes": {
+    "server": {
+      "code_fingerprint": "ee2eba74bd53e4ec7e91113ac1232eedb595e626d343ab1e6934a0312abf72bf",
+      "label": "server.js",
+      "last": "2026-09-09T14:20:17.262094+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-09T14:20:17.262094+00:00",
+          "outcome": "useful",
+          "q": "Implement the Poosta Pharmacy Kiosk Improvement Plan"
+        }
+      ],
+      "score": 0.99922294,
+      "source_file": "server.js",
+      "status": "tentative",
+      "uses": 1
+    },
+    "server_db_getdb": {
+      "code_fingerprint": "dfcec6ed162e2d7c9fd0cb7ce60eba972ba70f6f34cb57617f0443656b3aee0f",
+      "label": "getDb()",
+      "last": "2026-09-09T14:20:17.262094+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-09T14:20:17.262094+00:00",
+          "outcome": "useful",
+          "q": "Implement the Poosta Pharmacy Kiosk Improvement Plan"
+        }
+      ],
+      "score": 0.99922294,
+      "source_file": "server/db.mjs",
+      "status": "tentative",
+      "uses": 1
+    },
+    "server_pharmacystaff": {
+      "code_fingerprint": "bf6e793d9f2978d2f3086d2d44715307d059f1424af6d1623fd74c1b89886029",
+      "label": "pharmacyStaff.mjs",
+      "last": "2026-09-09T14:20:17.262094+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-09T14:20:17.262094+00:00",
+          "outcome": "useful",
+          "q": "Implement the Poosta Pharmacy Kiosk Improvement Plan"
+        }
+      ],
+      "score": 0.99922294,
+      "source_file": "server/pharmacyStaff.mjs",
+      "status": "tentative",
+      "uses": 1
+    },
+    "server_pharmacystaff_stafflogin": {
+      "code_fingerprint": "bf6e793d9f2978d2f3086d2d44715307d059f1424af6d1623fd74c1b89886029",
+      "label": "staffLogin()",
+      "last": "2026-09-09T13:24:14.273275+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-09T13:24:14.273275+00:00",
+          "outcome": "useful",
+          "q": "Portrait tablet kiosk UI: add weekly navigation, stronger weekly routine CTA, remove consent, add staff utilities, enforce first-run license, show cloud analysis directly, and fix /onboarding route"
+        }
+      ],
+      "score": 0.99832472,
+      "source_file": "server/pharmacyStaff.mjs",
+      "status": "tentative",
+      "uses": 1
+    },
+    "src_app_app": {
+      "code_fingerprint": "cd2358f6eaa6adafc2f938ee3f3932880d1a36540d8fd820b2df22a34e3c5029",
+      "label": "App()",
+      "last": "2026-09-09T13:24:14.273275+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-09T13:24:14.273275+00:00",
+          "outcome": "useful",
+          "q": "Portrait tablet kiosk UI: add weekly navigation, stronger weekly routine CTA, remove consent, add staff utilities, enforce first-run license, show cloud analysis directly, and fix /onboarding route"
+        }
+      ],
+      "score": 0.99832472,
+      "source_file": "src/App.tsx",
+      "status": "tentative",
+      "uses": 1
+    },
+    "src_components_layout_bottomnav_bottomnav": {
+      "code_fingerprint": "9db965c77612a5d2049d7e48986f8ff99e4e98a8242ef981c657eb15166eef39",
+      "label": "BottomNav()",
+      "last": "2026-09-09T13:24:14.273275+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-09T13:24:14.273275+00:00",
+          "outcome": "useful",
+          "q": "Portrait tablet kiosk UI: add weekly navigation, stronger weekly routine CTA, remove consent, add staff utilities, enforce first-run license, show cloud analysis directly, and fix /onboarding route"
+        }
+      ],
+      "score": 0.99832472,
+      "source_file": "src/components/layout/BottomNav.tsx",
+      "status": "tentative",
+      "uses": 1
+    },
+    "src_hooks_usekioskmode_usekioskmode": {
+      "code_fingerprint": "f42ba68106413d9d4325523fb34cef94b7d6aab099a60aa0e370315dfbf20c2c",
+      "label": "useKioskMode()",
+      "last": "2026-09-09T14:54:39.106946+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-09T14:54:39.106946+00:00",
+          "outcome": "useful",
+          "q": "Fix Poosta for Surface Pro, staff login routing, and no-HTTPS tablet camera capture"
+        }
+      ],
+      "score": 0.999774038,
+      "source_file": "src/hooks/useKioskMode.ts",
+      "status": "tentative",
+      "uses": 1
+    },
+    "src_pages_activate_activate": {
+      "code_fingerprint": "f5d005fe13ae0423a7fa0759afc735f2d3ded433e9fc4c1a53f65e1cefc63912",
+      "label": "Activate()",
+      "last": "2026-09-09T13:24:14.273275+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-09T13:24:14.273275+00:00",
+          "outcome": "useful",
+          "q": "Portrait tablet kiosk UI: add weekly navigation, stronger weekly routine CTA, remove consent, add staff utilities, enforce first-run license, show cloud analysis directly, and fix /onboarding route"
+        }
+      ],
+      "score": 0.99832472,
+      "source_file": "src/pages/Activate.tsx",
+      "status": "tentative",
+      "uses": 1
+    },
+    "src_pages_onboarding_onboarding": {
+      "code_fingerprint": "a28daf4bd333e48fe328f052320c52e135392848e704b96b45366d9edb624b0d",
+      "label": "Onboarding()",
+      "last": "2026-09-09T13:24:14.273275+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-09T13:24:14.273275+00:00",
+          "outcome": "useful",
+          "q": "Portrait tablet kiosk UI: add weekly navigation, stronger weekly routine CTA, remove consent, add staff utilities, enforce first-run license, show cloud analysis directly, and fix /onboarding route"
+        }
+      ],
+      "score": 0.99832472,
+      "source_file": "src/pages/Onboarding.tsx",
+      "status": "tentative",
+      "uses": 1
+    },
+    "src_pages_pharmacydashboard_pharmacydashboard": {
+      "code_fingerprint": "187409554020ff01c3676dec5676510ef9c367e2834c5d8f17ebea97acb8420a",
+      "label": "PharmacyDashboard()",
+      "last": "2026-09-09T14:54:39.106946+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-09T14:54:39.106946+00:00",
+          "outcome": "useful",
+          "q": "Fix Poosta for Surface Pro, staff login routing, and no-HTTPS tablet camera capture"
+        },
+        {
+          "date": "2026-09-09T14:20:17.262094+00:00",
+          "outcome": "useful",
+          "q": "Implement the Poosta Pharmacy Kiosk Improvement Plan"
+        }
+      ],
+      "score": 1.998996979,
+      "source_file": "src/pages/PharmacyDashboard.tsx",
+      "status": "preferred",
+      "uses": 2
+    },
+    "src_pages_pharmacylogin_pharmacylogin": {
+      "code_fingerprint": "bcf0c8ae4e1a46bcc9dee773eee29ad0265aa180ce106709a04cf7373e374a71",
+      "label": "PharmacyLogin()",
+      "last": "2026-09-09T14:54:39.106946+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-09T14:54:39.106946+00:00",
+          "outcome": "useful",
+          "q": "Fix Poosta for Surface Pro, staff login routing, and no-HTTPS tablet camera capture"
+        }
+      ],
+      "score": 0.999774038,
+      "source_file": "src/pages/PharmacyLogin.tsx",
+      "status": "tentative",
+      "uses": 1
+    },
+    "src_pages_scan_scan": {
+      "code_fingerprint": "3bdedb25d31f268da1bc869ccad430e2a84a987445ff8fe2cec8e3fe09eadd9d",
+      "label": "Scan()",
+      "last": "2026-09-09T14:54:39.106946+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-09T14:54:39.106946+00:00",
+          "outcome": "useful",
+          "q": "Fix Poosta for Surface Pro, staff login routing, and no-HTTPS tablet camera capture"
+        },
+        {
+          "date": "2026-09-09T13:24:14.273275+00:00",
+          "outcome": "useful",
+          "q": "Portrait tablet kiosk UI: add weekly navigation, stronger weekly routine CTA, remove consent, add staff utilities, enforce first-run license, show cloud analysis directly, and fix /onboarding route"
+        }
+      ],
+      "score": 1.998098758,
+      "source_file": "src/pages/Scan.tsx",
+      "status": "preferred",
+      "uses": 2
+    },
+    "src_pages_weeklyroutine_weeklyroutine": {
+      "code_fingerprint": "1b1e06e51139c057ebd42aca385ecab5e7ce693494eb189b2a6f72053d02fd6f",
+      "label": "WeeklyRoutine()",
+      "last": "2026-09-09T13:24:14.273275+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-09T13:24:14.273275+00:00",
+          "outcome": "useful",
+          "q": "Portrait tablet kiosk UI: add weekly navigation, stronger weekly routine CTA, remove consent, add staff utilities, enforce first-run license, show cloud analysis directly, and fix /onboarding route"
+        }
+      ],
+      "score": 0.99832472,
+      "source_file": "src/pages/WeeklyRoutine.tsx",
+      "status": "tentative",
+      "uses": 1
+    },
+    "src_pages_welcome_welcome": {
+      "code_fingerprint": "ae966e2a15bd656dbebe0784f0eaf028906c69d2c5f154507c3e319afbcc92d2",
+      "label": "Welcome()",
+      "last": "2026-09-09T14:54:39.106946+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-09T14:54:39.106946+00:00",
+          "outcome": "useful",
+          "q": "Fix Poosta for Surface Pro, staff login routing, and no-HTTPS tablet camera capture"
+        }
+      ],
+      "score": 0.999774038,
+      "source_file": "src/pages/Welcome.tsx",
+      "status": "tentative",
+      "uses": 1
+    }
+  },
+  "version": 1
+}

@@ -59,6 +59,49 @@ export const pharmacyStaffService = {
     return body;
   },
 
+  async searchCustomers(phone: string) {
+    const res = await fetch(`/api/pharmacy/customers?phone=${encodeURIComponent(phone)}`, {
+      headers: { ...staffHeaders() },
+    });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(body.error || 'جست‌وجوی مشتری ناموفق بود.');
+    return body.customers as any[];
+  },
+
+  async analytics(range: 'today' | 'week' | 'month' = 'today') {
+    const res = await fetch(`/api/pharmacy/analytics?range=${range}`, { headers: { ...staffHeaders() } });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(body.error || 'گزارش داروخانه خوانده نشد.');
+    return body;
+  },
+
+  async scanAction(scanId: string, action: string, note?: string) {
+    const res = await fetch(`/api/pharmacy/scans/${encodeURIComponent(scanId)}/actions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...staffHeaders() },
+      body: JSON.stringify({ action, note }),
+    });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(body.error || 'ثبت اقدام ناموفق بود.');
+    return body;
+  },
+
+  async searchCatalog(query: string) {
+    const res = await fetch(`/api/pharmacy/catalog/search?q=${encodeURIComponent(query)}`, {
+      headers: { ...staffHeaders() },
+    });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(body.error || 'جست‌وجوی محصول ناموفق بود.');
+    return body.products as any[];
+  },
+
+  async audit(limit = 80) {
+    const res = await fetch(`/api/pharmacy/audit?limit=${limit}`, { headers: { ...staffHeaders() } });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(body.error || 'گزارش فعالیت خوانده نشد.');
+    return body.events as any[];
+  },
+
   async listProducts() {
     const res = await fetch('/api/pharmacy/products', { headers: { ...staffHeaders() } });
     const body = await res.json().catch(() => ({}));

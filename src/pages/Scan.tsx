@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { TopBar } from '@/components/layout/TopBar';
 import { Button } from '@/components/ui/Button';
 import { MedicalDisclaimer } from '@/components/ui/MedicalDisclaimer';
 import { useSkinScan } from '@/hooks/useSkinScan';
 import { useAppStore } from '@/store/useAppStore';
 import { useKioskMode } from '@/hooks/useKioskMode';
+import { Camera, Cloud, ImagePlus } from 'lucide-react';
 
 const GUIDES = ['نور کافی و یکنواخت', 'صورت مستقیم رو‌به‌دوربین', 'بدون آرایش غلیظ/عینک', 'فاصله حدود ۳۰ سانتی‌متر'];
 
@@ -26,8 +27,6 @@ function resizeThumb(src: string, size: number): Promise<string | undefined> {
 
 export default function Scan() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const consent = useAppStore((s) => s.faceDataConsent);
   const kiosk = useKioskMode();
   const kioskPhone = useAppStore((s) => s.kioskPhone);
   const setKioskPhone = useAppStore((s) => s.setKioskPhone);
@@ -48,12 +47,8 @@ export default function Scan() {
   };
 
   useEffect(() => {
-    if (!consent && location.pathname !== '/consent') {
-      navigate('/consent', { replace: true });
-    }
     return stopStream;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [consent, location.pathname, navigate]);
+  }, []);
 
   const cameraErrorMessage = (e: unknown): string => {
     const name = e instanceof DOMException ? e.name : '';
@@ -67,10 +62,13 @@ export default function Scan() {
   const openCamera = async () => {
     setCameraError('');
     if (!window.isSecureContext) {
-      setCameraError('دوربین روی HTTP شبکه محلی کار نمی‌کند (نیاز به HTTPS). از دکمه «انتخاب عکس از گالری» استفاده کنید.');
+      setCameraError('مرورگر اجازه نمایش دوربین داخل صفحه را روی HTTP شبکه نمی‌دهد. پوستا را روی localhost باز کنید یا میانبر Surface Kiosk را اجرا کنید؛ برنامه دیگر دوربین جداگانه ویندوز را باز نمی‌کند.');
       return;
     }
-    if (!navigator.mediaDevices?.getUserMedia) { setCameraError('دوربین در این مرورگر پشتیبانی نمی‌شود.'); return; }
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setCameraError('نمایش دوربین داخل صفحه در این مرورگر فعال نیست. دسترسی Camera را در تنظیمات Edge بررسی کنید.');
+      return;
+    }
     stopStream();
     // Mount/show the <video> element FIRST so videoRef.current definitely
     // exists before we try to attach the stream to it (fixes a silent
@@ -107,6 +105,7 @@ export default function Scan() {
   const onFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    setCameraError('');
     const reader = new FileReader();
     reader.onload = async (ev) => {
       const dataUrl = ev.target?.result as string;
@@ -116,6 +115,7 @@ export default function Scan() {
       await checkImage(dataUrl);
     };
     reader.readAsDataURL(file);
+    e.target.value = '';
   };
 
   const submit = async (mode: 'accurate' | 'standard') => {
@@ -126,7 +126,7 @@ export default function Scan() {
   };
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-140px)]">
+    <div className="flex flex-col min-h-[calc(100dvh-140px)]">
       <TopBar eyebrow="مرحله اسکن" />
       <h1 className="text-[22px] min-[600px]:text-[26px] font-extrabold text-sageDeep">یک عکس واضح و روبه‌رو از صورتتان بگیرید</h1>
 
@@ -148,7 +148,7 @@ export default function Scan() {
         ))}
       </div>
 
-      <div className="relative rounded-2xl overflow-hidden bg-black w-full h-[min(42vh,380px)] min-[600px]:h-[min(46vh,440px)]">
+      <div className="relative rounded-2xl overflow-hidden bg-black w-full h-[min(42dvh,380px)] min-[600px]:h-[min(48dvh,540px)] min-[1100px]:h-[min(52dvh,560px)]">
         {/* video is ALWAYS in the DOM so videoRef.current is never null when we need it */}
         <video
           ref={videoRef} playsInline muted autoPlay
@@ -157,27 +157,38 @@ export default function Scan() {
         {!cameraOpen && preview && <img src={preview} className="absolute inset-0 w-full h-full object-cover" />}
         {!cameraOpen && !preview && (
           <div onClick={openCamera} className="absolute inset-0 flex flex-col items-center justify-center gap-3 cursor-pointer bg-white">
-            <div className="w-16 h-16 min-[600px]:w-20 min-[600px]:h-20 rounded-full bg-sageMist flex items-center justify-center text-3xl">📷</div>
-            <div className="font-bold text-sm min-[600px]:text-base text-ink">باز کردن دوربین</div>
+            <div className="w-16 h-16 min-[600px]:w-20 min-[600px]:h-20 rounded-full bg-sageMist flex items-center justify-center text-sageDeep"><Camera size={32} strokeWidth={2} /></div>
+            <div className="font-bold text-sm min-[600px]:text-base text-ink">گرفتن عکس با دوربین تبلت</div>
             <div className="text-xs min-[600px]:text-sm text-stone">یا فایل تصویر را انتخاب کنید</div>
           </div>
         )}
         {cameraOpen && (
           <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-3">
-            <button onClick={capture} className="w-16 h-16 min-[600px]:w-[72px] min-[600px]:h-[72px] rounded-full bg-white border-4 border-sageSoft shadow-lg" aria-label="گرفتن عکس" />
+            <button type="button" onClick={capture} className="w-16 h-16 min-[600px]:w-[72px] min-[600px]:h-[72px] rounded-full bg-white border-4 border-sageSoft shadow-lg" aria-label="گرفتن عکس" />
           </div>
         )}
         {!cameraOpen && preview && (
-          <button onClick={openCamera} className="absolute bottom-3 left-3 bg-white/95 rounded-full px-4 py-2.5 min-[600px]:px-5 min-[600px]:py-3 text-xs min-[600px]:text-sm font-bold">دوباره عکس بگیر</button>
+          <button type="button" onClick={openCamera} className="absolute bottom-3 left-3 bg-white/95 rounded-full px-4 py-2.5 min-[600px]:px-5 min-[600px]:py-3 text-xs min-[600px]:text-sm font-bold">دوباره عکس بگیر</button>
         )}
       </div>
 
       <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={onFile} />
-      <Button variant="secondary" className="mt-3" onClick={() => fileRef.current?.click()}>انتخاب عکس از گالری</Button>
+      <div className="grid grid-cols-1 min-[600px]:grid-cols-2 gap-2.5 mt-3">
+        <Button variant="secondary" onClick={openCamera}><Camera size={19} />گرفتن عکس</Button>
+        <Button variant="ghost" onClick={() => fileRef.current?.click()}><ImagePlus size={19} />انتخاب از فایل‌ها</Button>
+      </div>
 
       {(checking || quality || cameraError) && (
-        <div className={`rounded-md p-3.5 mt-3.5 text-sm min-[600px]:text-[15px] leading-7 ${checking ? 'bg-sageMist text-sageDeep' : quality?.ok ? 'bg-sageMist text-sageDeep' : 'bg-[#FBEEE9] text-coral'}`}>
-          {checking ? 'در حال بررسی چهره، نور و کیفیت تصویر...' : quality?.ok ? '✓ چهره پیدا شد و عکس برای تحلیل مناسب است' : cameraError || quality?.issues.map((i) => i.message).join(' · ')}
+        <div className={`rounded-md p-3.5 mt-3.5 text-sm min-[600px]:text-[15px] leading-7 ${cameraError || (quality && !quality.ok) ? 'bg-[#FBEEE9] text-coral' : 'bg-sageMist text-sageDeep'}`}>
+          {checking
+            ? 'در حال بررسی چهره، نور و کیفیت تصویر...'
+            : cameraError
+              ? cameraError
+              : quality
+                ? quality.ok
+                  ? '✓ چهره پیدا شد و عکس برای تحلیل مناسب است'
+                  : quality.issues.map((i) => i.message).join(' · ')
+                : ''}
         </div>
       )}
 
@@ -185,11 +196,13 @@ export default function Scan() {
         {kiosk ? (
           <>
             <Button onClick={() => submit('standard')} disabled={!preview || checking || !quality?.ok}>شروع تحلیل</Button>
-            <details className="text-[12.5px] text-stone">
-              <summary className="cursor-pointer font-bold text-sageDeep py-2 min-h-12 flex items-center">تحلیل ابری (ارسال عکس به اینترنت)</summary>
-              <p className="leading-6 my-2">فقط با اجازه مشتری. عکس برای همان یک تحلیل به سرویس ابری ارسال می‌شود.</p>
-              <Button variant="secondary" onClick={() => submit('accurate')} disabled={!preview || checking || !quality?.ok}>تحلیل ابری (Gemini)</Button>
-            </details>
+            <Button variant="secondary" onClick={() => submit('accurate')} disabled={!preview || checking || !quality?.ok}>
+              <Cloud size={18} />
+              <span className="flex flex-col leading-5">
+                <span>تحلیل ابری</span>
+                <span className="text-[11px] font-medium text-stone">OpenAI Vision · ذخیره برای دیتاست</span>
+              </span>
+            </Button>
           </>
         ) : (
           <>
@@ -198,6 +211,11 @@ export default function Scan() {
           </>
         )}
       </div>
+      {kiosk && (
+        <p className="mt-2 text-[11.5px] min-[600px]:text-[13px] leading-6 text-stone">
+          در حالت تحلیل ابری، تصویر به سرور خصوصی داروخانه ارسال و همراه امتیازها و برچسب‌های AI برای بازبینی و ساخت دیتاست ذخیره می‌شود.
+        </p>
+      )}
       {!kiosk && (
       <p className="text-[11.5px] text-stone leading-6 mt-2">
         «تحلیل با دقت» عکس شما را برای بررسی به سرویس هوش مصنوعی Gemini/OpenRouter می‌فرستد (دقت بالاتر). «تحلیل معمولی» کاملاً روی مدل‌های محلی همین پروژه انجام می‌شود و هیچ عکسی جایی ارسال نمی‌شود.

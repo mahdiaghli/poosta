@@ -17,7 +17,7 @@ export default function Activate() {
     try {
       const out = await deviceLicenseService.activate(code);
       const plan = out.license?.plan || 'basic';
-      navigate('/consent', { replace: true, state: { activated: true, plan } });
+      navigate('/welcome', { replace: true, state: { activated: true, plan } });
     } catch (e) {
       setError(e instanceof Error ? e.message : 'فعال‌سازی ناموفق بود.');
     } finally {
@@ -27,13 +27,13 @@ export default function Activate() {
 
   return (
     <div>
-      <TopBar showBack eyebrow="مجوز دستگاه" />
-      <h1 className="text-[21px] font-extrabold text-sageDeep mb-2">فعال‌سازی پوستا</h1>
+      <TopBar eyebrow="راه‌اندازی اولیه" />
+      <h1 className="text-[21px] min-[600px]:text-[26px] font-extrabold text-sageDeep mb-2">فعال‌سازی تبلت داروخانه</h1>
       <p className="text-[13px] text-stone leading-[1.8] mb-4">
-        کد فعال‌سازی را که از پشتیبانی پوستا دریافت کرده‌اید وارد کنید. بدون مجوز معتبر، اسکن روی این دستگاه انجام نمی‌شود.
+        برای اولین استفاده، کد مجوز داروخانه را وارد کنید. پس از فعال‌سازی، همه بخش‌های پوستا روی این تبلت در دسترس قرار می‌گیرند.
       </p>
       <Card className="mb-4">
-        <label className="text-[12.5px] font-bold text-sageDeep">کد فعال‌سازی</label>
+        <label className="text-[12.5px] min-[600px]:text-sm font-bold text-sageDeep">کد مجوز داروخانه</label>
         <input
           value={code}
           onChange={(e) => setCode(e.target.value.toUpperCase())}

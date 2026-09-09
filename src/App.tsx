@@ -1,13 +1,12 @@
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { BottomNav } from '@/components/layout/BottomNav';
 import { useAppStore } from '@/store/useAppStore';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { notificationService } from '@/services/notificationService';
 
 import Welcome from '@/pages/Welcome';
 import Auth from '@/pages/Auth';
 import Onboarding from '@/pages/Onboarding';
-import Consent from '@/pages/Consent';
 import Activate from '@/pages/Activate';
 import Scan from '@/pages/Scan';
 import Analyzing from '@/pages/Analyzing';
@@ -46,16 +45,6 @@ function pathHasNav(pathname: string, kiosk: boolean) {
   if (kiosk) return KIOSK_NAV_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
   return MAIN_ROUTES.includes(pathname) || pathname.startsWith('/routine/');
 }
-const OPEN_WHEN_LOCKED = new Set(['/activate', '/welcome', '/privacy', '/pharmacy/login', '/admin']);
-
-function isPublicPath(pathname: string) {
-  return OPEN_WHEN_LOCKED.has(pathname)
-    || pathname.startsWith('/r/')
-    || pathname.startsWith('/pharmacy')
-    || pathname.startsWith('/print/')
-    || pathname.startsWith('/admin');
-}
-
 export default function App() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -69,6 +58,7 @@ export default function App() {
       ? 'pb-[110px] min-[600px]:pb-[128px]'
       : 'pb-8';
   const reminders = useAppStore((s) => s.reminders);
+  const [licenseGate, setLicenseGate] = useState<'checking' | 'ready' | 'locked'>('checking');
 
   useEffect(() => {
     if (kiosk && location.pathname === '/home') navigate('/scan', { replace: true });
@@ -80,26 +70,61 @@ export default function App() {
     (async () => {
       try {
         const health = await deviceLicenseService.health();
-        if (cancelled || !health.licenseRequired) return;
+        if (cancelled) return;
+        if (!health.licenseRequired) {
+          setLicenseGate('ready');
+          return;
+        }
         if (!getDeviceToken()) {
-          if (!isPublicPath(location.pathname)) navigate('/activate', { replace: true });
+          setLicenseGate('locked');
+          if (location.pathname !== '/activate') navigate('/activate', { replace: true });
           return;
         }
         try {
           await deviceLicenseService.heartbeat();
+          if (!cancelled) setLicenseGate('ready');
         } catch {
-          if (!cancelled) navigate('/activate', { replace: true });
+          if (!cancelled) {
+            setLicenseGate('locked');
+            navigate('/activate', { replace: true });
+          }
         }
       } catch {
-        /* API down — don't block UI in dev */
+        if (!cancelled) {
+          /* Local UI development can run without the API; production kiosks fail closed. */
+          if (import.meta.env.DEV) setLicenseGate('ready');
+          else {
+            setLicenseGate('locked');
+            navigate('/activate', { replace: true });
+          }
+        }
       }
     })();
     return () => { cancelled = true; };
   }, [location.pathname, navigate]);
 
+  if (licenseGate === 'checking') {
+    return (
+      <div className={`${SHELL_WIDTH} mx-auto min-h-[100dvh] bg-gradient-to-br from-sageMist/40 via-cream to-blushSoft/30 flex items-center justify-center`}>
+        <div className="text-center text-sageDeep">
+          <div className="mx-auto mb-4 h-11 w-11 rounded-full border-4 border-sageMist border-t-sageDeep animate-spin" />
+          <p className="text-sm font-bold">در حال بررسی مجوز دستگاه…</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (licenseGate === 'locked') {
+    return (
+      <div className={`${SHELL_WIDTH} mx-auto min-h-[100dvh] relative bg-gradient-to-br from-sageMist/40 via-cream to-blushSoft/30`}>
+        <div className="px-[22px] min-[600px]:px-8 min-[1100px]:px-10 pt-7 pb-8"><Activate /></div>
+      </div>
+    );
+  }
+
   return (
-    <div className={`${SHELL_WIDTH} mx-auto min-h-screen relative bg-gradient-to-br from-sageMist/40 via-cream to-blushSoft/30`}>
-      <div className={`px-[22px] pt-7 ${padBottom}`}>
+    <div className={`${SHELL_WIDTH} mx-auto min-h-[100dvh] relative bg-gradient-to-br from-sageMist/40 via-cream to-blushSoft/30`}>
+      <div className={`px-[22px] min-[600px]:px-8 min-[1100px]:px-10 pt-7 ${padBottom}`}>
         <Routes>
           <Route path="/" element={<Navigate to={lastScan ? (kiosk ? '/result' : '/home') : '/welcome'} replace />} />
           <Route path="/welcome" element={<Welcome />} />
@@ -111,8 +136,9 @@ export default function App() {
           <Route path="/print/kiosk" element={<PrintKioskSlip />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/onboarding" element={<Onboarding />} />
+          <Route path="/consent" element={<Navigate to="/scan" replace />} />
           <Route path="/staff" element={<Staff />} />
-          <Route path="/consent" element={<Consent />} />
           <Route path="/scan" element={<Scan />} />
           <Route path="/analyzing" element={<Analyzing />} />
           <Route path="/result" element={<Result />} />

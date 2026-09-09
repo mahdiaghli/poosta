@@ -32,7 +32,6 @@ interface AppState {
   budget: Budget;
   useOnlyMyProducts: boolean;
   coachMessages: ChatMessage[];
-  faceDataConsent: boolean;
   kioskPhone: string;
   serverProgress: any | null;
   lastServerScanId: string | null;
@@ -51,7 +50,6 @@ interface AppState {
   buildRoutineFromOwned: () => void;
   setReminders: (r: Reminders) => void;
   pushCoachMessage: (m: ChatMessage) => void;
-  setFaceDataConsent: (v: boolean) => void;
   setKioskPhone: (phone: string) => void;
   resetKioskSession: () => void;
   skipTonightTreatment: () => void;
@@ -81,7 +79,6 @@ export const useAppStore = create<AppState>()(
       budget: '2to5m',
       useOnlyMyProducts: false,
       coachMessages: [],
-      faceDataConsent: false,
       kioskPhone: '',
       serverProgress: null,
       lastServerScanId: null,
@@ -198,7 +195,6 @@ export const useAppStore = create<AppState>()(
       addPatchCheckIn: (id,reaction,notes) => set(s=>({patchTests:s.patchTests.map(t=>t.id===id?{...t,reaction,status:(reaction==='moderate'||reaction==='severe')?'failed':t.status,checkins:[...t.checkins,{date:new Date().toISOString().slice(0,10),reaction,notes}]}:t)})),
       setOwnedProductDates: (id,openedAt,expiresAt) => { set(s=>({myProducts:s.myProducts.map(p=>p.id===id?{...p,openedAt,expiresAt}:p)})); },
       requestNotifications: async () => { const permission=await notificationService.requestPermission(); if(permission==='granted') notificationService.schedule(get().reminders); return permission; },
-      setFaceDataConsent: (v) => { set({ faceDataConsent: v }); },
       setKioskPhone: (phone) => {
         persistKioskPhone(phone);
         set({ kioskPhone: phone });
@@ -213,7 +209,6 @@ export const useAppStore = create<AppState>()(
           products: [],
           serverProgress: null,
           lastServerScanId: null,
-          faceDataConsent: false,
         });
       },
       skipTonightTreatment: () => {
@@ -230,7 +225,7 @@ export const useAppStore = create<AppState>()(
 
       resetAccount: () => set({
         user: null, profile: emptyProfile, lastScan: null, scanHistory: [], lastComparison: null,
-        routine: null, products: [], myProducts: [], routineLog: {}, coachMessages: [], faceDataConsent: false, checkIns: [], diaryEntries: [], patchTests: [],
+        routine: null, products: [], myProducts: [], routineLog: {}, coachMessages: [], checkIns: [], diaryEntries: [], patchTests: [],
         reminders: { morning: '08:00', night: '22:00', enabled: true }, routineVariant: 'best', budget: '2to5m', useOnlyMyProducts: false,
       }),
     }),

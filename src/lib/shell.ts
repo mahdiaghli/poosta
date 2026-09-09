@@ -1,2 +1,5 @@
-/** Portrait kiosk = phone column that fills the short side; landscape stays 480 so we don't layout for a horizontal tablet. */
-export const SHELL_WIDTH = 'w-full max-w-[480px] portrait:min-[520px]:max-w-none';
+/**
+ * Keep phone screens compact, then use the extra room on portrait and
+ * landscape Surface tablets without stretching the UI edge-to-edge.
+ */
+export const SHELL_WIDTH = 'w-full max-w-[480px] min-[600px]:max-w-[700px] min-[1100px]:max-w-[880px]';

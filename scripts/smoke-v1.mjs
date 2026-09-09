@@ -12,12 +12,13 @@ const BASE = process.env.POOSTA_SMOKE_URL || 'http://127.0.0.1:8787';
 // 1x1 JPEG
 const TINY_JPEG = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAn/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIQAxAAAAGfAP/EABQQAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQEAAQUCf//EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQMBAT8Bf//EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQIBAT8Bf//Z';
 
-async function req(method, urlPath, { body, token } = {}) {
+async function req(method, urlPath, { body, token, staffToken } = {}) {
   const res = await fetch(`${BASE}${urlPath}`, {
     method,
     headers: {
       ...(body ? { 'Content-Type': 'application/json' } : {}),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(staffToken ? { 'X-Poosta-Staff-Token': staffToken } : {}),
     },
     body: body ? JSON.stringify(body) : undefined,
   });
@@ -52,6 +53,85 @@ async function main() {
 
   const hb = await req('POST', '/api/device/heartbeat', { body: {}, token });
   assert(hb.status === 200 && hb.json.token, 'heartbeat failed');
+
+  const login = await req('POST', '/api/pharmacy/login', { body: { code: 'DEMO', pin: '1234' } });
+  assert(login.status === 200 && login.json.token, `staff login failed: ${JSON.stringify(login.json)}`);
+  const staffToken = login.json.token;
+
+  const catalog = await req('GET', '/api/pharmacy/catalog/search?q=cerave', { staffToken });
+  assert(catalog.status === 200 && Array.isArray(catalog.json.products) && catalog.json.products.length > 0, 'catalog search failed');
+  const catalogProduct = catalog.json.products[0];
+
+  // Seed one deterministic completed scan so staff handoff/actions do not depend on an AI provider.
+  const { getDb, newId, nowIso } = await import('../server/db.mjs');
+  const smokeScanId = newId('scan_smoke');
+  getDb().prepare(`
+    INSERT INTO scans (
+      id, pharmacy_id, device_id, mode, status, provider, customer_result_json, created_at
+    ) VALUES (?, 'pharmacy_demo', ?, 'standard', 'completed', 'smoke', ?, ?)
+  `).run(smokeScanId, act.json.device_id, JSON.stringify({
+    overallScore: 74,
+    metrics: { hydration: 68, texture: 73 },
+    concerns: ['dehydration'],
+  }), nowIso());
+
+  const routine = {
+    morning: [{ name: 'Cleanser', productName: catalogProduct.name, frequency: 'daily' }],
+    night: [],
+    conflicts: [],
+    variant: 'simple',
+  };
+  const handoff = await req('POST', `/api/scans/${smokeScanId}/handoff`, {
+    token: hb.json.token,
+    body: {
+      phone: '09120000000',
+      routine,
+      recommendations: [{ id: catalogProduct.id, name: catalogProduct.name, brand: catalogProduct.brand, score: 90 }],
+    },
+  });
+  assert(handoff.status === 200 && handoff.json.customer_id, 'scan handoff failed');
+  assert(!JSON.stringify(handoff.json).includes('original_key'), 'handoff leaked storage keys');
+
+  const scans = await req('GET', '/api/pharmacy/scans/today', { staffToken });
+  assert(scans.status === 200 && scans.json.scans.some((scan) => scan.scan_id === smokeScanId), 'staff scan list failed');
+
+  const detail = await req('GET', `/api/pharmacy/scans/${smokeScanId}`, { staffToken });
+  assert(detail.status === 200 && detail.json.phone === '+989120000000', 'staff scan detail did not store phone');
+  assert(detail.json.recommendations?.[0]?.id === catalogProduct.id, 'staff scan detail did not store recommendations');
+
+  const action = await req('POST', `/api/pharmacy/scans/${smokeScanId}/actions`, {
+    staffToken,
+    body: { action: 'print' },
+  });
+  assert(action.status === 200 && action.json.checklist?.product_slip_printed, 'scan staff action failed');
+
+  const resend = await req('POST', `/api/pharmacy/scans/${smokeScanId}/actions`, {
+    staffToken,
+    body: { action: 'share' },
+  });
+  assert(resend.status === 200 && resend.json.share?.url, 'routine resend failed');
+  assert(!JSON.stringify(resend.json).includes('original_key'), 'routine resend leaked storage keys');
+
+  const inventoryWrite = await req('POST', '/api/pharmacy/products', {
+    staffToken,
+    body: { product_id: catalogProduct.id, price: 100000, stock: 2, low_stock_threshold: 3, sku: 'SMOKE-001', available: true },
+  });
+  assert(inventoryWrite.status === 200 && inventoryWrite.json.low_stock_threshold === 3, 'inventory upsert failed');
+
+  const inventory = await req('GET', '/api/pharmacy/products', { staffToken });
+  assert(inventory.status === 200 && inventory.json.products.some((p) => p.product_id === catalogProduct.id), 'inventory list failed');
+
+  const analytics = await req('GET', '/api/pharmacy/analytics?range=today', { staffToken });
+  assert(analytics.status === 200, 'analytics failed');
+  assert(analytics.json.scan_count === scans.json.scans.length, 'analytics scan count does not match staff queue');
+  assert(analytics.json.low_stock_count >= 1, 'low stock analytics failed');
+
+  const customerSearch = await req('GET', '/api/pharmacy/customers?phone=912', { staffToken });
+  assert(customerSearch.status === 200 && Array.isArray(customerSearch.json.customers), 'customer search failed');
+
+  const audit = await req('GET', '/api/pharmacy/audit', { staffToken });
+  assert(audit.status === 200 && audit.json.events.some((event) => event.event_type === 'inventory.updated'), 'audit log failed');
+  console.log('  staff, catalog, inventory, analytics and audit ok');
 
   const analysis = await req('POST', '/api/skin-analysis', {
     token: hb.json.token,

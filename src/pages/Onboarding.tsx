@@ -25,7 +25,7 @@ export default function Onboarding() {
   const [step, setStep] = useState(0);
   const s = STEPS[step];
 
-  const finish = () => navigate('/consent');
+  const finish = () => navigate('/scan');
   const next = () => (step < STEPS.length - 1 ? setStep(step + 1) : finish());
   const prev = () => (step > 0 ? setStep(step - 1) : navigate('/welcome'));
 

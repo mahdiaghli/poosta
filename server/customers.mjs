@@ -51,6 +51,14 @@ export function getCustomerProgress(pharmacyId, phone) {
     routine: s.routine_json ? JSON.parse(s.routine_json) : null,
   }));
 
+  const notes = getDb().prepare(`
+    SELECT id, scan_id, note, created_at
+    FROM customer_notes
+    WHERE pharmacy_id = ? AND customer_id = ?
+    ORDER BY created_at DESC
+    LIMIT 20
+  `).all(pharmacyId, customer.id);
+
   let progress = null;
   if (parsed.length >= 2 && parsed[0].result && parsed[1].result) {
     const latest = parsed[0].result;
@@ -73,5 +81,5 @@ export function getCustomerProgress(pharmacyId, phone) {
     };
   }
 
-  return { customer, scans: parsed, progress };
+  return { customer, scans: parsed, progress, notes };
 }

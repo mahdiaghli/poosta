@@ -34,7 +34,7 @@ export const kioskHandoffService = {
       name: p.name,
       brand: p.brand,
       category: p.category,
-      score: p.score,
+      score: p.compatibility.score,
       price: p.price,
     }));
     const res = await fetch(`/api/scans/${encodeURIComponent(scanId)}/handoff`, {

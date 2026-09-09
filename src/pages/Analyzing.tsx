@@ -11,7 +11,7 @@ export default function Analyzing() {
   const [phraseIdx, setPhraseIdx] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const mode = (location.state as { mode?: 'accurate' | 'standard' } | null)?.mode ?? 'standard';
-  const modeLabel = mode === 'accurate' ? 'تحلیل با دقت بالا (Gemini/OpenRouter)' : 'تحلیل معمولی (مدل محلی)';
+  const modeLabel = mode === 'accurate' ? 'تحلیل ابری سرور (OpenAI Vision با پشتیبان Gemini/OpenRouter)' : 'تحلیل معمولی سرور (مدل محلی)';
 
   useEffect(() => {
     const state = location.state as { imageDataUrl?: string; thumb?: string; mode?: 'accurate' | 'standard' } | null;

@@ -11,7 +11,10 @@
     "api": "node server.js",
     "seed:products": "node scripts/import-products-local.mjs",
     "seed:license": "node scripts/seed-license.mjs",
+    "db:backup": "node scripts/backup-sqlite.mjs",
+    "dataset:export": "node scripts/export-training-dataset.mjs",
     "smoke:v1": "node scripts/smoke-v1.mjs",
+    "smoke:openai": "node scripts/smoke-openai-provider.mjs",
     "ai:install": "python -m pip install -r ai/requirements.txt",
     "ai:train": "python ai/train_acne.py",
     "ai:export": "python ai/export_model.py"

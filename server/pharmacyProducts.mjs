@@ -19,25 +19,36 @@ export function upsertPharmacyProduct(pharmacyId, body) {
     'SELECT * FROM pharmacy_products WHERE pharmacy_id = ? AND product_id = ?',
   ).get(pharmacyId, productId);
   const price = body.price != null ? Number(body.price) : existing?.price ?? null;
-  const stock = body.stock != null ? Number(body.stock) : existing?.stock ?? 0;
+  const stock = body.stock != null ? Math.floor(Number(body.stock)) : existing?.stock ?? 0;
   const available = body.available != null ? (body.available ? 1 : 0) : existing?.available ?? 1;
   const sku = body.sku ?? existing?.sku ?? null;
   const currency = body.currency || existing?.currency || 'IRT';
+  const lowStockThreshold = body.low_stock_threshold != null
+    ? Math.floor(Number(body.low_stock_threshold))
+    : existing?.low_stock_threshold ?? 3;
+  if ((price != null && (!Number.isFinite(price) || price < 0))
+    || !Number.isFinite(stock) || stock < 0
+    || !Number.isFinite(lowStockThreshold) || lowStockThreshold < 0) {
+    const err = new Error('قیمت، موجودی یا حد هشدار معتبر نیست.');
+    err.status = 400;
+    err.code = 'INVALID_INVENTORY_VALUE';
+    throw err;
+  }
 
   if (existing) {
     db.prepare(`
       UPDATE pharmacy_products
-      SET price = ?, stock = ?, available = ?, sku = ?, currency = ?, updated_at = ?
+      SET price = ?, stock = ?, available = ?, sku = ?, currency = ?, low_stock_threshold = ?, updated_at = ?
       WHERE id = ?
-    `).run(price, stock, available, sku, currency, nowIso(), existing.id);
+    `).run(price, stock, available, sku, currency, lowStockThreshold, nowIso(), existing.id);
     return db.prepare('SELECT * FROM pharmacy_products WHERE id = ?').get(existing.id);
   }
   const id = newId('pp');
   db.prepare(`
     INSERT INTO pharmacy_products (
-      id, pharmacy_id, product_id, price, currency, stock, available, sku, updated_at
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `).run(id, pharmacyId, productId, price, currency, stock, available, sku, nowIso());
+      id, pharmacy_id, product_id, price, currency, stock, available, sku, low_stock_threshold, updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).run(id, pharmacyId, productId, price, currency, stock, available, sku, lowStockThreshold, nowIso());
   return db.prepare('SELECT * FROM pharmacy_products WHERE id = ?').get(id);
 }
 
@@ -50,6 +61,14 @@ export function enrichRecommendations(pharmacyId, recommendations = []) {
     const row = id
       ? db.prepare('SELECT * FROM pharmacy_products WHERE pharmacy_id = ? AND product_id = ?').get(pharmacyId, id)
       : null;
+    const lowStockThreshold = row?.low_stock_threshold ?? 3;
+    const inventoryStatus = !row
+      ? 'not_stocked'
+      : (!row.available || Number(row.stock) <= 0)
+        ? 'out_of_stock'
+        : Number(row.stock) <= lowStockThreshold
+          ? 'low_stock'
+          : 'available';
     return {
       id,
       name: r.name,
@@ -59,7 +78,10 @@ export function enrichRecommendations(pharmacyId, recommendations = []) {
       price: row?.price ?? r.price ?? null,
       currency: row?.currency || r.currency || 'IRT',
       stock: row?.stock ?? null,
-      available: row ? Boolean(row.available) && (row.stock == null || row.stock > 0) : true,
+      available: inventoryStatus === 'available' || inventoryStatus === 'low_stock',
+      stocked_here: Boolean(row),
+      inventory_status: inventoryStatus,
+      low_stock_threshold: lowStockThreshold,
       pharmacy_sku: row?.sku || null,
     };
   });

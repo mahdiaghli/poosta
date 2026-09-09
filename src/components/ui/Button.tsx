@@ -14,9 +14,10 @@ const VARIANT_CLASSES: Record<Variant, string> = {
   danger: 'bg-[#FBEEE9] text-coral',
 };
 
-export function Button({ variant = 'primary', className = '', children, ...rest }: Props) {
+export function Button({ variant = 'primary', className = '', children, type = 'button', ...rest }: Props) {
   return (
     <button
+      type={type}
       className={`w-full rounded-full min-h-12 min-[600px]:min-h-14 py-4 px-5 font-bold text-[15px] min-[600px]:text-[16px] flex items-center justify-center gap-2 transition-transform active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed ${VARIANT_CLASSES[variant]} ${className}`}
       {...rest}
     >

@@ -103,7 +103,17 @@ export async function buildAndStoreAnnotations({ scan, analysisResult, mode }) {
     observations: analysisResult?.observations || [],
     confidence: analysisResult?.confidence,
     boxes,
-    note: 'Training assets only. Do not auto-retrain; operator runs training manually.',
+    training: {
+      schema_version: analysisResult?.trainingMeta?.schemaVersion || 1,
+      label_source: analysisResult?.trainingMeta?.labelSource || 'model_output',
+      review_status: analysisResult?.trainingMeta?.reviewStatus || 'unreviewed',
+      provider: analysisResult?.trainingMeta?.provider || null,
+      model: analysisResult?.trainingMeta?.model || null,
+      provider_response_id: analysisResult?.trainingMeta?.responseId || null,
+      image_width: analysisResult?.trainingMeta?.imageWidth || null,
+      image_height: analysisResult?.trainingMeta?.imageHeight || null,
+    },
+    note: 'AI pseudo-labels must be reviewed by a qualified human before training. Training is never started automatically.',
   };
 
   const annotationsKey = `${prefix}/annotations.json`;

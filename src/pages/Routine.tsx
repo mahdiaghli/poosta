@@ -6,6 +6,7 @@ import { useAppStore } from '@/store/useAppStore';
 import { useRoutineTracker } from '@/hooks/useRoutine';
 import type { RoutinePeriod, RoutineVariant, Budget } from '@/types';
 import { SendRoutineSms } from '@/components/SendRoutineSms';
+import { ChevronLeft } from 'lucide-react';
 
 const VARIANTS: [RoutineVariant, string][] = [['best', 'بهترین روتین'], ['budget', 'مقرون‌به‌صرفه'], ['minimal', 'حداقلی']];
 const BUDGETS: [Budget, string][] = [['under1m', 'زیر ۱M'], ['1to2m', '۱ تا ۲M'], ['2to5m', '۲ تا ۵M'], ['5plus', 'بالای ۵M']];
@@ -23,7 +24,17 @@ export default function Routine() {
   return (
     <div>
       <TopBar eyebrow="روتین شخصی‌سازی‌شده" />
-      <h1 className="text-[22px] font-extrabold text-sageDeep">روتین روزانه شما</h1><button onClick={() => navigate("/routine/weekly")} className="mt-2 text-sm font-bold text-sageDeep underline">مشاهده برنامه هفتگی →</button>
+      <h1 className="text-[22px] font-extrabold text-sageDeep">روتین روزانه شما</h1>
+      <button
+        onClick={() => navigate('/routine/weekly')}
+        className="mt-3 w-full rounded-2xl bg-sageDeep px-4 py-4 text-white shadow-card flex items-center justify-between text-right"
+      >
+        <span>
+          <span className="block text-[15px] font-extrabold">مشاهده برنامه هفتگی</span>
+          <span className="block text-[11.5px] text-white/75 mt-1">برنامه صبح و شب برای تمام روزهای هفته</span>
+        </span>
+        <ChevronLeft size={24} aria-hidden="true" />
+      </button>
 
       <div className="flex gap-2.5 mt-4">
         {[['🔥 روز متوالی', streaks.current], ['بهترین رکورد', streaks.longest], ['تکمیل امروز', `${todayCompletion}٪`]].map(([label, val]) => (

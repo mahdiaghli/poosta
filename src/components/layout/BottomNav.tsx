@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAppStore } from '@/store/useAppStore';
 import { useKioskMode } from '@/hooks/useKioskMode';
+import { SHELL_WIDTH } from '@/lib/shell';
 
 const CONSUMER = [
   { to: '/home', icon: '🏠', label: 'خانه' },
@@ -30,7 +31,7 @@ export function BottomNav() {
   };
 
   return (
-    <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] min-[600px]:max-w-[720px] bg-white/90 backdrop-blur-md border-t border-line flex justify-around items-stretch px-1.5 pt-2 pb-[calc(10px+env(safe-area-inset-bottom))] z-50">
+    <nav className={`${SHELL_WIDTH} fixed bottom-0 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-md border-t border-line flex justify-around items-stretch px-1.5 min-[600px]:px-4 pt-2 pb-[calc(10px+env(safe-area-inset-bottom))] z-50`}>
       {items.map((item) => (
         <NavLink
           key={item.to}

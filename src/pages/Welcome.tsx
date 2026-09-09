@@ -7,13 +7,13 @@ export default function Welcome() {
   const kiosk = useKioskMode();
 
   return (
-    <div className="flex flex-col justify-between min-h-[calc(100vh-140px)] pt-8">
+    <div className="flex flex-col justify-between min-h-[calc(100dvh-140px)] pt-8 min-[600px]:pt-10">
       <div>
         <div className="flex items-center gap-2 font-extrabold text-lg min-[600px]:text-xl text-sageDeep">
           <span className="w-2.5 h-2.5 rounded-full bg-blush" /> پوستا
           {kiosk && <span className="text-xs font-semibold bg-sageMist text-sage rounded-full px-3 py-1">کیوسک داروخانه</span>}
         </div>
-        <div className="h-[220px] min-[600px]:h-[280px] rounded-[32px] my-6 relative overflow-hidden shadow-card bg-gradient-to-br from-sageDeep via-sage to-blush flex items-center justify-center flex-col gap-1.5">
+        <div className="h-[220px] min-[600px]:h-[320px] min-[1100px]:h-[350px] rounded-[32px] my-6 min-[600px]:my-8 relative overflow-hidden shadow-card bg-gradient-to-br from-sageDeep via-sage to-blush flex items-center justify-center flex-col gap-1.5">
           <div className="num text-5xl min-[600px]:text-6xl text-white font-bold">اسکن</div>
           <div className="text-white/85 text-[13px] min-[600px]:text-[15px] font-semibold">
             {kiosk ? 'تحلیل پوست مشتری در کمتر از یک دقیقه' : 'نمونه‌ی امتیاز پوست'}
@@ -31,8 +31,8 @@ export default function Welcome() {
       <div className="flex flex-col gap-2.5 mt-6">
         {kiosk ? (
           <>
-            <Button onClick={() => navigate('/consent')}>شروع اسکن مشتری</Button>
-            <Button variant="ghost" onClick={() => navigate('/auth')}>ورود کارکنان</Button>
+            <Button onClick={() => navigate('/scan')}>شروع اسکن مشتری</Button>
+            <Button variant="ghost" onClick={() => navigate('/pharmacy/login')}>ورود کارکنان</Button>
           </>
         ) : (
           <>

@@ -1,8 +1,10 @@
+import './server/loadEnv.mjs';
 import http from 'node:http';
 import { spawn } from 'node:child_process';
 import process from 'node:process';
 import { analyzeSkinWithGemini } from './gemini-skin-analysis.js';
 import { analyzeSkinWithOpenRouter } from './openrouter-skin-analysis.js';
+import { analyzeSkinWithOpenAI } from './openai-skin-analysis.js';
 import { getDb, getDataDir } from './server/db.mjs';
 import { getStorage } from './server/storage.mjs';
 import {
@@ -18,6 +20,8 @@ import {
   createSession,
   createScan,
   finalizeScanAnalysis,
+  markScanAnalyzing,
+  markScanFailed,
   getScanCustomer,
   customerPayloadFromResult,
   linkScanCustomer,
@@ -32,6 +36,15 @@ import {
   attachScanExtras,
 } from './server/pharmacyStaff.mjs';
 import { listPharmacyProducts, upsertPharmacyProduct, enrichRecommendations } from './server/pharmacyProducts.mjs';
+import { listAuditEvents, recordAuditEvent } from './server/audit.mjs';
+import { assertRateLimit } from './server/rateLimit.mjs';
+import {
+  getPharmacyAnalytics,
+  getScanChecklist,
+  recordScanStaffAction,
+  searchCatalog,
+  searchPharmacyCustomers,
+} from './server/pharmacyOps.mjs';
 import {
   requireAdmin,
   adminCreatePharmacy,
@@ -42,19 +55,29 @@ import {
 } from './server/admin.mjs';
 
 const PORT = Number(process.env.PORT || 8787);
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY || '';
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || '';
+const OPENAI_DAILY_LIMIT = Number(process.env.OPENAI_DAILY_LIMIT || 200);
 const GEMINI_DAILY_LIMIT = Number(process.env.GEMINI_DAILY_LIMIT || 500);
 const OPENROUTER_DAILY_LIMIT = Number(process.env.OPENROUTER_DAILY_LIMIT || 180);
-let dailyCounts = { gemini: 0, openrouter: 0 };
+let dailyCounts = { openai: 0, gemini: 0, openrouter: 0 };
 let dayKey = new Date().toDateString();
 function quotaOk(provider, limit) {
   const today = new Date().toDateString();
-  if (today !== dayKey) { dayKey = today; dailyCounts = { gemini: 0, openrouter: 0 }; }
+  if (today !== dayKey) { dayKey = today; dailyCounts = { openai: 0, gemini: 0, openrouter: 0 }; }
   return dailyCounts[provider] < limit;
 }
 
 async function analyzeWithPremiumProvider(imageDataUrl) {
+  if (OPENAI_API_KEY && quotaOk('openai', OPENAI_DAILY_LIMIT)) {
+    try {
+      dailyCounts.openai++;
+      return await analyzeSkinWithOpenAI(imageDataUrl, OPENAI_API_KEY);
+    } catch (e) {
+      console.error('[OpenAI] failed, trying Gemini next:', e.message);
+    }
+  }
   if (GEMINI_API_KEY && quotaOk('gemini', GEMINI_DAILY_LIMIT)) {
     try {
       dailyCounts.gemini++;
@@ -79,19 +102,28 @@ const PYTHON_BIN = process.env.PYTHON_BIN || (process.platform === 'win32' ? 'py
 let aiProcess = null;
 
 function send(res, status, body) {
+  const defaultCodes = {
+    400: 'BAD_REQUEST', 401: 'UNAUTHORIZED', 403: 'FORBIDDEN', 404: 'NOT_FOUND',
+    409: 'CONFLICT', 413: 'PAYLOAD_TOO_LARGE', 429: 'RATE_LIMITED',
+    500: 'INTERNAL_ERROR', 503: 'SERVICE_UNAVAILABLE',
+  };
+  const payload = status >= 400 && body?.error && !body.code
+    ? { ...body, code: defaultCodes[status] || 'REQUEST_FAILED' }
+    : body;
   res.writeHead(status, {
     'Content-Type': 'application/json; charset=utf-8',
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Poosta-Staff-Token, X-Poosta-Admin-Key',
     'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
   });
-  res.end(JSON.stringify(body));
+  res.end(JSON.stringify(payload));
 }
 
 function sendErr(res, err) {
   const status = err.status || 500;
   const body = { error: err.message || 'خطای سرور', code: err.code || 'ERROR' };
   if (err.imageQuality) body.imageQuality = err.imageQuality;
+  if (err.retryAfter) body.retry_after = err.retryAfter;
   send(res, status, body);
 }
 
@@ -143,15 +175,16 @@ async function proxy(path, method, body) {
 
 /** Best-effort local pass for face/lesion boxes only (does not replace premium metrics). */
 async function enrichBoxesFromLocal(imageDataUrl, result) {
-  if (Array.isArray(result?.annotationBoxes) && result.annotationBoxes.length) return result;
   try {
     const local = await proxy('/analyze', 'POST', { imageDataUrl });
     if (local.status >= 400) return result;
-    const boxes = local.body?.annotationBoxes;
+    const existingBoxes = Array.isArray(result?.annotationBoxes) ? result.annotationBoxes : [];
+    const localBoxes = Array.isArray(local.body?.annotationBoxes) ? local.body.annotationBoxes : [];
+    const boxes = [...existingBoxes, ...localBoxes];
     const faceBox = local.body?.imageQuality?.faceBox;
     return {
       ...result,
-      annotationBoxes: Array.isArray(boxes) ? boxes : result.annotationBoxes,
+      annotationBoxes: boxes,
       imageQuality: {
         ...(result.imageQuality || {}),
         faceBox: result.imageQuality?.faceBox || faceBox,
@@ -164,7 +197,17 @@ async function enrichBoxesFromLocal(imageDataUrl, result) {
 }
 
 async function assertImageQuality(imageDataUrl) {
-  const q = await proxy('/quality', 'POST', { imageDataUrl });
+  let q;
+  try {
+    q = await proxy('/quality', 'POST', { imageDataUrl });
+  } catch (error) {
+    console.warn('[quality] local pre-check unavailable; cloud provider will validate the image:', error.message);
+    return { suitable: true, issues: ['local_quality_gate_unavailable'], providerValidationRequired: true };
+  }
+  if (q.status >= 500) {
+    console.warn('[quality] local pre-check returned', q.status, '- cloud provider will validate the image');
+    return { suitable: true, issues: ['local_quality_gate_unavailable'], providerValidationRequired: true };
+  }
   const iq = q.body?.imageQuality || {};
   if (q.status >= 400 || q.body?.ok === false || iq.suitable === false) {
     const msg = q.body?.error || iq.issues?.[0] || 'کیفیت تصویر یا تشخیص چهره مناسب نیست.';
@@ -221,7 +264,7 @@ async function runAnalysis(body) {
         result.apparentSkinAgeNote = `بر اساس ظاهر پوست در عکس، پوست شما حدوداً ${apparent} ساله به نظر می‌رسد. این یک برآورد ظاهری/کازمتیک است، نه سن واقعی یا تشخیص پزشکی.`;
       }
     } else if (mode === 'accurate') {
-      const err = new Error('در حال حاضر سرویس تحلیل دقیق (Gemini/OpenRouter) در دسترس نیست یا کلید تنظیم نشده. لطفاً «تحلیل معمولی» را امتحان کنید.');
+      const err = new Error('سرویس تحلیل ابری (OpenAI/Gemini/OpenRouter) در دسترس نیست یا کلید API تنظیم نشده است. لطفاً تنظیمات سرور را بررسی کنید یا «تحلیل معمولی» را امتحان کنید.');
       err.status = 503;
       throw err;
     } else {
@@ -247,16 +290,21 @@ const server = http.createServer(async (req, res) => {
   const path = req.url?.split('?')[0];
 
   try {
+    if (path?.startsWith('/api/admin/')) {
+      assertRateLimit(req, 'admin', { limit: 90, windowMs: 60_000 });
+    }
+
     if (path === '/health' && req.method === 'GET') {
       let dbOk = false;
       try { getDb().prepare('SELECT 1').get(); dbOk = true; } catch { /* */ }
       return send(res, 200, {
         ok: true,
         aiPort: AI_PORT,
+        openaiConfigured: Boolean(OPENAI_API_KEY),
         geminiConfigured: Boolean(GEMINI_API_KEY),
         openrouterConfigured: Boolean(OPENROUTER_API_KEY),
         dailyCounts,
-        limits: { gemini: GEMINI_DAILY_LIMIT, openrouter: OPENROUTER_DAILY_LIMIT },
+        limits: { openai: OPENAI_DAILY_LIMIT, gemini: GEMINI_DAILY_LIMIT, openrouter: OPENROUTER_DAILY_LIMIT },
         licenseRequired: licenseRequired(),
         dataDir: getDataDir(),
         dbOk,
@@ -266,7 +314,17 @@ const server = http.createServer(async (req, res) => {
 
     if (path === '/api/device/activate' && req.method === 'POST') {
       const body = await readBody(req, 100_000);
+      assertRateLimit(req, 'device-activation', { limit: 8, windowMs: 15 * 60_000 }, body.activation_code || body.activationCode);
       const out = activateDevice({ activationCode: body.activation_code || body.activationCode, appVersion: body.app_version || body.appVersion });
+      recordAuditEvent({
+        pharmacyId: out.pharmacy_id,
+        actorType: 'device',
+        actorId: out.device_id,
+        eventType: 'device.activated',
+        entityType: 'device',
+        entityId: out.device_id,
+        metadata: { app_version: body.app_version || body.appVersion || null },
+      });
       return send(res, 200, out);
     }
 
@@ -339,6 +397,7 @@ const server = http.createServer(async (req, res) => {
     if (path === '/api/routines/share' && req.method === 'POST') {
       const auth = optionalDevice(req);
       assertFeature(auth.license, 'routine_sms');
+      assertRateLimit(req, 'routine-share', { limit: 12, windowMs: 10 * 60_000 }, auth.device.device_id);
       const body = await readBody(req, 2_000_000);
       const out = await createAndSendRoutineShare({
         pharmacyId: auth.device.pharmacy_id,
@@ -348,6 +407,15 @@ const server = http.createServer(async (req, res) => {
         overallScore: body.overallScore ?? body.overall_score,
         sendSmsFlag: body.send_sms !== false,
         scanId: body.scan_id || body.scanId,
+      });
+      recordAuditEvent({
+        pharmacyId: auth.device.pharmacy_id,
+        actorType: 'device',
+        actorId: auth.device.device_id,
+        eventType: 'routine.sent',
+        entityType: 'shared_routine',
+        entityId: out.share_id,
+        metadata: { scan_id: body.scan_id || body.scanId || null, sms: out.sms },
       });
       return send(res, 200, out);
     }
@@ -363,7 +431,17 @@ const server = http.createServer(async (req, res) => {
     // --- Pharmacy staff ---
     if (path === '/api/pharmacy/login' && req.method === 'POST') {
       const body = await readBody(req, 100_000);
-      return send(res, 200, staffLogin({ code: body.code || body.pharmacy_code, pin: body.pin }));
+      assertRateLimit(req, 'staff-login', { limit: 10, windowMs: 15 * 60_000 }, body.code || body.pharmacy_code);
+      const out = staffLogin({ code: body.code || body.pharmacy_code, pin: body.pin });
+      recordAuditEvent({
+        pharmacyId: out.pharmacy.id,
+        actorType: 'staff',
+        actorId: out.pharmacy.code,
+        eventType: 'staff.login',
+        entityType: 'pharmacy',
+        entityId: out.pharmacy.id,
+      });
+      return send(res, 200, out);
     }
 
     if (path === '/api/pharmacy/scans/today' && req.method === 'GET') {
@@ -380,7 +458,82 @@ const server = http.createServer(async (req, res) => {
       const detail = getScanDetailForPharmacy(staff.pharmacy_id, scanId);
       if (!detail) return send(res, 404, { error: 'اسکن پیدا نشد.', code: 'NOT_FOUND' });
       detail.recommendations = enrichRecommendations(staff.pharmacy_id, detail.recommendations);
+      detail.visit = getScanChecklist(staff.pharmacy_id, scanId);
       return send(res, 200, detail);
+    }
+
+    if (path?.match(/^\/api\/pharmacy\/scans\/[^/]+\/actions$/) && req.method === 'POST') {
+      const staff = requireStaff(req);
+      const scanId = path.split('/')[4];
+      const body = await readBody(req, 100_000);
+      let share = null;
+      if (body.action === 'share') {
+        assertRateLimit(req, 'staff-routine-share', { limit: 12, windowMs: 10 * 60_000 }, staff.pharmacy_id);
+        const detail = getScanDetailForPharmacy(staff.pharmacy_id, scanId);
+        if (!detail?.phone || !detail?.routine) {
+          const err = new Error('برای ارسال دوباره، شماره مشتری و روتین ذخیره‌شده لازم است.');
+          err.status = 400;
+          err.code = 'ROUTINE_RESEND_UNAVAILABLE';
+          throw err;
+        }
+        share = await createAndSendRoutineShare({
+          pharmacyId: staff.pharmacy_id,
+          deviceId: null,
+          phone: detail.phone,
+          routine: detail.routine,
+          overallScore: detail.overallScore,
+          sendSmsFlag: true,
+          scanId,
+        });
+      }
+      const visit = recordScanStaffAction({
+        pharmacyId: staff.pharmacy_id,
+        staffTokenId: staff.id,
+        scanId,
+        action: String(body.action || ''),
+        note: body.note,
+      });
+      return send(res, 200, { ...visit, share });
+    }
+
+    if (path === '/api/pharmacy/analytics' && req.method === 'GET') {
+      const staff = requireStaff(req);
+      const url = new URL(req.url, 'http://localhost');
+      const range = url.searchParams.get('range') || 'today';
+      const analytics = getPharmacyAnalytics(staff.pharmacy_id, range);
+      const devices = getDb().prepare(`
+        SELECT id, device_code, status, last_seen, app_version
+        FROM devices WHERE pharmacy_id = ? ORDER BY registered_at DESC
+      `).all(staff.pharmacy_id);
+      return send(res, 200, {
+        ...analytics,
+        license: licenseStatusForPharmacy(staff.pharmacy_id),
+        devices,
+      });
+    }
+
+    if (path === '/api/pharmacy/customers' && req.method === 'GET') {
+      const staff = requireStaff(req);
+      const url = new URL(req.url, 'http://localhost');
+      return send(res, 200, {
+        customers: searchPharmacyCustomers(staff.pharmacy_id, url.searchParams.get('phone') || ''),
+      });
+    }
+
+    if (path === '/api/pharmacy/catalog/search' && req.method === 'GET') {
+      const staff = requireStaff(req);
+      const url = new URL(req.url, 'http://localhost');
+      return send(res, 200, {
+        products: searchCatalog(staff.pharmacy_id, url.searchParams.get('q') || ''),
+      });
+    }
+
+    if (path === '/api/pharmacy/audit' && req.method === 'GET') {
+      const staff = requireStaff(req);
+      const url = new URL(req.url, 'http://localhost');
+      return send(res, 200, {
+        events: listAuditEvents(staff.pharmacy_id, { limit: url.searchParams.get('limit') }),
+      });
     }
 
     if (path === '/api/pharmacy/customers/progress' && req.method === 'GET') {
@@ -400,7 +553,17 @@ const server = http.createServer(async (req, res) => {
     if (path === '/api/pharmacy/products' && req.method === 'POST') {
       const staff = requireStaff(req);
       const body = await readBody(req, 200_000);
-      return send(res, 200, upsertPharmacyProduct(staff.pharmacy_id, body));
+      const product = upsertPharmacyProduct(staff.pharmacy_id, body);
+      recordAuditEvent({
+        pharmacyId: staff.pharmacy_id,
+        actorType: 'staff',
+        actorId: staff.id,
+        eventType: 'inventory.updated',
+        entityType: 'pharmacy_product',
+        entityId: product.id,
+        metadata: { product_id: product.product_id, stock: product.stock, price: product.price },
+      });
+      return send(res, 200, product);
     }
 
     // Device: attach phone + recommendations after local routine build
@@ -447,21 +610,29 @@ const server = http.createServer(async (req, res) => {
     if (path === '/api/admin/pharmacies' && req.method === 'POST') {
       requireAdmin(req);
       const body = await readBody(req, 200_000);
-      return send(res, 200, adminCreatePharmacy(body));
+      const out = adminCreatePharmacy(body);
+      recordAuditEvent({ pharmacyId: out.pharmacy.id, actorType: 'admin', eventType: 'pharmacy.created', entityType: 'pharmacy', entityId: out.pharmacy.id });
+      return send(res, 200, out);
     }
     if (path === '/api/admin/devices/revoke' && req.method === 'POST') {
       requireAdmin(req);
       const body = await readBody(req, 100_000);
-      return send(res, 200, adminRevokeDevice(body.device_id || body.deviceId));
+      const deviceId = body.device_id || body.deviceId;
+      const device = getDb().prepare('SELECT pharmacy_id FROM devices WHERE id = ?').get(deviceId);
+      const out = adminRevokeDevice(deviceId);
+      recordAuditEvent({ pharmacyId: device?.pharmacy_id || null, actorType: 'admin', eventType: 'device.revoked', entityType: 'device', entityId: out.device_id });
+      return send(res, 200, out);
     }
     if (path === '/api/admin/subscriptions/renew' && req.method === 'POST') {
       requireAdmin(req);
       const body = await readBody(req, 100_000);
-      return send(res, 200, adminRenewSubscription({
+      const out = adminRenewSubscription({
         pharmacyId: body.pharmacy_id || body.pharmacyId,
         plan: body.plan,
         years: body.years,
-      }));
+      });
+      recordAuditEvent({ pharmacyId: body.pharmacy_id || body.pharmacyId, actorType: 'admin', eventType: 'subscription.renewed', entityType: 'subscription', entityId: out.subscription_id, metadata: { plan_id: out.plan_id, expires_at: out.expires_at } });
+      return send(res, 200, out);
     }
     if (path?.startsWith('/api/admin/pharmacies/') && path.endsWith('/devices') && req.method === 'GET') {
       requireAdmin(req);
@@ -504,10 +675,17 @@ const server = http.createServer(async (req, res) => {
         }
       }
 
-      const result = await runAnalysis({
-        ...body,
-        chronologicalAge: body.chronologicalAge ?? body.age ?? undefined,
-      });
+      if (scanId) markScanAnalyzing(scanId);
+      let result;
+      try {
+        result = await runAnalysis({
+          ...body,
+          chronologicalAge: body.chronologicalAge ?? body.age ?? undefined,
+        });
+      } catch (error) {
+        if (scanId) markScanFailed(scanId, error instanceof Error ? error.message : 'analysis failed');
+        throw error;
+      }
       let customer = customerPayloadFromResult(result);
 
       if (scanId) {
@@ -522,11 +700,11 @@ const server = http.createServer(async (req, res) => {
       return send(res, 200, { ...customer, scanId });
     }
 
-    return send(res, 404, { error: 'Not found' });
+    return send(res, 404, { error: 'Not found', code: 'ROUTE_NOT_FOUND' });
   } catch (e) {
     if (e.code || e.status) return sendErr(res, e);
     console.error(e);
-    return send(res, 503, { error: `سرویس در دسترس نیست: ${e instanceof Error ? e.message : 'unknown error'}` });
+    return send(res, 503, { error: `سرویس در دسترس نیست: ${e instanceof Error ? e.message : 'unknown error'}`, code: 'SERVICE_UNAVAILABLE' });
   }
 });
 

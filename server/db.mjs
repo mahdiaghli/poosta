@@ -182,6 +182,50 @@ function migrate(database) {
       expires_at TEXT NOT NULL,
       FOREIGN KEY (pharmacy_id) REFERENCES pharmacies(id)
     );
+
+    CREATE TABLE IF NOT EXISTS audit_events (
+      id TEXT PRIMARY KEY,
+      pharmacy_id TEXT,
+      actor_type TEXT NOT NULL,
+      actor_id TEXT,
+      event_type TEXT NOT NULL,
+      entity_type TEXT,
+      entity_id TEXT,
+      metadata_json TEXT,
+      created_at TEXT NOT NULL,
+      FOREIGN KEY (pharmacy_id) REFERENCES pharmacies(id)
+    );
+
+    CREATE TABLE IF NOT EXISTS scan_staff_actions (
+      id TEXT PRIMARY KEY,
+      pharmacy_id TEXT NOT NULL,
+      scan_id TEXT NOT NULL,
+      staff_token_id TEXT,
+      action TEXT NOT NULL,
+      note TEXT,
+      created_at TEXT NOT NULL,
+      FOREIGN KEY (pharmacy_id) REFERENCES pharmacies(id),
+      FOREIGN KEY (scan_id) REFERENCES scans(id)
+    );
+
+    CREATE TABLE IF NOT EXISTS customer_notes (
+      id TEXT PRIMARY KEY,
+      pharmacy_id TEXT NOT NULL,
+      customer_id TEXT NOT NULL,
+      scan_id TEXT,
+      note TEXT NOT NULL,
+      created_at TEXT NOT NULL,
+      FOREIGN KEY (pharmacy_id) REFERENCES pharmacies(id),
+      FOREIGN KEY (customer_id) REFERENCES customers(id),
+      FOREIGN KEY (scan_id) REFERENCES scans(id)
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_audit_pharmacy_created
+      ON audit_events(pharmacy_id, created_at DESC);
+    CREATE INDEX IF NOT EXISTS idx_scan_actions_scan
+      ON scan_staff_actions(scan_id, created_at DESC);
+    CREATE INDEX IF NOT EXISTS idx_customer_notes_customer
+      ON customer_notes(customer_id, created_at DESC);
   `);
 
   ensureColumn(database, 'pharmacies', 'code', 'TEXT');
@@ -189,7 +233,10 @@ function migrate(database) {
   ensureColumn(database, 'scans', 'customer_id', 'TEXT');
   ensureColumn(database, 'scans', 'recommendations_json', 'TEXT');
   ensureColumn(database, 'scans', 'routine_json', 'TEXT');
+  ensureColumn(database, 'scans', 'analysis_error', 'TEXT');
+  ensureColumn(database, 'scans', 'completed_at', 'TEXT');
   ensureColumn(database, 'shared_routines', 'customer_id', 'TEXT');
+  ensureColumn(database, 'pharmacy_products', 'low_stock_threshold', 'INTEGER DEFAULT 3');
 }
 
 export function newId(prefix) {
