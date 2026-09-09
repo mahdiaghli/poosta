@@ -31,8 +31,8 @@ export default function Consent() {
           </div>
         ))}
       </Card>
-      <label className="flex items-start gap-2.5 text-[13.5px] mb-4 cursor-pointer">
-        <input type="checkbox" checked={checked} onChange={(e) => setChecked(e.target.checked)} className="mt-1" />
+      <label className="flex items-start gap-3 text-[13.5px] min-[600px]:text-[15px] mb-4 cursor-pointer min-h-12">
+        <input type="checkbox" checked={checked} onChange={(e) => setChecked(e.target.checked)} className="mt-1 w-5 h-5 min-[600px]:w-6 min-[600px]:h-6" />
         با پردازش تصویر چهره برای تحلیل پوست، طبق توضیحات بالا موافقم.
       </label>
       <Button disabled={!checked} onClick={() => { setConsent(true); navigate('/scan'); }}>ادامه</Button>

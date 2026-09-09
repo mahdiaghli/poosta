@@ -125,18 +125,18 @@
     "semantic_hash": ""
   },
   "src/App.tsx": {
-    "mtime": 1788853357.4447708,
-    "ast_hash": "312f839aaa210421967973e65803e1d7",
+    "mtime": 1788879597.1229117,
+    "ast_hash": "4bba6966b2a732a7e794c9583cccbeba",
     "semantic_hash": ""
   },
   "src/components/layout/BottomNav.tsx": {
-    "mtime": 1786976072.0,
-    "ast_hash": "0da7a7fb434e4b5ca6853799e0cac8b9",
+    "mtime": 1788879426.946453,
+    "ast_hash": "1a7960bde013fc05b5901499b26750d5",
     "semantic_hash": ""
   },
   "src/components/layout/TopBar.tsx": {
-    "mtime": 1786976072.0,
-    "ast_hash": "c173037aaa1a3af49f443f5b7c757620",
+    "mtime": 1788879444.2693982,
+    "ast_hash": "af0eb739331a335e2599449d9bf84287",
     "semantic_hash": ""
   },
   "src/components/product/ProductCard.tsx": {
@@ -145,8 +145,8 @@
     "semantic_hash": ""
   },
   "src/components/ui/Button.tsx": {
-    "mtime": 1786976072.0,
-    "ast_hash": "ba70373074b6ab84eaa903ab284bde48",
+    "mtime": 1788879442.5217526,
+    "ast_hash": "b8a2a1af87d9e2bedbd79919f8415a91",
     "semantic_hash": ""
   },
   "src/components/ui/Card.tsx": {
@@ -170,13 +170,13 @@
     "semantic_hash": ""
   },
   "src/components/ui/MetricBar.tsx": {
-    "mtime": 1787491664.0,
-    "ast_hash": "b826a76b113801f068c6abad367427b6",
+    "mtime": 1788879554.885186,
+    "ast_hash": "b0d0fb6ae295e44d89b541a381df483a",
     "semantic_hash": ""
   },
   "src/components/ui/ScoreRing.tsx": {
-    "mtime": 1786976072.0,
-    "ast_hash": "7f0f44a3d87bf2d1d7636a2adc9d4fb9",
+    "mtime": 1788879579.018616,
+    "ast_hash": "8d84b02fde78072580c9ed8d2aa09570",
     "semantic_hash": ""
   },
   "src/hooks/useAuth.ts": {
@@ -230,8 +230,8 @@
     "semantic_hash": ""
   },
   "src/pages/Consent.tsx": {
-    "mtime": 1788851021.5334804,
-    "ast_hash": "a83fdfd853e35099c1acead6480cbe67",
+    "mtime": 1788879566.2273602,
+    "ast_hash": "98d1a4f8f6575a0a89626fd1214eae9c",
     "semantic_hash": ""
   },
   "src/pages/DailyCheckIn.tsx": {
@@ -240,8 +240,8 @@
     "semantic_hash": ""
   },
   "src/pages/Home.tsx": {
-    "mtime": 1786976072.0,
-    "ast_hash": "073d8db9dfae680efa67876d214a520c",
+    "mtime": 1788879566.227918,
+    "ast_hash": "68545ac4f522fa11ab5fd0abbdacbf60",
     "semantic_hash": ""
   },
   "src/pages/IngredientScanner.tsx": {
@@ -290,8 +290,8 @@
     "semantic_hash": ""
   },
   "src/pages/Result.tsx": {
-    "mtime": 1788871862.9705336,
-    "ast_hash": "a0c9c79be23141791794089484c63151",
+    "mtime": 1788879582.0668473,
+    "ast_hash": "080cf2d100d5733c837f58f1a9c364dd",
     "semantic_hash": ""
   },
   "src/pages/Routine.tsx": {
@@ -300,8 +300,8 @@
     "semantic_hash": ""
   },
   "src/pages/Scan.tsx": {
-    "mtime": 1788871897.4025564,
-    "ast_hash": "e9b834f020bb7d9d7cb7695c37c3bdb3",
+    "mtime": 1788879539.848126,
+    "ast_hash": "897b4a61799f0fd1d2cf3f43024fc2e2",
     "semantic_hash": ""
   },
   "src/pages/SkinDiary.tsx": {
@@ -315,8 +315,8 @@
     "semantic_hash": ""
   },
   "src/pages/Welcome.tsx": {
-    "mtime": 1786976072.0,
-    "ast_hash": "8576642965e086484ea9cbf0367d41b2",
+    "mtime": 1788879556.7186358,
+    "ast_hash": "248f15688849fe4bde6d23cf4c5779e0",
     "semantic_hash": ""
   },
   "src/services/authService.ts": {
@@ -735,8 +735,8 @@
     "semantic_hash": ""
   },
   "src/components/SendRoutineSms.tsx": {
-    "mtime": 1788853726.3796363,
-    "ast_hash": "fef46d6d943b78b23c66951aad88b658",
+    "mtime": 1788879582.0668473,
+    "ast_hash": "97fde684c93dc97de8b9d1004d37bcd3",
     "semantic_hash": ""
   },
   "src/pages/SharedRoutine.tsx": {
@@ -770,8 +770,8 @@
     "semantic_hash": ""
   },
   "src/components/KioskVisitActions.tsx": {
-    "mtime": 1788853389.9600482,
-    "ast_hash": "08554588a8357c2da8bf33c810382072",
+    "mtime": 1788879597.0006125,
+    "ast_hash": "17dd25969b7eda7845d024e73ea998a4",
     "semantic_hash": ""
   },
   "src/pages/Admin.tsx": {
@@ -822,6 +822,16 @@
   "scripts/download_scin_images.py": {
     "mtime": 1788872504.7533233,
     "ast_hash": "734c8694f565403e51f6ea8832b6deb0",
+    "semantic_hash": ""
+  },
+  "src/hooks/useKioskIdle.ts": {
+    "mtime": 1788879426.9476728,
+    "ast_hash": "0880c5de477d859fcd169ca974a4ce30",
+    "semantic_hash": ""
+  },
+  "src/hooks/useKioskMode.ts": {
+    "mtime": 1788879612.6167471,
+    "ast_hash": "c0539dd440e243527561157300202623",
     "semantic_hash": ""
   }
 }

@@ -8,12 +8,12 @@ export function TopBar({ eyebrow, showBack, right }: Props) {
   return (
     <div className="flex items-center justify-between mb-5">
       {showBack ? (
-        <button onClick={() => navigate(-1)} className="w-9 h-9 rounded-full bg-white border border-line flex items-center justify-center">←</button>
-      ) : <div className="w-9" />}
+        <button onClick={() => navigate(-1)} className="w-9 h-9 min-[600px]:w-12 min-[600px]:h-12 rounded-full bg-white border border-line flex items-center justify-center text-lg">←</button>
+      ) : <div className="w-9 min-[600px]:w-12" />}
       {eyebrow && (
-        <span className="text-xs font-semibold bg-sageMist text-sage rounded-full px-3.5 py-1.5">{eyebrow}</span>
+        <span className="text-xs min-[600px]:text-sm font-semibold bg-sageMist text-sage rounded-full px-3.5 py-1.5">{eyebrow}</span>
       )}
-      {right ?? <div className="w-9" />}
+      {right ?? <div className="w-9 min-[600px]:w-12" />}
     </div>
   );
 }

@@ -51,11 +51,11 @@ export default function Home() {
       </div>
 
       <div className="grid grid-cols-2 gap-3 my-5">
-        <div onClick={() => navigate('/scan')} className="bg-white border border-line rounded-md p-4 text-center cursor-pointer">
-          <div className="text-[22px] mb-1.5">📷</div><div className="text-[13px] font-bold">اسکن جدید پوست</div>
+        <div onClick={() => navigate('/scan')} className="bg-white border border-line rounded-md p-4 min-[600px]:p-5 text-center cursor-pointer min-h-24">
+          <div className="text-[22px] mb-1.5">📷</div><div className="text-[13px] min-[600px]:text-[15px] font-bold">اسکن جدید پوست</div>
         </div>
-        <div onClick={() => navigate('/progress')} className="bg-white border border-line rounded-md p-4 text-center cursor-pointer">
-          <div className="text-[22px] mb-1.5">📈</div><div className="text-[13px] font-bold">مشاهده پیشرفت</div>
+        <div onClick={() => navigate('/progress')} className="bg-white border border-line rounded-md p-4 min-[600px]:p-5 text-center cursor-pointer min-h-24">
+          <div className="text-[22px] mb-1.5">📈</div><div className="text-[13px] min-[600px]:text-[15px] font-bold">مشاهده پیشرفت</div>
         </div>
       </div>
 

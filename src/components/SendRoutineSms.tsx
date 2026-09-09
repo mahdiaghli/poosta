@@ -54,7 +54,7 @@ export function SendRoutineSms() {
         onChange={(e) => setPhone(e.target.value)}
         placeholder="09xxxxxxxxx"
         inputMode="tel"
-        className="w-full rounded-xl border border-line bg-white px-3 py-3 text-[14px] outline-none focus:border-sage"
+        className="w-full rounded-xl border border-line bg-white px-3 min-h-12 py-3 text-[15px] outline-none focus:border-sage"
         dir="ltr"
       />
       {error && <p className="mt-2 text-[12.5px] text-rose-700">{error}</p>}

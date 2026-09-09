@@ -13,14 +13,14 @@ function bandFor(value: number) {
 export function MetricBar({ label, value, source }: Props) {
   const [, bandLabel, bandColor] = bandFor(value);
   return (
-    <div className="flex items-center gap-3 py-[11px] border-b border-line last:border-none">
-      <span className="w-24 flex-none text-[13.5px] font-bold">{label}</span>
+    <div className="flex items-center gap-3 py-[11px] min-[600px]:py-3.5 border-b border-line last:border-none">
+      <span className="w-24 min-[600px]:w-[7.5rem] flex-none text-[13.5px] min-[600px]:text-[15px] font-bold">{label}</span>
       <div className="flex-1">
-        <div className="h-2 rounded-full bg-sageMist overflow-hidden">
+        <div className="h-2 min-[600px]:h-3 rounded-full bg-sageMist overflow-hidden">
           <span className="block h-full rounded-full bg-gradient-to-r from-sage to-sageDeep" style={{ width: `${value}%` }} />
         </div>
         <div className="flex items-center gap-1.5 mt-1">
-          <span className={`text-[10.5px] font-bold ${bandColor}`}>{bandLabel}</span>
+          <span className={`text-[10.5px] min-[600px]:text-[12px] font-bold ${bandColor}`}>{bandLabel}</span>
           {source && (
             <span className="text-[9.5px] text-stone bg-creamDeep rounded-full px-1.5 py-0.5">
               {source === 'model' ? '🎯 مدل' : '≈ تخمین'}

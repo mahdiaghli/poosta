@@ -33,9 +33,19 @@ import PharmacyDashboard from '@/pages/PharmacyDashboard';
 import PrintScanSlip from '@/pages/PrintScanSlip';
 import PrintKioskSlip from '@/pages/PrintKioskSlip';
 import Admin from '@/pages/Admin';
+import Staff from '@/pages/Staff';
 import { deviceLicenseService, getDeviceToken } from '@/services/deviceLicenseService';
+import { useKioskMode } from '@/hooks/useKioskMode';
+import { useKioskIdle } from '@/hooks/useKioskIdle';
+import { SHELL_WIDTH } from '@/lib/shell';
 
 const MAIN_ROUTES = ['/home', '/scan', '/routine', '/products', '/profile'];
+const KIOSK_NAV_PREFIXES = ['/scan', '/result', '/routine', '/products'];
+
+function pathHasNav(pathname: string, kiosk: boolean) {
+  if (kiosk) return KIOSK_NAV_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+  return MAIN_ROUTES.includes(pathname) || pathname.startsWith('/routine/');
+}
 const OPEN_WHEN_LOCKED = new Set(['/activate', '/welcome', '/privacy', '/pharmacy/login', '/admin']);
 
 function isPublicPath(pathname: string) {
@@ -50,8 +60,19 @@ export default function App() {
   const location = useLocation();
   const navigate = useNavigate();
   const lastScan = useAppStore((s) => s.lastScan);
-  const showNav = MAIN_ROUTES.includes(location.pathname);
+  const kiosk = useKioskMode();
+  useKioskIdle(kiosk);
+  const showNav = pathHasNav(location.pathname, kiosk);
+  const padBottom = kiosk && location.pathname === '/result'
+    ? 'pb-[240px] min-[600px]:pb-[260px]'
+    : showNav
+      ? 'pb-[110px] min-[600px]:pb-[128px]'
+      : 'pb-8';
   const reminders = useAppStore((s) => s.reminders);
+
+  useEffect(() => {
+    if (kiosk && location.pathname === '/home') navigate('/scan', { replace: true });
+  }, [kiosk, location.pathname, navigate]);
   useEffect(() => { if (typeof window !== 'undefined') notificationService.schedule(reminders); }, [reminders]);
 
   useEffect(() => {
@@ -77,10 +98,10 @@ export default function App() {
   }, [location.pathname, navigate]);
 
   return (
-    <div className="max-w-[480px] mx-auto min-h-screen relative bg-gradient-to-br from-sageMist/40 via-cream to-blushSoft/30">
-      <div className="px-[22px] pt-7 pb-[110px]">
+    <div className={`${SHELL_WIDTH} mx-auto min-h-screen relative bg-gradient-to-br from-sageMist/40 via-cream to-blushSoft/30`}>
+      <div className={`px-[22px] pt-7 ${padBottom}`}>
         <Routes>
-          <Route path="/" element={<Navigate to={lastScan ? '/home' : '/welcome'} replace />} />
+          <Route path="/" element={<Navigate to={lastScan ? (kiosk ? '/result' : '/home') : '/welcome'} replace />} />
           <Route path="/welcome" element={<Welcome />} />
           <Route path="/activate" element={<Activate />} />
           <Route path="/r/:token" element={<SharedRoutine />} />
@@ -90,7 +111,7 @@ export default function App() {
           <Route path="/print/kiosk" element={<PrintKioskSlip />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/auth" element={<Auth />} />
-          <Route path="/onboarding" element={<Onboarding />} />
+          <Route path="/staff" element={<Staff />} />
           <Route path="/consent" element={<Consent />} />
           <Route path="/scan" element={<Scan />} />
           <Route path="/analyzing" element={<Analyzing />} />

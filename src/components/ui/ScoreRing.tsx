@@ -12,7 +12,7 @@ export function ScoreRing({ size = 190, score, strokeWidth = 14, trackColor = '#
   const c = 2 * Math.PI * r;
   const offset = c - (Math.min(100, Math.max(0, score)) / 100) * c;
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}>
+    <svg width="100%" height="100%" viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}>
       <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={trackColor} strokeWidth={strokeWidth} />
       <circle
         cx={size / 2} cy={size / 2} r={r} fill="none" stroke={fillColor} strokeWidth={strokeWidth}

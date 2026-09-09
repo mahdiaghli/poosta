@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { TopBar } from '@/components/layout/TopBar';
 import { Button } from '@/components/ui/Button';
 import { MedicalDisclaimer } from '@/components/ui/MedicalDisclaimer';
 import { useSkinScan } from '@/hooks/useSkinScan';
 import { useAppStore } from '@/store/useAppStore';
+import { useKioskMode } from '@/hooks/useKioskMode';
 
 const GUIDES = ['نور کافی و یکنواخت', 'صورت مستقیم رو‌به‌دوربین', 'بدون آرایش غلیظ/عینک', 'فاصله حدود ۳۰ سانتی‌متر'];
 
@@ -25,7 +26,9 @@ function resizeThumb(src: string, size: number): Promise<string | undefined> {
 
 export default function Scan() {
   const navigate = useNavigate();
+  const location = useLocation();
   const consent = useAppStore((s) => s.faceDataConsent);
+  const kiosk = useKioskMode();
   const kioskPhone = useAppStore((s) => s.kioskPhone);
   const setKioskPhone = useAppStore((s) => s.setKioskPhone);
   const { quality, checking, checkImage } = useSkinScan();
@@ -45,10 +48,12 @@ export default function Scan() {
   };
 
   useEffect(() => {
-    if (!consent) navigate('/consent', { replace: true });
+    if (!consent && location.pathname !== '/consent') {
+      navigate('/consent', { replace: true });
+    }
     return stopStream;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [consent, navigate]);
+  }, [consent, location.pathname, navigate]);
 
   const cameraErrorMessage = (e: unknown): string => {
     const name = e instanceof DOMException ? e.name : '';
@@ -123,27 +128,27 @@ export default function Scan() {
   return (
     <div className="flex flex-col min-h-[calc(100vh-140px)]">
       <TopBar eyebrow="مرحله اسکن" />
-      <h1 className="text-[22px] font-extrabold text-sageDeep">یک عکس واضح و روبه‌رو از صورتتان بگیرید</h1>
+      <h1 className="text-[22px] min-[600px]:text-[26px] font-extrabold text-sageDeep">یک عکس واضح و روبه‌رو از صورتتان بگیرید</h1>
 
-      <div className="mt-3 mb-1">
-        <label className="text-[12.5px] font-bold text-sageDeep">موبایل (اختیاری — برای پیگیری پیشرفت)</label>
+      {/* <div className="mt-3 mb-1">
+        <label className="text-[12.5px] min-[600px]:text-[14px] font-bold text-sageDeep">موبایل (اختیاری — برای پیگیری پیشرفت)</label>
         <input
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           placeholder="09xxxxxxxxx"
-          className="w-full mt-1 border-[1.5px] border-line rounded-sm px-4 py-3 text-[15px] bg-white"
+          className="w-full mt-1 border-[1.5px] border-line rounded-sm px-4 min-h-12 min-[600px]:min-h-14 py-3 text-[15px] min-[600px]:text-[17px] bg-white"
           dir="ltr"
           inputMode="tel"
         />
-      </div>
+      </div> */}
 
-      <div className="grid grid-cols-2 gap-2 my-4">
+      <div className="flex flex-wrap gap-2 my-3 min-[600px]:my-4">
         {GUIDES.map((g) => (
-          <div key={g} className="bg-white border border-line rounded-md p-3 text-xs leading-6"><b className="text-sageDeep">✓</b> {g}</div>
+          <div key={g} className="bg-white border border-line rounded-full px-3 py-2 text-[11px] min-[600px]:text-[13px] leading-5"><b className="text-sageDeep">✓</b> {g}</div>
         ))}
       </div>
 
-      <div className="relative rounded-2xl overflow-hidden aspect-square bg-black">
+      <div className="relative rounded-2xl overflow-hidden bg-black w-full h-[min(42vh,380px)] min-[600px]:h-[min(46vh,440px)]">
         {/* video is ALWAYS in the DOM so videoRef.current is never null when we need it */}
         <video
           ref={videoRef} playsInline muted autoPlay
@@ -152,37 +157,52 @@ export default function Scan() {
         {!cameraOpen && preview && <img src={preview} className="absolute inset-0 w-full h-full object-cover" />}
         {!cameraOpen && !preview && (
           <div onClick={openCamera} className="absolute inset-0 flex flex-col items-center justify-center gap-3 cursor-pointer bg-white">
-            <div className="w-16 h-16 rounded-full bg-sageMist flex items-center justify-center text-3xl">📷</div>
-            <div className="font-bold text-sm text-ink">باز کردن دوربین</div>
-            <div className="text-xs text-stone">یا فایل تصویر را انتخاب کنید</div>
+            <div className="w-16 h-16 min-[600px]:w-20 min-[600px]:h-20 rounded-full bg-sageMist flex items-center justify-center text-3xl">📷</div>
+            <div className="font-bold text-sm min-[600px]:text-base text-ink">باز کردن دوربین</div>
+            <div className="text-xs min-[600px]:text-sm text-stone">یا فایل تصویر را انتخاب کنید</div>
           </div>
         )}
         {cameraOpen && (
           <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-3">
-            <button onClick={capture} className="w-16 h-16 rounded-full bg-white border-4 border-sageSoft shadow-lg" aria-label="گرفتن عکس" />
+            <button onClick={capture} className="w-16 h-16 min-[600px]:w-[72px] min-[600px]:h-[72px] rounded-full bg-white border-4 border-sageSoft shadow-lg" aria-label="گرفتن عکس" />
           </div>
         )}
         {!cameraOpen && preview && (
-          <button onClick={openCamera} className="absolute bottom-3 left-3 bg-white/95 rounded-full px-4 py-2 text-xs font-bold">دوباره عکس بگیر</button>
+          <button onClick={openCamera} className="absolute bottom-3 left-3 bg-white/95 rounded-full px-4 py-2.5 min-[600px]:px-5 min-[600px]:py-3 text-xs min-[600px]:text-sm font-bold">دوباره عکس بگیر</button>
         )}
       </div>
 
       <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={onFile} />
-      <button onClick={() => fileRef.current?.click()} className="text-sm font-bold text-sage mt-3">انتخاب عکس از گالری</button>
+      <Button variant="secondary" className="mt-3" onClick={() => fileRef.current?.click()}>انتخاب عکس از گالری</Button>
 
       {(checking || quality || cameraError) && (
-        <div className={`rounded-md p-3.5 mt-3.5 text-sm leading-7 ${checking ? 'bg-sageMist text-sageDeep' : quality?.ok ? 'bg-sageMist text-sageDeep' : 'bg-[#FBEEE9] text-coral'}`}>
+        <div className={`rounded-md p-3.5 mt-3.5 text-sm min-[600px]:text-[15px] leading-7 ${checking ? 'bg-sageMist text-sageDeep' : quality?.ok ? 'bg-sageMist text-sageDeep' : 'bg-[#FBEEE9] text-coral'}`}>
           {checking ? 'در حال بررسی چهره، نور و کیفیت تصویر...' : quality?.ok ? '✓ چهره پیدا شد و عکس برای تحلیل مناسب است' : cameraError || quality?.issues.map((i) => i.message).join(' · ')}
         </div>
       )}
 
-      <div className="mt-5 flex flex-col gap-2.5">
-        <Button onClick={() => submit('accurate')} disabled={!preview || checking || !quality?.ok}>🎯 شروع تحلیل با دقت (Gemini)</Button>
-        <Button onClick={() => submit('standard')} disabled={!preview || checking || !quality?.ok} variant="secondary">⚡ شروع تحلیل معمولی (مدل محلی)</Button>
+      <div className="mt-4 flex flex-col gap-2.5">
+        {kiosk ? (
+          <>
+            <Button onClick={() => submit('standard')} disabled={!preview || checking || !quality?.ok}>شروع تحلیل</Button>
+            <details className="text-[12.5px] text-stone">
+              <summary className="cursor-pointer font-bold text-sageDeep py-2 min-h-12 flex items-center">تحلیل ابری (ارسال عکس به اینترنت)</summary>
+              <p className="leading-6 my-2">فقط با اجازه مشتری. عکس برای همان یک تحلیل به سرویس ابری ارسال می‌شود.</p>
+              <Button variant="secondary" onClick={() => submit('accurate')} disabled={!preview || checking || !quality?.ok}>تحلیل ابری (Gemini)</Button>
+            </details>
+          </>
+        ) : (
+          <>
+            <Button onClick={() => submit('accurate')} disabled={!preview || checking || !quality?.ok}>🎯 شروع تحلیل با دقت (Gemini)</Button>
+            <Button onClick={() => submit('standard')} disabled={!preview || checking || !quality?.ok} variant="secondary">⚡ شروع تحلیل معمولی (مدل محلی)</Button>
+          </>
+        )}
       </div>
+      {!kiosk && (
       <p className="text-[11.5px] text-stone leading-6 mt-2">
         «تحلیل با دقت» عکس شما را برای بررسی به سرویس هوش مصنوعی Gemini/OpenRouter می‌فرستد (دقت بالاتر). «تحلیل معمولی» کاملاً روی مدل‌های محلی همین پروژه انجام می‌شود و هیچ عکسی جایی ارسال نمی‌شود.
       </p>
+      )}
       <MedicalDisclaimer />
     </div>
   );
