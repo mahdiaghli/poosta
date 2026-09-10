@@ -7,7 +7,6 @@ import { MetricBar } from '@/components/ui/MetricBar';
 import { MedicalDisclaimer } from '@/components/ui/MedicalDisclaimer';
 import { useAppStore } from '@/store/useAppStore';
 import { METRIC_LABELS_FA, type SkinMetricKey } from '@/types';
-import { SendRoutineSms } from '@/components/SendRoutineSms';
 import { KioskVisitActions } from '@/components/KioskVisitActions';
 import { useKioskMode } from '@/hooks/useKioskMode';
 
@@ -61,7 +60,7 @@ export default function Result() {
             </div>
           </div>
         )}
-        <div className="text-[11.5px] min-[600px]:text-[13px] text-stone">اعتمادپذیری تحلیل تصویری: {Math.round(lastScan.confidence * 100)}٪</div>
+        {/* <div className="text-[11.5px] min-[600px]:text-[13px] text-stone">اعتمادپذیری تحلیل تصویری: {Math.round(lastScan.confidence * 100)}٪</div> */}
       </div>
 
       <Card className="mt-2">
@@ -93,41 +92,36 @@ export default function Result() {
 
       <Card className="mt-4">
         <h2 className="text-[17px] min-[600px]:text-[19px] font-bold mb-3.5">خلاصه تحلیل</h2>
-        <p className="text-[14.5px] min-[600px]:text-[16px] text-stone leading-[1.9] mt-0">
+        {/* <p className="text-[14.5px] min-[600px]:text-[16px] text-stone leading-[1.9] mt-0">
           پوست شما به‌طور کلی امتیاز {lastScan.overallScore} از ۱۰۰ گرفته است. این امتیاز از میانگین ساده محاسبه نشده
           و بر اساس اهمیت هرکدام از شاخص‌ها وزن‌دهی شده است. این یک تشخیص پزشکی نیست؛ بلکه یک برآورد ظاهری برای کمک
           به انتخاب روتین مناسب شماست.
-        </p>
+        </p> */}
         <p className="text-[14.5px] min-[600px]:text-[16px] font-semibold text-sageDeep mt-2">بیشترین فرصت بهبود شما: {opportunities}</p>
         {worst[1] < 45 && (
           <div className="inline-flex items-center gap-1.5 bg-[#FBEEE9] text-coral text-xs min-[600px]:text-sm font-bold px-3 py-1.5 rounded-full mt-3.5">
             ⚠ این تحلیل تشخیص پزشکی نیست؛ در صورت ادامه‌دار بودن مشکل به متخصص پوست مراجعه کنید
           </div>
         )}
-        <MedicalDisclaimer />
+        {/* <MedicalDisclaimer /> */}
       </Card>
 
       {!kiosk && (
         <div className="flex flex-col gap-2.5 mt-5">
           <Button onClick={() => navigate('/routine')}>مشاهده روتین پیشنهادی</Button>
-          <SendRoutineSms />
           <KioskVisitActions />
           <Button variant="secondary" onClick={() => navigate('/home')}>بازگشت به خانه</Button>
         </div>
       )}
 
       {kiosk && (
-        <div className="fixed bottom-[calc(72px+env(safe-area-inset-bottom))] min-[600px]:bottom-[calc(80px+env(safe-area-inset-bottom))] left-1/2 -translate-x-1/2 w-full max-w-[480px] min-[600px]:max-w-[720px] px-[22px] min-[600px]:px-8 z-40">
+        <div className="fixed bottom-[calc(72px+env(safe-area-inset-bottom))] min-[600px]:bottom-[calc(80px+env(safe-area-inset-bottom))] left-1/2 -translate-x-1/2 w-full max-w-[480px] min-[600px]:max-w-[820px] min-[1100px]:max-w-[1120px] px-[22px] min-[600px]:px-8 min-[1100px]:px-10 z-40">
           <div className="bg-white/95 backdrop-blur-md border border-line rounded-2xl p-3 shadow-card">
-            <div className="grid grid-cols-2 gap-2 mb-2">
-              <Button onClick={() => navigate('/routine')}>روتین</Button>
-              <Button variant="secondary" onClick={() => navigate('/print/kiosk')}>چاپ برای فروشنده</Button>
-            </div>
-            <SendRoutineSms />
-            <KioskVisitActions compact />
+            <Button onClick={() => navigate('/routine')}>روتین</Button>
           </div>
         </div>
       )}
+      {kiosk && <div className="mt-5"><KioskVisitActions /></div>}
     </div>
   );
 }

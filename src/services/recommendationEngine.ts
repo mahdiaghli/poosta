@@ -24,6 +24,15 @@ const GOAL_TO_METRIC: Partial<Record<string, keyof SkinMetrics>> = {
 const SKIN_TYPE_LABELS_FA: Record<string, string> = { oily: 'چرب', dry: 'خشک', combination: 'مختلط', normal: 'نرمال' };
 
 const PREGNANCY_UNSAFE_ACTIVES = ['retinol'];
+
+/** Rank the lowest-scoring skin metrics first: lower score means greater need. */
+const priorityMetrics = (metrics: SkinMetrics | null): (keyof SkinMetrics)[] => {
+  const keys = Object.keys(METRIC_LABELS_FA) as (keyof SkinMetrics)[];
+  return keys.sort((a, b) => (metrics ? metrics[a] : 65) - (metrics ? metrics[b] : 65));
+};
+
+const needLevel = (score: number): RoutineStep['importance'] =>
+  score < 45 ? 'high' : score < 65 ? 'mid' : 'low';
 // Strong actives are scheduled on alternating days rather than nightly, per dermatology best-practice (#10).
 const STRONG_ACTIVE_WEEKDAYS = ['شنبه', 'دوشنبه', 'چهارشنبه'];
 const RECOVERY_WEEKDAYS = ['یکشنبه', 'سه‌شنبه', 'پنجشنبه', 'جمعه'];
@@ -99,7 +108,7 @@ export const recommendationEngine = {
 
   pickProduct(
     category: ProductCategory, metrics: SkinMetrics | null, profile: SkinProfile,
-    opts: RoutineOptions, catalog: Product[], exclude: string[] = []
+    opts: RoutineOptions, catalog: Product[], exclude: string[] = [], targetMetrics: (keyof SkinMetrics)[] = []
   ): Product {
     let pool = catalog.filter((p) => p.category === category);
     if (profile.isPregnantOrNursing) {
@@ -111,13 +120,25 @@ export const recommendationEngine = {
       if (mine.length) pool = mine;
     }
 
+    const rank = (p: Product) => {
+      const base = this.compatibility(p, metrics, profile).score;
+      const targetedNeed = targetMetrics.reduce((total, metric) => {
+        const score = metrics?.[metric] ?? 65;
+        return total + (p.concerns.includes(metric) ? Math.max(0, 70 - score) * 0.55 : 0);
+      }, 0);
+      return base + targetedNeed;
+    };
+
     if (opts.variant === 'budget') {
       const max = BUDGET_MAX[opts.budget] ?? Infinity;
       const inBudget = pool.filter((p) => typeof p.price === 'number' && p.price <= max);
-      pool = (inBudget.length ? inBudget : pool).slice().sort((a, b) => (a.price ?? Number.POSITIVE_INFINITY) - (b.price ?? Number.POSITIVE_INFINITY));
+      pool = (inBudget.length ? inBudget : pool).slice().sort((a, b) => {
+        const priceDiff = (a.price ?? Number.POSITIVE_INFINITY) - (b.price ?? Number.POSITIVE_INFINITY);
+        return priceDiff || rank(b) - rank(a);
+      });
     } else {
       pool = pool
-        .map((p) => ({ p, score: this.compatibility(p, metrics, profile).score }))
+        .map((p) => ({ p, score: rank(p) }))
         .sort((a, b) => b.score - a.score)
         .map((x) => x.p);
     }
@@ -136,13 +157,14 @@ export const recommendationEngine = {
 
   buildRoutine(metrics: SkinMetrics | null, profile: SkinProfile, opts: RoutineOptions, catalog: Product[] = MOCK_PRODUCTS): Routine {
     const suffix = opts.useOnlyMyProducts ? ' (از محصولات شما)' : '';
-    const weakest = metrics
-      ? (Object.entries(metrics) as [keyof SkinMetrics, number][]).sort((a, b) => a[1] - b[1])[0][0]
-      : 'hydration';
+    const priorities = priorityMetrics(metrics);
+    const primaryNeed = priorities[0] ?? 'hydration';
+    const secondaryNeeds = priorities.slice(0, 3);
+    const primaryScore = metrics?.[primaryNeed] ?? 65;
 
     if (opts.variant === 'minimal') {
-      const cleanser = this.pickProduct('cleanser', metrics, profile, opts, catalog);
-      const moisturizer = this.pickProduct('moisturizer', metrics, profile, opts, catalog);
+      const cleanser = this.pickProduct('cleanser', metrics, profile, opts, catalog, [], secondaryNeeds);
+      const moisturizer = this.pickProduct('moisturizer', metrics, profile, opts, catalog, [], ['hydration', ...secondaryNeeds]);
       const sunscreen = this.pickProduct('sunscreen', metrics, profile, opts, catalog);
       const morning: RoutineStep[] = [
         this.toStep('شست‌وشوی صورت', cleanser, 'پاکسازی پایه و ضروری', 'با آب ولرم', 'روزی ۱ بار', 'high', suffix),
@@ -156,22 +178,22 @@ export const recommendationEngine = {
       return { morning, night, conflicts: [], variant: opts.variant, source: opts.useOnlyMyProducts ? 'own_products' : 'catalog' };
     }
 
-    const mCleanser = this.pickProduct('cleanser', metrics, profile, opts, catalog);
-    const mSerum = this.pickProduct('serum', metrics, profile, opts, catalog);
-    const mMoist = this.pickProduct('moisturizer', metrics, profile, opts, catalog);
+    const mCleanser = this.pickProduct('cleanser', metrics, profile, opts, catalog, [], secondaryNeeds);
+    const mSerum = this.pickProduct('serum', metrics, profile, opts, catalog, [], secondaryNeeds);
+    const mMoist = this.pickProduct('moisturizer', metrics, profile, opts, catalog, [], ['hydration', ...secondaryNeeds]);
     const mSun = this.pickProduct('sunscreen', metrics, profile, opts, catalog);
-    const nCleanser = this.pickProduct('cleanser', metrics, profile, opts, catalog, [mCleanser.id]) ?? mCleanser;
-    const nTreat = this.pickProduct('treatment', metrics, profile, opts, catalog);
+    const nCleanser = this.pickProduct('cleanser', metrics, profile, opts, catalog, [mCleanser.id], secondaryNeeds) ?? mCleanser;
+    const nTreat = this.pickProduct('treatment', metrics, profile, opts, catalog, [], secondaryNeeds);
 
     const morning: RoutineStep[] = [
       this.toStep('شست‌وشوی صورت', mCleanser, 'پاکسازی بدون از بین بردن رطوبت طبیعی پوست', 'با آب ولرم و حرکات دورانی', 'روزی ۱ بار', 'high', suffix),
-      this.toStep('سرم', mSerum, weakest === 'hydration' ? 'افزایش رطوبت و آبرسانی عمقی' : 'کنترل چربی، منافذ باز و روشن‌سازی', 'چند قطره روی پوست مرطوب', 'روزی ۱ بار', 'mid', suffix),
+      this.toStep('سرم', mSerum, primaryNeed === 'hydration' ? 'افزایش رطوبت و آبرسانی عمقی' : `تمرکز بر نیاز اصلی پوست (امتیاز ${primaryScore}/100)`, 'چند قطره روی پوست مرطوب', 'روزی ۱ بار', needLevel(primaryScore), suffix),
       this.toStep('مرطوب‌کننده', mMoist, 'حفظ رطوبت و تقویت سد پوستی', 'لایه نازک روی صورت و گردن', 'روزی ۱ بار', 'mid', suffix),
       this.toStep('ضدآفتاب', mSun, 'جلوگیری از تیرگی و آسیب نور خورشید', 'دو انگشت، ۱۵ دقیقه قبل از خروج', 'روزی ۱ بار و تجدید هر ۳ ساعت', 'high', suffix),
     ];
     const night: RoutineStep[] = [
       this.toStep('شست‌وشوی صورت', nCleanser, 'حذف آلودگی و باقی‌مانده ضدآفتاب', 'با آب ولرم', 'روزی ۱ بار', 'high', suffix),
-      this.toStep('درمانی', nTreat, weakest === 'texture' || weakest === 'pores' ? 'بهبود بافت پوست و کاهش منافذ باز' : 'کاهش قرمزی و آرام‌سازی پوست', 'به آرامی روی پوست خشک', 'شب‌ها، ۲ تا ۳ بار در هفته', 'high', suffix,
+      this.toStep('درمانی', nTreat, `درمان نیاز اصلی پوست (امتیاز ${primaryScore}/100)`, 'به آرامی روی پوست خشک', 'شب‌ها، ۲ تا ۳ بار در هفته', needLevel(primaryScore), suffix,
         nTreat.activeIngredientKeys.some((k) => ['retinol', 'aha', 'bha'].includes(k)) ? STRONG_ACTIVE_WEEKDAYS : undefined),
       this.toStep('مرطوب‌کننده', mMoist, 'ترمیم و بازسازی پوست در طول شب', 'لایه نازک روی صورت', 'روزی ۱ بار', 'mid', suffix),
     ];

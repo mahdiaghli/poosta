@@ -53,7 +53,7 @@ export default function App() {
   useKioskIdle(kiosk);
   const showNav = pathHasNav(location.pathname, kiosk);
   const padBottom = kiosk && location.pathname === '/result'
-    ? 'pb-[240px] min-[600px]:pb-[260px]'
+    ? 'pb-[170px] min-[600px]:pb-[190px]'
     : showNav
       ? 'pb-[110px] min-[600px]:pb-[128px]'
       : 'pb-8';

@@ -2,6 +2,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useAppStore } from '@/store/useAppStore';
 import { useKioskMode } from '@/hooks/useKioskMode';
 import { SHELL_WIDTH } from '@/lib/shell';
+import { LogOut } from 'lucide-react';
 
 const CONSUMER = [
   { to: '/home', icon: '🏠', label: 'خانه' },
@@ -56,7 +57,7 @@ export function BottomNav() {
           onClick={endVisit}
           className="flex flex-col items-center justify-center gap-1 min-w-14 min-h-12 min-[600px]:min-h-14 text-[11px] min-[600px]:text-[13px] font-bold text-coral"
         >
-          <span className="text-[19px] min-[600px]:text-[22px]">⏻</span>
+          <LogOut size={22} strokeWidth={2} aria-hidden="true" />
           پایان
         </button>
       )}

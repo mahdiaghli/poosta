@@ -5,8 +5,9 @@ import { EmptyState } from '@/components/ui/EmptyState';
 import { useAppStore } from '@/store/useAppStore';
 import { useRoutineTracker } from '@/hooks/useRoutine';
 import type { RoutinePeriod, RoutineVariant, Budget } from '@/types';
+import { Button } from '@/components/ui/Button';
+import { ChevronLeft, Printer } from 'lucide-react';
 import { SendRoutineSms } from '@/components/SendRoutineSms';
-import { ChevronLeft } from 'lucide-react';
 
 const VARIANTS: [RoutineVariant, string][] = [['best', 'بهترین روتین'], ['budget', 'مقرون‌به‌صرفه'], ['minimal', 'حداقلی']];
 const BUDGETS: [Budget, string][] = [['under1m', 'زیر ۱M'], ['1to2m', '۱ تا ۲M'], ['2to5m', '۲ تا ۵M'], ['5plus', 'بالای ۵M']];
@@ -15,7 +16,7 @@ const IMPORTANCE_LABEL = { high: 'اهمیت بالا', mid: 'اهمیت متو�
 export default function Routine() {
   const navigate = useNavigate();
   const [tab, setTab] = useState<RoutinePeriod>('morning');
-  const { routine, today, todayCompletion, streaks, toggleStep } = useRoutineTracker();
+  const { routine, today, toggleStep } = useRoutineTracker();
   const routineVariant = useAppStore((s) => s.routineVariant);
   const budget = useAppStore((s) => s.budget);
   const useOnlyMyProducts = useAppStore((s) => s.useOnlyMyProducts);
@@ -35,15 +36,6 @@ export default function Routine() {
         </span>
         <ChevronLeft size={24} aria-hidden="true" />
       </button>
-
-      <div className="flex gap-2.5 mt-4">
-        {[['🔥 روز متوالی', streaks.current], ['بهترین رکورد', streaks.longest], ['تکمیل امروز', `${todayCompletion}٪`]].map(([label, val]) => (
-          <div key={label as string} className="flex-1 bg-white border border-line rounded-md p-3.5 text-center">
-            <div className="num text-xl font-extrabold text-sageDeep">{val}</div>
-            <div className="text-[11.5px] text-stone mt-0.5">{label}</div>
-          </div>
-        ))}
-      </div>
 
       <div className="flex bg-sageMist rounded-full p-1 mt-4">
         {VARIANTS.map(([v, label]) => (
@@ -115,11 +107,20 @@ export default function Routine() {
         })
       )}
 
-      {routine && (
-        <div className="mt-5 flex flex-col gap-2.5">
-          <SendRoutineSms />
-        </div>
-      )}
+{routine && (
+  <div className="mt-5 flex flex-col gap-2.5">
+    <SendRoutineSms />
+
+    <Button
+      variant="secondary"
+      onClick={() => navigate('/print/kiosk')}
+      className="w-full"
+    >
+      <Printer size={18} aria-hidden="true" />
+      چاپ برای فروشنده
+    </Button>
+  </div>
+)}
     </div>
   );
 }

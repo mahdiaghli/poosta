@@ -35,14 +35,19 @@ export default function Scan() {
   const [preview, setPreview] = useState<string | null>(null);
   const [phone, setPhone] = useState(kioskPhone || '');
   const [cameraOpen, setCameraOpen] = useState(false);
+  const [cameraReady, setCameraReady] = useState(false);
   const [cameraError, setCameraError] = useState('');
   const fileRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null); // ALWAYS mounted below -- never conditionally rendered
   const streamRef = useRef<MediaStream | null>(null);
+  const cameraRequestRef = useRef(0);
+  const autoStartedRef = useRef(false);
 
   const stopStream = () => {
+    cameraRequestRef.current += 1;
     streamRef.current?.getTracks().forEach((t) => t.stop());
     streamRef.current = null;
+    setCameraReady(false);
     if (videoRef.current) videoRef.current.srcObject = null;
   };
 
@@ -60,6 +65,7 @@ export default function Scan() {
   };
 
   const openCamera = async () => {
+    const requestId = ++cameraRequestRef.current;
     setCameraError('');
     if (!window.isSecureContext) {
       setCameraError('مرورگر اجازه نمایش دوربین داخل صفحه را روی HTTP شبکه نمی‌دهد. پوستا را روی localhost باز کنید یا میانبر Surface Kiosk را اجرا کنید؛ برنامه دیگر دوربین جداگانه ویندوز را باز نمی‌کند.');
@@ -69,7 +75,9 @@ export default function Scan() {
       setCameraError('نمایش دوربین داخل صفحه در این مرورگر فعال نیست. دسترسی Camera را در تنظیمات Edge بررسی کنید.');
       return;
     }
-    stopStream();
+    streamRef.current?.getTracks().forEach((t) => t.stop());
+    streamRef.current = null;
+    setCameraReady(false);
     // Mount/show the <video> element FIRST so videoRef.current definitely
     // exists before we try to attach the stream to it (fixes a silent
     // no-op bug where the stream was assigned before the element existed).
@@ -79,10 +87,15 @@ export default function Scan() {
         video: { facingMode: 'user', width: { ideal: 1080 }, height: { ideal: 1080 } },
         audio: false,
       });
+      if (requestId !== cameraRequestRef.current) {
+        stream.getTracks().forEach((t) => t.stop());
+        return;
+      }
       streamRef.current = stream;
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
-        try { await videoRef.current.play(); } catch { /* some browsers auto-play once metadata loads */ }
+        try { await videoRef.current.play(); } catch { /* metadata callback will retry */ }
+        if (videoRef.current.videoWidth > 0) setCameraReady(true);
       }
     } catch (e) {
       setCameraError(cameraErrorMessage(e));
@@ -90,8 +103,20 @@ export default function Scan() {
     }
   };
 
+  // Start the embedded preview when the scan page opens; the capture control
+  // remains inside the page so tablets never launch a separate camera app.
+  useEffect(() => {
+    if (kiosk && !autoStartedRef.current) {
+      autoStartedRef.current = true;
+      void openCamera();
+    }
+  }, [kiosk]);
+
   const capture = async () => {
     const video = videoRef.current;
+    if (video && video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) {
+      try { await video.play(); } catch { /* stream may still be negotiating */ }
+    }
     if (!video || !video.videoWidth) { setCameraError('تصویر دوربین هنوز آماده نیست، یک لحظه صبر کنید و دوباره امتحان کنید.'); return; }
     const c = document.createElement('canvas'); c.width = video.videoWidth; c.height = video.videoHeight;
     c.getContext('2d')?.drawImage(video, 0, 0, c.width, c.height);
@@ -142,7 +167,7 @@ export default function Scan() {
         />
       </div> */}
 
-      <div className="flex flex-wrap gap-2 my-3 min-[600px]:my-4">
+      <div className="w-full grid grid-cols-2 gap-2 my-3 min-[600px]:my-4 text-center">
         {GUIDES.map((g) => (
           <div key={g} className="bg-white border border-line rounded-full px-3 py-2 text-[11px] min-[600px]:text-[13px] leading-5"><b className="text-sageDeep">✓</b> {g}</div>
         ))}
@@ -152,17 +177,19 @@ export default function Scan() {
         {/* video is ALWAYS in the DOM so videoRef.current is never null when we need it */}
         <video
           ref={videoRef} playsInline muted autoPlay
-          className={`w-full h-full object-cover scale-x-[-1] ${cameraOpen ? 'block' : 'hidden'}`}
+          onLoadedMetadata={() => { setCameraReady(true); void videoRef.current?.play(); }}
+          onCanPlay={() => setCameraReady(true)}
+          className={`w-full h-full object-cover scale-x-[-1] ${cameraOpen && cameraReady ? 'block' : 'hidden'}`}
         />
         {!cameraOpen && preview && <img src={preview} className="absolute inset-0 w-full h-full object-cover" />}
-        {!cameraOpen && !preview && (
-          <div onClick={openCamera} className="absolute inset-0 flex flex-col items-center justify-center gap-3 cursor-pointer bg-white">
+        {!cameraReady && !preview && (
+          <div onClick={() => void openCamera()} className="absolute inset-0 flex flex-col items-center justify-center gap-3 cursor-pointer bg-white">
             <div className="w-16 h-16 min-[600px]:w-20 min-[600px]:h-20 rounded-full bg-sageMist flex items-center justify-center text-sageDeep"><Camera size={32} strokeWidth={2} /></div>
             <div className="font-bold text-sm min-[600px]:text-base text-ink">گرفتن عکس با دوربین تبلت</div>
             <div className="text-xs min-[600px]:text-sm text-stone">یا فایل تصویر را انتخاب کنید</div>
           </div>
         )}
-        {cameraOpen && (
+        {cameraOpen && cameraReady && (
           <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-3">
             <button type="button" onClick={capture} className="w-16 h-16 min-[600px]:w-[72px] min-[600px]:h-[72px] rounded-full bg-white border-4 border-sageSoft shadow-lg" aria-label="گرفتن عکس" />
           </div>
@@ -222,6 +249,23 @@ export default function Scan() {
       </p>
       )}
       <MedicalDisclaimer />
+      {kiosk && (
+        <div className="mt-6 rounded-2xl border border-line bg-white p-4 min-[600px]:p-5">
+          <label className="text-[13px] min-[600px]:text-[14px] font-bold text-sageDeep">شماره موبایل (برای پیشرفت مراجعات بعد) ثبت</label>
+          <div className="flex gap-2 mt-2">
+            <input
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="09xxxxxxxxx"
+              className="flex-1 border-[1.5px] border-line rounded-xl px-4 min-h-12 min-[600px]:min-h-14 py-3 text-[15px] min-[600px]:text-[17px] bg-white"
+              dir="ltr"
+              inputMode="tel"
+            />
+            <Button variant="secondary" className="!w-auto px-5" onClick={() => setKioskPhone(phone.trim())}>ثبت</Button>
+          </div>
+          <p className="text-[11.5px] text-stone mt-2">اختیاری است و برای مقایسه مراجعات بعدی استفاده می‌شود.</p>
+        </div>
+      )}
     </div>
   );
 }

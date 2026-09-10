@@ -17,7 +17,7 @@ if (-not $edgePath) {
 
 $profilePath = Join-Path $env:LOCALAPPDATA 'PoostaKioskEdge'
 $arguments = @(
-  "--user-data-dir=$profilePath",
+  ('--user-data-dir="' + $profilePath + '"'),
   "--unsafely-treat-insecure-origin-as-secure=$AppUrl",
   '--autoplay-policy=no-user-gesture-required',
   '--no-first-run'
