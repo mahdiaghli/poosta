@@ -222,54 +222,7 @@ data/scans/<date>/scan_<id>/
   overlay.jpg
 ```
 
-The server keeps private scan data local to the project runtime, which makes it suitable for local-first or private deployment scenarios.
 
----
-
-## Environment Variables
-
-Common runtime variables used by the app include:
-
-```bash
-PORT=8787
-POOSTA_AI_PORT=8788
-OPENAI_API_KEY=...
-GEMINI_API_KEY=...
-OPENROUTER_API_KEY=...
-OPENAI_DAILY_LIMIT=200
-GEMINI_DAILY_LIMIT=500
-OPENROUTER_DAILY_LIMIT=180
-PYTHON_BIN=python
-```
-
-The Node backend uses these to control provider routing, local AI startup, and daily request quotas.
-
----
-
-## Development Notes
-
-- The frontend is Vite-based and designed for local development.
-- The backend is a custom Node server with a rich set of modules beyond analysis itself.
-- Model artifacts are expected under `models/skin/...` when available.
-- Do not bundle trained model weights directly into the frontend.
-
----
-
-## License and Use
-
-This project is intended for research, product prototyping, and local consumer-facing skincare analysis workflows. It is not a medical device or diagnostic system and should not be used as a substitute for clinical evaluation.
-
----
-
-## Recommended Next Steps
-
-1. Install dependency stack and run the local server.
-2. Validate face quality and scan intake workflow.
-3. Train/export a local acne or skin-condition model.
-4. Benchmark the trained model against a labeled validation set.
-5. Add a formal evaluation report for heuristic quality and model accuracy.
-
----
 
 ## Summary
 
