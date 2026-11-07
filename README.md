@@ -197,32 +197,6 @@ npm run dataset:export -- --reviewed-only
 
 ---
 
-## Important Notes About Metrics
-
-The project intentionally distinguishes between:
-- trained model outputs with measurable validation metrics such as `mAP50` and `mAP50-95`
-- handcrafted heuristic image metrics for features like redness, dark spots, pores, texture, and wrinkles
-
-These heuristic metrics are directional wellness signals and are not clinical diagnostic measurements. The code explicitly documents this in `ai/skin_ai_server.py` and the setup notes in `SKIN_AI_SETUP.md`.
-
-This is important for interpretation:
-- trained YOLO-based detectors are the strongest machine-learning components in the repository
-- classical OpenCV metrics are useful for consumer-facing scoring and trend tracking, but are not validated clinical-grade measurements
-
----
-
-## Data and Privacy
-
-The project stores scan assets in the local data directory. For example:
-
-```text
-data/scans/<date>/scan_<id>/
-  original.jpg
-  annotations.json
-  overlay.jpg
-```
-
-
 
 ## Summary
 
